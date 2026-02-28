@@ -15,20 +15,27 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-53833](CVE-2025-53833/) | LaRecipe (Laravel) | SSTI to RCE | **10.0** | No |
 | [CVE-2025-58159](CVE-2025-58159/) | WeGIA | File Upload to RCE | **9.9** | No |
 | [CVE-2026-2749](CVE-2026-2749/) | Centreon Open Tickets | Path Traversal to RCE | **9.9** | No |
+| [CVE-2025-11539](CVE-2025-11539/) | Grafana Image Renderer | Arbitrary File Write to RCE | **9.9** | No |
+| [CVE-2016-15057](CVE-2016-15057/) | Apache Continuum | Command Injection (Pre-Auth) | **9.9** | No |
 | [CVE-2026-2635](CVE-2026-2635/) | MLflow | Default Credentials Auth Bypass | **9.8** | **Yes** — FastAPI route auth bypass |
+| [CVE-2026-23906](CVE-2026-23906/) | Apache Druid | LDAP Auth Bypass (Empty Password) | **9.8** | No |
+| [CVE-2026-28268](CVE-2026-28268/) | Vikunja | Auth Bypass via Password Reset Token Reuse | **9.8** | No |
 | [CVE-2025-69985](CVE-2025-69985/) | FUXA | Auth Bypass to RCE | **9.8** | **Yes** — JWT forgery + insecure defaults on patched |
 | [CVE-2025-60355](CVE-2025-60355/) | OneBlog (Java/FreeMarker) | SSTI to RCE | **9.8** | **Yes** — "fixed" version still exploitable |
 | [CVE-2025-58046](CVE-2025-58046/) | DataEase (Java/Spring Boot) | JNDI Injection to RCE | **9.8** | **Yes** — fix only patches Impala, CK/SQLServer unpatched |
+| [CVE-2025-66489](CVE-2025-66489/) | Cal.com | Auth Bypass via TOTP Code Injection | **9.8** | No |
 | [CVE-2026-26988](CVE-2026-26988/) | LibreNMS | SQL Injection (Blind) | **9.1** | No |
 | [CVE-2026-28370](CVE-2026-28370/) | OpenStack Vitrage | Eval Injection to RCE | **9.1** | No |
 | [CVE-2026-28215](CVE-2026-28215/) | Hoppscotch | Auth Bypass to Config Overwrite | **9.1** | No |
 | [CVE-2025-55010](CVE-2025-55010/) | Kanboard | Deserialization to RCE | **9.1** | **Yes** — session handler bypass |
 | [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
+| [CVE-2024-56143](CVE-2024-56143/) | Strapi | IDOR via lookup Parameter Injection | **8.2** | No |
+| [CVE-2026-26321](CVE-2026-26321/) | OpenClaw | Path Traversal / SSRF | **7.5** | No |
 | [CVE-2026-28372](CVE-2026-28372/) | GNU telnetd + util-linux | Privilege Escalation | **7.4** | No |
 | [CVE-2026-28417](CVE-2026-28417/) | Vim (netrw plugin) | OS Command Injection | **4.4** | No |
 | [CVE-2026-28296](CVE-2026-28296/) | GVFS FTP Backend | CRLF Command Injection | **4.3** | **Yes** — server-supplied path injection |
 
-Seven out of sixteen runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+Seven out of twenty-three runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ## What's In Each Directory
 

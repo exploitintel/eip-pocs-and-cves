@@ -1,0 +1,4 @@
+dn: cn=config
+changetype: modify
+add: olcAllows
+olcAllows: bind_anon_dn
