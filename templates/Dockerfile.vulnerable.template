@@ -1,0 +1,21 @@
+# {{CVE_ID}} Lab - {{PRODUCT}} {{VULN_TYPE}}
+# {{BUILD_STRATEGY_DESCRIPTION}}
+
+FROM {{BASE_IMAGE}}
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    {{PACKAGES}} \
+    && rm -rf /var/lib/apt/lists/*
+
+# {{SETUP_STEP_DESCRIPTION}}
+{{SETUP_COMMANDS}}
+
+# {{CONFIG_STEP_DESCRIPTION}}
+{{CONFIG_COMMANDS}}
+
+EXPOSE {{PORT}}
+
+CMD [{{CMD}}]

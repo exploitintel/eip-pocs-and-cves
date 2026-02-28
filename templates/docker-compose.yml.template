@@ -1,0 +1,66 @@
+# docker-compose.yml — {{CVE_ID}} Lab Environment
+#
+# {{SHORT_DESCRIPTION}}
+#
+# Usage:
+#   docker compose build
+#   docker compose up -d
+#   docker compose down
+
+services:
+  vulnerable:
+    build:
+      context: .
+      dockerfile: Dockerfile.vulnerable
+    container_name: {{CVE_SHORT}}-vulnerable
+    hostname: {{HOSTNAME}}
+    ports:
+      - "{{HOST_PORT}}:{{CONTAINER_PORT}}"
+    networks:
+      - lab-net
+    healthcheck:
+      test: {{HEALTHCHECK_CMD}}
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+# --- Uncomment for multi-service labs ---
+#
+#  {{SERVICE_NAME}}:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.{{SERVICE_NAME}}
+#    image: {{CVE_SHORT}}-{{SERVICE_NAME}}
+#    container_name: {{CVE_SHORT}}-{{SERVICE_NAME}}
+#    hostname: {{CVE_SHORT}}-{{SERVICE_NAME}}
+#    {{ENV_OR_ENV_FILE}}
+#    ports:
+#      - "{{HOST_PORT}}:{{CONTAINER_PORT}}"
+#    depends_on:
+#      {{DEPENDENCY}}:
+#        condition: service_healthy
+#    networks:
+#      - lab-net
+#    healthcheck:
+#      test: {{HEALTHCHECK_CMD}}
+#      interval: 5s
+#      timeout: 3s
+#      retries: 10
+
+# --- Uncomment for patched comparison ---
+#
+#  patched:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.patched
+#    container_name: {{CVE_SHORT}}-patched
+#    hostname: {{HOSTNAME}}-patched
+#    ports:
+#      - "{{PATCHED_HOST_PORT}}:{{CONTAINER_PORT}}"
+#    networks:
+#      - lab-net
+
+networks:
+  lab-net:
+    driver: bridge
