@@ -1,0 +1,104 @@
+# Build and push Docker images to GitHub Container Registry
+# Triggers on push to main when any CVE directory changes.
+# Each Dockerfile gets its own GHCR image tagged by CVE + role.
+#
+# Images are published as:
+#   ghcr.io/exploitintel/CVE-YYYY-XXXXX-<role>:latest
+#
+# Example:
+#   ghcr.io/exploitintel/cve-2026-28372-vulnerable:latest
+
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "CVE-*/**"
+  workflow_dispatch:
+    inputs:
+      cve:
+        description: "CVE directory to build (e.g. CVE-2026-28372), or 'all'"
+        required: false
+        default: "all"
+
+env:
+  REGISTRY: ghcr.io
+  OWNER: exploitintel
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  # Discover which CVE dirs have Dockerfiles and need building
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image matrix
+        id: set-matrix
+        run: |
+          images="[]"
+
+          # Determine which CVE dirs to scan
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.cve }}" != "all" ]]; then
+            cve_dirs="${{ inputs.cve }}"
+          else
+            cve_dirs=$(ls -d CVE-* 2>/dev/null || true)
+          fi
+
+          for dir in $cve_dirs; do
+            [ -d "$dir" ] || continue
+            for dockerfile in "$dir"/Dockerfile.*; do
+              [ -f "$dockerfile" ] || continue
+              # Extract role from Dockerfile.<role> (e.g., "vulnerable", "patched", "ftpserver")
+              role=$(basename "$dockerfile" | sed 's/^Dockerfile\.//')
+              # Image name: cve-yyyy-xxxxx-role (lowercase)
+              image_name=$(echo "${dir}-${role}" | tr '[:upper:]' '[:lower:]')
+              images=$(echo "$images" | jq -c --arg ctx "$dir" --arg df "$dockerfile" --arg name "$image_name" '. + [{"context": $ctx, "dockerfile": $df, "name": $name}]')
+            done
+          done
+
+          echo "matrix={\"include\":$images}" >> "$GITHUB_OUTPUT"
+          echo "Found images:"
+          echo "$images" | jq .
+
+  build:
+    needs: detect
+    if: ${{ needs.detect.outputs.matrix != '{"include":[]}' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.detect.outputs.matrix) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push ${{ matrix.name }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ matrix.name }}:latest
+            ${{ env.REGISTRY }}/${{ env.OWNER }}/${{ matrix.name }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.description=EIP CVE Lab - ${{ matrix.name }}
