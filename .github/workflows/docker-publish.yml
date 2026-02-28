@@ -38,6 +38,8 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Need parent commit for git diff HEAD~1
 
       - name: Build image matrix
         id: set-matrix
