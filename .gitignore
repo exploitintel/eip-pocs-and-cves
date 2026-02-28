@@ -1,3 +1,5 @@
 .DS_Store
 __pycache__/
 *.pyc
+disclosures/
+CVE-2026-28215/source/
