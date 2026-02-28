@@ -50,8 +50,11 @@ jobs:
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.cve }}" == "all" ]]; then
             cve_dirs=$(ls -d CVE-* 2>/dev/null || true)
           else
-            # On push: only build CVE dirs that changed in this commit
-            cve_dirs=$(git diff --name-only HEAD~1 HEAD -- 'CVE-*/' | cut -d/ -f1 | sort -u)
+            # On push: only build CVE dirs where build-related files changed
+            # (skip screenshots, READMEs, and other non-build files)
+            cve_dirs=$(git diff --name-only HEAD~1 HEAD -- 'CVE-*/' \
+              | grep -v -E '\.(png|jpg|svg|md)$' \
+              | cut -d/ -f1 | sort -u)
           fi
 
           for dir in $cve_dirs; do
