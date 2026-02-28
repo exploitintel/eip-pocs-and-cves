@@ -1,0 +1,150 @@
+# {{CVE_ID}} - {{TITLE}}
+
+> **Exploit Intelligence Platform** | [exploit-intel.com](https://exploit-intel.com) | [@exploit_intel](https://x.com/exploit_intel)
+
+## Vulnerability Summary
+
+| Field | Value |
+|---|---|
+| CVE | {{CVE_ID}} |
+| Component | [{{PRODUCT}}]({{PRODUCT_URL}}) |
+| Type | {{CWE_ID}}: {{CWE_NAME}} |
+| CVSS | {{CVSS_SCORE}} ({{CVSS_SEVERITY}}) — `{{CVSS_VECTOR}}` |
+| EPSS | {{EPSS_SCORE}} ({{EPSS_PERCENTILE}} percentile) |
+| Affected | {{AFFECTED_VERSIONS}} |
+| Fix | {{FIX_DESCRIPTION}} |
+| Author | Exploit Intelligence Platform |
+| Date | {{DATE}} |
+
+## Vulnerability Details
+
+{{VULN_DETAILS_PARAGRAPHS}}
+
+### Attack Chain
+
+```
+1. {{STEP_1}}
+2. {{STEP_2}}
+3. {{STEP_3}}
+...
+```
+
+### Fix
+
+{{FIX_EXPLANATION}}
+
+```diff
+{{FIX_DIFF}}
+```
+
+## Lab Setup
+
+### Architecture
+
+```
+{{ASCII_ARCHITECTURE_DIAGRAM}}
+```
+
+### Quick Start
+
+```bash
+cd {{CVE_ID}}
+
+# Build and start
+docker compose build
+docker compose up -d
+
+# Run the exploit
+python3 poc/poc.py {{POC_ARGS}}
+
+# Cleanup
+docker compose down
+```
+
+### Container Details
+
+| Container | Role | Base | Host Port | Description |
+|---|---|---|---|---|
+| `{{CONTAINER_NAME}}` | {{ROLE}} | {{BASE_IMAGE}} | `{{PORT}}` | {{DESCRIPTION}} |
+
+### Default Credentials
+
+| Service | Username | Password |
+|---|---|---|
+| {{SERVICE}} | `{{USERNAME}}` | `{{PASSWORD}}` |
+
+## PoC Usage
+
+The PoC script (`poc/poc.py`) is a standalone Python 3 tool with **no external dependencies** (stdlib only). {{POC_DESCRIPTION}}
+
+```bash
+# Basic syntax
+python3 poc/poc.py {{POC_SYNTAX}}
+
+# Run against the lab
+python3 poc/poc.py {{POC_LAB_EXAMPLE}}
+```
+
+### Expected Output (Vulnerable)
+
+```
+======================================================================
+  {{CVE_ID}}: {{SHORT_TITLE}}
+  {{SUBTITLE}}
+======================================================================
+
+[*] {{STEP_OUTPUT_1}}
+[+] {{STEP_OUTPUT_2}}
+
+----------------------------------------------------------------------
+  EXPLOIT RESULTS
+----------------------------------------------------------------------
+  {{RESULT_LINE_1}}
+----------------------------------------------------------------------
+
+[+] VULNERABILITY CONFIRMED — {{CVE_ID}}
+
+======================================================================
+  [✓] EXPLOIT SUCCESSFUL — {{SUCCESS_SUMMARY}}
+======================================================================
+```
+
+## Verification: Vulnerable vs Patched
+
+| Test | Vulnerable | Patched |
+|---|---|---|
+| **Exploit PoC** | {{VULN_RESULT}} | {{PATCHED_RESULT}} |
+| **Control (no exploit)** | {{CONTROL_VULN}} | {{CONTROL_PATCHED}} |
+
+## Files
+
+| File | Description |
+|---|---|
+| `poc/poc.py` | {{POC_FILE_DESCRIPTION}} |
+| `Dockerfile.vulnerable` | {{DOCKERFILE_DESCRIPTION}} |
+| `docker-compose.yml` | {{COMPOSE_DESCRIPTION}} |
+
+## References
+
+- [NVD Entry](https://nvd.nist.gov/vuln/detail/{{CVE_ID}})
+- {{ADDITIONAL_REFERENCES}}
+
+### Related CVEs
+
+| CVE | Description |
+|---|---|
+| {{RELATED_CVE}} | {{RELATED_DESCRIPTION}} |
+
+## Timeline
+
+| Date | Event |
+|---|---|
+| {{TIMELINE_DATE}} | {{TIMELINE_EVENT}} |
+
+## Disclaimer
+
+This proof-of-concept is provided for **authorized security testing and educational purposes only**. It is intended to help defenders understand, detect, and remediate {{CVE_ID}} in their environments.
+
+**Do not** use this tool against systems you do not own or have explicit written authorization to test. Unauthorized access to computer systems is illegal in most jurisdictions and may violate laws including the Computer Fraud and Abuse Act (CFAA), the Computer Misuse Act, and equivalent legislation worldwide.
+
+The authors assume no liability for misuse of this material. This project follows responsible disclosure practices.

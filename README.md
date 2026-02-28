@@ -14,12 +14,13 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-53833](CVE-2025-53833/) | LaRecipe (Laravel) | SSTI to RCE | **10.0** | No |
 | [CVE-2025-58159](CVE-2025-58159/) | WeGIA | File Upload to RCE | **9.9** | No |
 | [CVE-2025-60355](CVE-2025-60355/) | OneBlog (Java/FreeMarker) | SSTI to RCE | **9.8** | **Yes** — "fixed" version still exploitable |
+| [CVE-2025-58046](CVE-2025-58046/) | DataEase (Java/Spring Boot) | JNDI Injection to RCE | **9.8** | **Yes** — fix only patches Impala, CK/SQLServer unpatched |
 | [CVE-2025-55010](CVE-2025-55010/) | Kanboard | Deserialization to RCE | **9.1** | **Yes** — session handler bypass |
 | [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
 | [CVE-2026-28372](CVE-2026-28372/) | GNU telnetd + util-linux | Privilege Escalation | **7.4** | No |
 | [CVE-2026-28296](CVE-2026-28296/) | GVFS FTP Backend | CRLF Command Injection | **4.3** | **Yes** — server-supplied path injection |
 
-Three out of seven runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+Four out of eight runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ## What's In Each Directory
 

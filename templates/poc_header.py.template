@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+# ──────────────────────────────────────────────────────────────────────
+# Exploit Title  : {{EXPLOIT_TITLE}}
+# CVE            : {{CVE_ID}}
+# Vendor         : {{VENDOR}}
+# Product        : {{PRODUCT}}
+# Affected       : {{AFFECTED_VERSIONS}}
+# Type           : {{CWE_ID}} - {{CWE_SHORT_NAME}}
+# CVSS           : {{CVSS_SCORE}} ({{CVSS_SEVERITY}})
+# Platform       : {{PLATFORM}}
+# Author         : Exploit Intelligence Platform
+# Website        : https://exploit-intel.com
+# Twitter        : @exploit_intel
+# Date           : {{DATE}}
+#
+# For authorized security testing and educational purposes only.
+# ──────────────────────────────────────────────────────────────────────
+"""
+{{DOCSTRING_TITLE}}
+
+{{DOCSTRING_DESCRIPTION}}
+
+ATTACK CHAIN:
+  1. {{STEP_1}}
+  2. {{STEP_2}}
+  3. {{STEP_3}}
+
+PREREQUISITES:
+  - {{PREREQ_1}}
+  - {{PREREQ_2}}
+
+REFERENCES:
+  - {{CVE_ID}}
+  - {{REFERENCE_URLS}}
+"""
