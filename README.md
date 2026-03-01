@@ -11,12 +11,24 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 
 | CVE | Target | Class | CVSS | Bypass? |
 |-----|--------|-------|:----:|:-------:|
+| [CVE-2025-14931](CVE-2025-14931/) | Hugging Face smolagents | Pickle Deserialization to RCE (Sandbox Escape) | **10.0** | No |
 | [CVE-2026-28409](CVE-2026-28409/) | WeGIA | OS Command Injection to RCE | **10.0** | **Yes** — symlink file read + SQL injection in patched restore |
+| [CVE-2025-47916](CVE-2025-47916/) | Invision Community | SSTI to RCE (Pre-Auth) | **10.0** | No |
 | [CVE-2025-53833](CVE-2025-53833/) | LaRecipe (Laravel) | SSTI to RCE | **10.0** | No |
+| [CVE-2024-45409](CVE-2024-45409/) | ruby-saml | XML Signature Wrapping Auth Bypass | **10.0** | No |
+| [CVE-2026-1868](CVE-2026-1868/) | GitLab AI Gateway | SSTI to DoS/Code Execution | **9.9** | **Yes** — filter abuse + `%` operator bypass patched sandbox |
 | [CVE-2025-58159](CVE-2025-58159/) | WeGIA | File Upload to RCE | **9.9** | No |
 | [CVE-2026-2749](CVE-2026-2749/) | Centreon Open Tickets | Path Traversal to RCE | **9.9** | No |
 | [CVE-2025-11539](CVE-2025-11539/) | Grafana Image Renderer | Arbitrary File Write to RCE | **9.9** | No |
 | [CVE-2016-15057](CVE-2016-15057/) | Apache Continuum | Command Injection (Pre-Auth) | **9.9** | No |
+| [CVE-2025-12421](CVE-2025-12421/) | Mattermost Server | Token Type Confusion to Account Takeover | **9.9** | No |
+| [CVE-2025-4981](CVE-2025-4981/) | Mattermost Server | Path Traversal to Arbitrary File Write | **9.9** | No |
+| [CVE-2024-37288](CVE-2024-37288/) | Kibana | YAML Deserialization (`!!js/function`) to RCE | **9.9** | No |
+| [CVE-2025-53606](CVE-2025-53606/) | Apache Seata (Fury) | Deserialization Whitelist Bypass to RCE | **9.8** | **Yes** — AllowListChecker pre-registration bypass |
+| [CVE-2025-32897](CVE-2025-32897/) | Apache Seata (Raft) | Insecure Deserialization to RCE | **9.8** | No |
+| [CVE-2025-67895](CVE-2025-67895/) | Apache Airflow Edge3 | Exposed Internal RPC API to RCE | **9.8** | No |
+| [CVE-2025-48913](CVE-2025-48913/) | Apache CXF (JMS Transport) | JNDI Injection to RCE | **9.8** | **Yes** — `AbstractMessageListenerContainer` bypasses `JndiHelper` fix |
+| [CVE-2025-54466](CVE-2025-54466/) | Apache OFBiz (Scrum Plugin) | SVN Argument Injection to RCE | **9.8** | No |
 | [CVE-2026-2635](CVE-2026-2635/) | MLflow | Default Credentials Auth Bypass | **9.8** | **Yes** — FastAPI route auth bypass |
 | [CVE-2026-23906](CVE-2026-23906/) | Apache Druid | LDAP Auth Bypass (Empty Password) | **9.8** | No |
 | [CVE-2026-28268](CVE-2026-28268/) | Vikunja | Auth Bypass via Password Reset Token Reuse | **9.8** | No |
@@ -24,18 +36,39 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-60355](CVE-2025-60355/) | OneBlog (Java/FreeMarker) | SSTI to RCE | **9.8** | **Yes** — "fixed" version still exploitable |
 | [CVE-2025-58046](CVE-2025-58046/) | DataEase (Java/Spring Boot) | JNDI Injection to RCE | **9.8** | **Yes** — fix only patches Impala, CK/SQLServer unpatched |
 | [CVE-2025-66489](CVE-2025-66489/) | Cal.com | Auth Bypass via TOTP Code Injection | **9.8** | No |
+| [CVE-2025-29953](CVE-2025-29953/) | Apache ActiveMQ NMS | Deserialization Filter Bypass | **9.8** | No |
+| [CVE-2025-27531](CVE-2025-27531/) | Apache InLong Manager | JDBC URL Sanitization Bypass to File Read/RCE | **9.8** | No |
+| [CVE-2025-62515](CVE-2025-62515/) | pyquokka FlightServer | Pickle Deserialization to RCE | **9.8** | **Yes** — do_get/do_put sinks bypass do_action-only fix |
+| [CVE-2026-0773](CVE-2026-0773/) | Upsonic | Cloudpickle Deserialization to RCE | **9.8** | No |
+| [CVE-2026-0760](CVE-2026-0760/) | MetaGPT | Pickle Deserialization + eval() to RCE | **9.8** | No |
+| [CVE-2024-31866](CVE-2024-31866/) | Apache Zeppelin | Environment Variable Injection to RCE | **9.8** | **Yes** — `ZEPPELIN_IMPERSONATE_CMD` bypasses `printf %q` fix |
+| [CVE-2026-0769](CVE-2026-0769/) | Langflow | Eval Injection via `exec()` to RCE (0-day) | **9.8** | No |
+| [CVE-2026-0768](CVE-2026-0768/) | Langflow | Code Injection via `exec()` to RCE | **9.8** | **Yes** — `AUTO_LOGIN=true` default bypasses auth fix |
+| [CVE-2026-0761](CVE-2026-0761/) | MetaGPT | Code Injection via `eval()` to RCE | **9.8** | **Yes** — `import_class()` + `pickle.loads()` bypass eval() fix |
+| [CVE-2025-50213](CVE-2025-50213/) | Apache Airflow (Snowflake) | SQL Injection via f-string Interpolation | **9.8** | **Yes** — fix validates 2/8 parameters, 6 remain injectable |
+| [CVE-2025-24490](CVE-2025-24490/) | Mattermost Server (Boards Plugin) | SQL Injection (Blind) | **9.6** | No |
 | [CVE-2026-26988](CVE-2026-26988/) | LibreNMS | SQL Injection (Blind) | **9.1** | No |
 | [CVE-2026-28370](CVE-2026-28370/) | OpenStack Vitrage | Eval Injection to RCE | **9.1** | No |
 | [CVE-2026-28215](CVE-2026-28215/) | Hoppscotch | Auth Bypass to Config Overwrite | **9.1** | No |
 | [CVE-2025-55010](CVE-2025-55010/) | Kanboard | Deserialization to RCE | **9.1** | **Yes** — session handler bypass |
-| [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
+| [CVE-2025-29927](CVE-2025-29927/) | Next.js | Middleware Authorization Bypass | **9.1** | No |
+| [CVE-2025-66524](CVE-2025-66524/) | Apache NiFi | Unsafe Deserialization via GetAsanaObject Processor | **8.8** | No |
+| [CVE-2026-0766](CVE-2026-0766/) | Open WebUI | exec() Code Injection to RCE | **8.8** | No |
+| [CVE-2026-0765](CVE-2026-0765/) | Open WebUI | pip Command Injection to RCE (0-day) | **8.8** | No |
+| [CVE-2025-49828](CVE-2025-49828/) | CyberArk Conjur | SSTI to RCE via ERB Policy Factory | **8.8** | No |
+| [CVE-2025-53192](CVE-2025-53192/) | Apache Commons OGNL | Expression Injection to RCE | **8.8** | No |
+| [CVE-2024-43115](CVE-2024-43115/) | Apache DolphinScheduler | Script Alert Plugin Authenticated RCE | **8.8** | **Yes** — 6 bypass techniques against `.sh` extension check |
+| [CVE-2025-27818](CVE-2025-27818/) | Apache Kafka Connect | LdapLoginModule Denylist Bypass to RCE | **8.8** | **Yes** — OAuthBearer SSRF bypasses patched denylist |
+| [CVE-2025-7734](CVE-2025-7734/) | GitLab CE/EE | Stored XSS via Code Navigation (Account Takeover) | **8.7** | No |
 | [CVE-2024-56143](CVE-2024-56143/) | Strapi | IDOR via lookup Parameter Injection | **8.2** | No |
+| [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
 | [CVE-2026-26321](CVE-2026-26321/) | OpenClaw | Path Traversal / SSRF | **7.5** | No |
 | [CVE-2026-28372](CVE-2026-28372/) | GNU telnetd + util-linux | Privilege Escalation | **7.4** | No |
+| [CVE-2025-2753](CVE-2025-2753/) | Assimp (LWS Importer) | Uninitialized Pointer Array (OOB Read / DoS) (0-day) | **6.3** | **Yes** — recommended fix bypassed via 2 NULL deref paths |
 | [CVE-2026-28417](CVE-2026-28417/) | Vim (netrw plugin) | OS Command Injection | **4.4** | No |
 | [CVE-2026-28296](CVE-2026-28296/) | GVFS FTP Backend | CRLF Command Injection | **4.3** | **Yes** — server-supplied path injection |
 
-Seven out of twenty-three runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+Eighteen out of fifty-six runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ## What's In Each Directory
 
