@@ -47,6 +47,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-0768](CVE-2026-0768/) | Langflow | Code Injection via `exec()` to RCE | **9.8** | **Yes** — `AUTO_LOGIN=true` default bypasses auth fix |
 | [CVE-2026-0761](CVE-2026-0761/) | MetaGPT | Code Injection via `eval()` to RCE | **9.8** | **Yes** — `import_class()` + `pickle.loads()` bypass eval() fix |
 | [CVE-2025-50213](CVE-2025-50213/) | Apache Airflow (Snowflake) | SQL Injection via f-string Interpolation | **9.8** | **Yes** — fix validates 2/8 parameters, 6 remain injectable |
+| [CVE-2023-42117](CVE-2023-42117/) | Exim MTA | Improper IP Validation (PROXY Protocol) to DoS | **9.8** | No |
 | [CVE-2025-24490](CVE-2025-24490/) | Mattermost Server (Boards Plugin) | SQL Injection (Blind) | **9.6** | No |
 | [CVE-2026-26988](CVE-2026-26988/) | LibreNMS | SQL Injection (Blind) | **9.1** | No |
 | [CVE-2026-28370](CVE-2026-28370/) | OpenStack Vitrage | Eval Injection to RCE | **9.1** | No |
