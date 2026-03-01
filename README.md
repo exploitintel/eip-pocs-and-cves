@@ -31,6 +31,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-54466](CVE-2025-54466/) | Apache OFBiz (Scrum Plugin) | SVN Argument Injection to RCE | **9.8** | No |
 | [CVE-2026-2635](CVE-2026-2635/) | MLflow | Default Credentials Auth Bypass | **9.8** | **Yes** — FastAPI route auth bypass |
 | [CVE-2026-23906](CVE-2026-23906/) | Apache Druid | LDAP Auth Bypass (Empty Password) | **9.8** | No |
+| [CVE-2025-59390](CVE-2025-59390/) | Apache Druid | Kerberos Auth Bypass (Weak PRNG Cookie Signing) | **9.8** | No |
 | [CVE-2026-28268](CVE-2026-28268/) | Vikunja | Auth Bypass via Password Reset Token Reuse | **9.8** | No |
 | [CVE-2025-69985](CVE-2025-69985/) | FUXA | Auth Bypass to RCE | **9.8** | **Yes** — JWT forgery + insecure defaults on patched |
 | [CVE-2025-60355](CVE-2025-60355/) | OneBlog (Java/FreeMarker) | SSTI to RCE | **9.8** | **Yes** — "fixed" version still exploitable |
@@ -52,6 +53,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-28215](CVE-2026-28215/) | Hoppscotch | Auth Bypass to Config Overwrite | **9.1** | No |
 | [CVE-2025-55010](CVE-2025-55010/) | Kanboard | Deserialization to RCE | **9.1** | **Yes** — session handler bypass |
 | [CVE-2025-29927](CVE-2025-29927/) | Next.js | Middleware Authorization Bypass | **9.1** | No |
+| [CVE-2025-6000](CVE-2025-6000/) | HashiCorp Vault | Audit Log Prefix Code Injection to RCE | **9.1** | No |
 | [CVE-2025-66524](CVE-2025-66524/) | Apache NiFi | Unsafe Deserialization via GetAsanaObject Processor | **8.8** | No |
 | [CVE-2026-0766](CVE-2026-0766/) | Open WebUI | exec() Code Injection to RCE | **8.8** | No |
 | [CVE-2026-0765](CVE-2026-0765/) | Open WebUI | pip Command Injection to RCE (0-day) | **8.8** | No |
@@ -59,6 +61,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-53192](CVE-2025-53192/) | Apache Commons OGNL | Expression Injection to RCE | **8.8** | No |
 | [CVE-2024-43115](CVE-2024-43115/) | Apache DolphinScheduler | Script Alert Plugin Authenticated RCE | **8.8** | **Yes** — 6 bypass techniques against `.sh` extension check |
 | [CVE-2025-27818](CVE-2025-27818/) | Apache Kafka Connect | LdapLoginModule Denylist Bypass to RCE | **8.8** | **Yes** — OAuthBearer SSRF bypasses patched denylist |
+| [CVE-2025-26866](CVE-2025-26866/) | Apache HugeGraph PD | Hessian Deserialization to RCE | **8.8** | No |
 | [CVE-2025-7734](CVE-2025-7734/) | GitLab CE/EE | Stored XSS via Code Navigation (Account Takeover) | **8.7** | No |
 | [CVE-2024-56143](CVE-2024-56143/) | Strapi | IDOR via lookup Parameter Injection | **8.2** | No |
 | [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
@@ -68,7 +71,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-28417](CVE-2026-28417/) | Vim (netrw plugin) | OS Command Injection | **4.4** | No |
 | [CVE-2026-28296](CVE-2026-28296/) | GVFS FTP Backend | CRLF Command Injection | **4.3** | **Yes** — server-supplied path injection |
 
-Eighteen out of fifty-six runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+Eighteen out of fifty-eight runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ## What's In Each Directory
 
