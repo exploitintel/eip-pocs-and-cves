@@ -2,4 +2,29 @@
 __pycache__/
 *.pyc
 disclosures/
-CVE-2026-28215/source/
+
+# Vendor source checkouts (can be huge)
+**/source/
+
+# Metasploit dev environment
+msf-modules/
+msf-init.rc
+msf-lab.sh
+docker-compose.msf.yml
+docs/metasploit-porting.md
+docs/refined-metasploit.md
+
+# Security reports (contain embargoed details)
+docs/security-reports/
+
+# Embargo tracking (local only)
+BYPASS_FINDINGS_LOG.md
+
+# Internal index (local only)
+INDEX.md
+
+# Docker/lab runtime artifacts
+*.log
+*.pid
+**/data/
+**/logs/
