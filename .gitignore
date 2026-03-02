@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 disclosures/
+scripts/
 
 # Vendor source checkouts (can be huge)
 **/source/
@@ -11,16 +12,12 @@ msf-modules/
 msf-init.rc
 msf-lab.sh
 docker-compose.msf.yml
-docs/metasploit-porting.md
-docs/refined-metasploit.md
+metasploit/
 
-# Security reports (contain embargoed details)
-docs/security-reports/
-
-# Embargo tracking (local only)
+# Internal docs/reports (local only)
+docs/
+.claude/
 BYPASS_FINDINGS_LOG.md
-
-# Internal index (local only)
 INDEX.md
 
 # Docker/lab runtime artifacts
@@ -28,3 +25,12 @@ INDEX.md
 *.pid
 **/data/
 **/logs/
+poc-run-logs/
+poc-run-results.md
+runtime-ports.env
+runtime-ports.md
+.docker-compose.verify.yml
+.runtime-port-map.csv
+pipeline-run-report.md
+templates/
+RUN-DOCKER-SINGLE.md
