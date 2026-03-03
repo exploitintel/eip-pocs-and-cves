@@ -71,6 +71,12 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-2753](CVE-2025-2753/) | Assimp (LWS Importer) | Uninitialized Pointer Array (OOB Read / DoS) (0-day) | **6.3** | **Yes** — recommended fix bypassed via 2 NULL deref paths |
 | [CVE-2026-28417](CVE-2026-28417/) | Vim (netrw plugin) | OS Command Injection | **4.4** | No |
 | [CVE-2026-28296](CVE-2026-28296/) | GVFS FTP Backend | CRLF Command Injection | **4.3** | **Yes** — server-supplied path injection |
+| [CVE-2025-27528](CVE-2025-27528/) | Apache InLong Manager | Apache InLong Manager JDBC URL Sensitive Parameter Filter Bypass | **9.1** | No |
+| [CVE-2025-49003](CVE-2025-49003/) | DataEase | # CVE-2025-49003 - DataEase H2 JDBC URL Injection via Blocklist Bypass (RCE) | **9.8** | No |
+| [CVE-2021-32824](CVE-2021-32824/) | Apache Dubbo | Apache Dubbo Pre-Authentication Remote Code Execution | **9.8** | No |
+| [CVE-2025-15467](CVE-2025-15467/) | OpenSSL < 3.0.19 | CMS AEAD Stack Buffer Overflow | **9.8** | No |
+| [CVE-2025-62507](CVE-2025-62507/) | Redis 8.2.x (`XACKDEL`) | Redis 8.2 XACKDEL Stack Overflow Lab | **9.8** | No |
+| [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
 Eighteen out of fifty-eight runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 

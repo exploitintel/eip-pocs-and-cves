@@ -20,6 +20,10 @@ docs/
 BYPASS_FINDINGS_LOG.md
 INDEX.md
 
+# Local docker helper scripts
+WORKING-DOCKER.md
+check-all-docker.sh
+
 # Docker/lab runtime artifacts
 *.log
 *.pid
