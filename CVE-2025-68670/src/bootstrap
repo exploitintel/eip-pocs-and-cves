@@ -1,0 +1,46 @@
+#!/bin/sh
+
+command -v autoconf
+if ! test $? -eq 0
+then
+  echo "error, install autoconf"
+  exit 1
+fi
+
+command -v automake
+if ! test $? -eq 0
+then
+  echo "error, install automake"
+  exit 1
+fi
+
+command -v libtool || command -v libtoolize
+if ! test $? -eq 0
+then
+  echo "error, install libtool"
+  exit 1
+fi
+
+command -v pkg-config
+if ! test $? -eq 0
+then
+  echo "error, install pkg-config"
+  exit 1
+fi
+
+if ! test -f libpainter/configure.ac
+then
+  git submodule update --init libpainter
+fi
+
+if ! test -f librfxcodec/configure.ac
+then
+  git submodule update --init librfxcodec
+fi
+
+if ! test -f ulalaca/Makefile.am
+then
+  git submodule update --init ulalaca
+fi
+
+autoreconf -fvi

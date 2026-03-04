@@ -55,6 +55,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-55010](CVE-2025-55010/) | Kanboard | Deserialization to RCE | **9.1** | **Yes** — session handler bypass |
 | [CVE-2025-29927](CVE-2025-29927/) | Next.js | Middleware Authorization Bypass | **9.1** | No |
 | [CVE-2025-6000](CVE-2025-6000/) | HashiCorp Vault | Audit Log Prefix Code Injection to RCE | **9.1** | No |
+| [CVE-2025-68670](CVE-2025-68670/) | xrdp | Pre-Auth Stack Buffer Overflow (RIP Control / RCE Primitives) | **9.1** | **Yes** — v0.10.5 fix misses `xrdp_sec.c` heap overflow path |
 | [CVE-2025-66524](CVE-2025-66524/) | Apache NiFi | Unsafe Deserialization via GetAsanaObject Processor | **8.8** | No |
 | [CVE-2026-0766](CVE-2026-0766/) | Open WebUI | exec() Code Injection to RCE | **8.8** | No |
 | [CVE-2026-0765](CVE-2026-0765/) | Open WebUI | pip Command Injection to RCE (0-day) | **8.8** | No |

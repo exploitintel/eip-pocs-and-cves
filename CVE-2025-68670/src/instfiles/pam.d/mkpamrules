@@ -1,0 +1,102 @@
+#!/bin/sh
+
+# Find suitable PAM config file
+
+rules="$1"
+srcdir="$2"
+outfile="$3"
+
+service="xrdp-sesman"
+pamdir="/etc/pam.d"
+pamdir_suse="/usr/lib/pam.d"
+if [ ! -d $pamdir_suse ]; then
+   # Older SUSE distros uses /usr/etc/pam.d
+   pamdir_suse="/usr/etc/pam.d"
+fi
+
+# Modules needed by xrdp-sesman.unix, if we get to that
+unix_modules_needed="pam_unix.so pam_env.so pam_nologin.so"
+
+# Directories where pam modules might be installed
+# Add to this list as platforms are added
+pam_module_dir_searchpath="/lib*/security /usr/lib*/security /lib/*/security /usr/lib/*/security"
+
+find_pam_module_dir()
+{
+  # Looks for the pam security module directory
+  set -- $pam_module_dir_searchpath
+  for d in "$@"; do
+    if [ -s "$d/pam_unix.so" ]; then
+      echo "$d"
+      break
+    fi
+  done
+}
+
+can_apply_unix_config()
+{
+  result=0
+  module_dir="$1"
+  for m in $unix_modules_needed; do
+    if [ ! -s "$module_dir/$m" ]; then
+      echo "  ** $m not found" >&2
+      result=1
+    fi
+  done
+
+  return $result
+}
+
+guess_rules ()
+{
+  rules=
+  if [ -s "$pamdir/password-auth" ]; then
+    rules="redhat"
+
+  elif [ -s "$pamdir_suse/common-account" ]; then
+    rules="suse"
+
+  elif [ -s "$pamdir/common-account" ]; then
+    if grep "^@include" "$pamdir/passwd" >/dev/null 2>&1; then
+      rules="debian"
+    else
+      rules="suse"
+    fi
+
+  elif [ ! -f "$pamdir/system-auth" -a -s "$pamdir/system" ]; then
+    rules="freebsd"
+
+  elif [ -s "$pamdir/authorization" ]; then
+    rules="macos"
+
+  elif [ -s "$pamdir/system-remote-login" ]; then
+    rules="arch"
+
+  elif [ -s "$pamdir/system-auth" ]; then
+    rules="system"
+
+  else
+    module_dir=`find_pam_module_dir`
+    if [ -d "$module_dir" ]; then
+      #echo "- Found pam modules in $module_dir" >&2
+      if can_apply_unix_config "$module_dir" ; then
+        rules="unix"
+      fi
+    fi
+  fi
+}
+
+if [ "$rules" = "auto" ]; then
+  guess_rules
+  if [ -z "$rules" ]; then
+    echo "** Can't guess PAM rules for this system"
+    exit 1
+  fi
+fi
+
+if [ -s "$srcdir/$service.$rules" ]; then
+  ln -nsf "$srcdir/$service.$rules" "$outfile"
+else
+  echo "Cannot find $srcdir/$service.$rules"
+  exit 1
+fi
