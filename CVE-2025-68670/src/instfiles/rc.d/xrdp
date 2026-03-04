@@ -1,0 +1,89 @@
+#!/bin/sh
+#
+# Copyright (c) 1992-2018 The FreeBSD Project. All rights reserved.
+# Copyright (c) 2015-2018 Koichiro Iwao <meta@FreeBSD.org>
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+#
+# $FreeBSD$
+#
+# REQUIRE: DAEMON
+# PROVIDE: xrdp
+#
+# Add the following line to /etc/rc.conf to enable xrdp:
+#
+#  xrdp_enable="YES"
+#  xrdp_sesman_enable="YES"
+
+. /etc/rc.subr
+
+name="xrdp"
+rcvar="xrdp_enable"
+
+load_rc_config "$name"
+: ${xrdp_enable="NO"}
+
+extra_commands="status allstart allstop allrestart"
+command="%%PREFIX%%/sbin/xrdp"
+
+allstart_cmd="xrdp_allstart"
+allstop_cmd="xrdp_allstop"
+allrestart_cmd="xrdp_allrestart"
+stop_postcmd="xrdp_poststop"
+
+xrdp_allstart()
+{
+     run_rc_command "start"
+
+    if checkyesno "xrdp_sesman_enable" && \
+        ! %%PREFIX%%/etc/rc.d/xrdp-sesman forcestatus 1>/dev/null 2>&1; then
+        %%PREFIX%%/etc/rc.d/xrdp-sesman start || return 1
+    fi
+}
+
+xrdp_allstop()
+{
+    if checkyesno "xrdp_sesman_enable" && \
+        %%PREFIX%%/etc/rc.d/xrdp-sesman forcestatus 1>/dev/null 2>&1; then
+        %%PREFIX%%/etc/rc.d/xrdp-sesman stop || return 1
+    fi
+
+    run_rc_command "stop"
+}
+
+xrdp_allrestart()
+{
+    if checkyesno "xrdp_sesman_enable" && \
+        %%PREFIX%%/etc/rc.d/xrdp-sesman forcestatus 1>/dev/null 2>&1; then
+        %%PREFIX%%/etc/rc.d/xrdp-sesman restart || return 1
+    fi
+
+    run_rc_command "restart"
+}
+
+xrdp_poststop()
+{
+    # If running with dropped privileges, xrdp can't delete its own
+    # PID file
+    rm -f %%LOCALSTATEDIR%%/run/xrdp.pid
+}
+run_rc_command "$1"
