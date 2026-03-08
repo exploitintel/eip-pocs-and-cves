@@ -17,6 +17,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-53833](CVE-2025-53833/) | LaRecipe (Laravel) | SSTI to RCE | **10.0** | No |
 | [CVE-2024-45409](CVE-2024-45409/) | ruby-saml | XML Signature Wrapping Auth Bypass | **10.0** | No |
 | [CVE-2026-30860](CVE-2026-30860/) | WeKnora | SQL Injection Bypass (ARRAY/ROW AST) to RCE | **9.9** | No |
+| [CVE-2026-30861](CVE-2026-30861/) | WeKnora | OS Command Injection (MCP `-p` Flag Bypass) | **9.9** | No |
 | [CVE-2026-1868](CVE-2026-1868/) | GitLab AI Gateway | SSTI to DoS/Code Execution | **9.9** | **Yes** — filter abuse + `%` operator bypass patched sandbox |
 | [CVE-2025-58159](CVE-2025-58159/) | WeGIA | File Upload to RCE | **9.9** | No |
 | [CVE-2026-2749](CVE-2026-2749/) | Centreon Open Tickets | Path Traversal to RCE | **9.9** | No |
@@ -81,7 +82,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-62507](CVE-2025-62507/) | Redis 8.2.x (`XACKDEL`) | Redis 8.2 XACKDEL Stack Overflow Lab | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-Eighteen out of sixty runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+Eighteen out of sixty-one runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ## What's In Each Directory
 
