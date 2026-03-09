@@ -12,6 +12,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | CVE | Target | Class | CVSS | Bypass? |
 |-----|--------|-------|:----:|:-------:|
 | [CVE-2025-14931](CVE-2025-14931/) | Hugging Face smolagents | Pickle Deserialization to RCE (Sandbox Escape) | **10.0** | No |
+| [CVE-2026-28289](CVE-2026-28289/) | FreeScout | TOCTOU File Upload Bypass to RCE | **10.0** | No |
 | [CVE-2026-28409](CVE-2026-28409/) | WeGIA | OS Command Injection to RCE | **10.0** | **Yes** — symlink file read + SQL injection in patched restore |
 | [CVE-2025-47916](CVE-2025-47916/) | Invision Community | SSTI to RCE (Pre-Auth) | **10.0** | No |
 | [CVE-2025-53833](CVE-2025-53833/) | LaRecipe (Laravel) | SSTI to RCE | **10.0** | No |
@@ -82,7 +83,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-62507](CVE-2025-62507/) | Redis 8.2.x (`XACKDEL`) | Redis 8.2 XACKDEL Stack Overflow Lab | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-Eighteen out of sixty-one runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+Eighteen out of sixty-two runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ## What's In Each Directory
 
