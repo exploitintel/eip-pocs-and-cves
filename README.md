@@ -68,6 +68,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2024-43115](CVE-2024-43115/) | Apache DolphinScheduler | Script Alert Plugin Authenticated RCE | **8.8** | **Yes** — 6 bypass techniques against `.sh` extension check |
 | [CVE-2025-27818](CVE-2025-27818/) | Apache Kafka Connect | LdapLoginModule Denylist Bypass to RCE | **8.8** | **Yes** — OAuthBearer SSRF bypasses patched denylist |
 | [CVE-2025-26866](CVE-2025-26866/) | Apache HugeGraph PD | Hessian Deserialization to RCE | **8.8** | No |
+| [CVE-2025-15566](CVE-2025-15566/) | ingress-nginx | Nginx Config Injection to RCE | **8.8** | No |
 | [CVE-2025-7734](CVE-2025-7734/) | GitLab CE/EE | Stored XSS via Code Navigation (Account Takeover) | **8.7** | No |
 | [CVE-2024-56143](CVE-2024-56143/) | Strapi | IDOR via lookup Parameter Injection | **8.2** | No |
 | [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
@@ -83,7 +84,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-62507](CVE-2025-62507/) | Redis 8.2.x (`XACKDEL`) | Redis 8.2 XACKDEL Stack Overflow Lab | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-Eighteen out of sixty-two runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+Eighteen out of sixty-three runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ## What's In Each Directory
 
