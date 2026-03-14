@@ -74,6 +74,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
 | [CVE-2026-26321](CVE-2026-26321/) | OpenClaw | Path Traversal / SSRF | **7.5** | No |
 | [CVE-2026-28372](CVE-2026-28372/) | GNU telnetd + util-linux | Privilege Escalation | **7.4** | No |
+| [CVE-2026-4105](CVE-2026-4105/) | systemd (systemd-machined) | Local Privilege Escalation (Improper Machine Class Access Control) | **6.7** | **Yes** — class=container + Varlink vl_method_open() missing namespace check |
 | [CVE-2025-2753](CVE-2025-2753/) | Assimp (LWS Importer) | Uninitialized Pointer Array (OOB Read / DoS) (0-day) | **6.3** | **Yes** — recommended fix bypassed via 2 NULL deref paths |
 | [CVE-2026-28417](CVE-2026-28417/) | Vim (netrw plugin) | OS Command Injection | **4.4** | No |
 | [CVE-2026-28296](CVE-2026-28296/) | GVFS FTP Backend | CRLF Command Injection | **4.3** | **Yes** — server-supplied path injection |
@@ -84,7 +85,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-62507](CVE-2025-62507/) | Redis 8.2.x (`XACKDEL`) | Redis 8.2 XACKDEL Stack Overflow Lab | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-Eighteen out of sixty-three runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+Nineteen out of sixty-four runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ## What's In Each Directory
 
