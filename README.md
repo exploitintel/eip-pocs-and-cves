@@ -72,6 +72,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-7734](CVE-2025-7734/) | GitLab CE/EE | Stored XSS via Code Navigation (Account Takeover) | **8.7** | No |
 | [CVE-2024-56143](CVE-2024-56143/) | Strapi | IDOR via lookup Parameter Injection | **8.2** | No |
 | [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
+| [CVE-2026-24289](CVE-2026-24289/) | Windows Kernel (ntoskrnl.exe) | IOCP Race Condition Use-After-Free (LPE) | **7.8** | No |
 | [CVE-2026-26321](CVE-2026-26321/) | OpenClaw | Path Traversal / SSRF | **7.5** | No |
 | [CVE-2026-28372](CVE-2026-28372/) | GNU telnetd + util-linux | Privilege Escalation | **7.4** | No |
 | [CVE-2026-4105](CVE-2026-4105/) | systemd (systemd-machined) | Local Privilege Escalation (Improper Machine Class Access Control) | **6.7** | **Yes** — class=container + Varlink vl_method_open() missing namespace check |
@@ -151,6 +152,7 @@ The full story, in order:
 6. [Zero to RCE: Autonomous Exploit Development Across Three Vulnerability Classes](https://exploit-intel.com/blog/posts/zero-to-rce-autonomous-exploit-development/)
 7. [Five CVEs, Three Bypasses: A Java Case Study](https://exploit-intel.com/blog/posts/five-cves-three-bypasses-java-case-study/)
 8. [Foreman Command Injection and Telnetd Privilege Escalation](https://exploit-intel.com/blog/posts/two-cves-two-outcomes-foreman-command-injection-telnetd-privilege-escalation/)
+9. [WinForge vs. the Windows Kernel: Hunting CVE-2026-24289](https://exploit-intel.com/blog/posts/cve-2026-24289-winforge-kernel-iocp-race-condition/)
 
 ## Disclaimer
 
