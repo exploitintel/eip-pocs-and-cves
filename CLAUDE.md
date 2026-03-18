@@ -1,6 +1,6 @@
 # CLAUDE.md — eip-pocs-and-cves
 
-## What This Repo Is
+## Overview
 
 Public collection of CVE proof-of-concept exploits and Docker lab environments, generated autonomously by [CVEForge](https://exploit-intel.com/blog/posts/cveforge-from-shannon-to-autonomous-poc/). Each entry is a fully self-contained package: vulnerable + patched Docker targets, standalone PoC scripts (Python 3, stdlib only), root cause analysis, and — when the fix looked narrow — a bypass attempt.
 
@@ -9,23 +9,6 @@ All entries are created by the CVEForge pipeline. Human/agent work in this repo 
 - Fixing lab breakage (e.g. upstream image changes, broken Dockerfiles)
 - Updating README tables and blog post lists
 - Responding to responsible disclosure or public corrections
-
-## Key Paths
-
-| Path | Purpose |
-|---|---|
-| `CVE-YYYY-XXXXX/` | One directory per CVE — self-contained lab + PoC |
-| `CVE-YYYY-XXXXX/README.md` | Full writeup: root cause, attack chain, fix analysis |
-| `CVE-YYYY-XXXXX/poc/poc.py` | Standalone exploit — Python 3, no external deps |
-| `CVE-YYYY-XXXXX/poc/control_test.py` | Control: proves auth is required without the bug |
-| `CVE-YYYY-XXXXX/Dockerfile.vulnerable` | Target container (vulnerable version) |
-| `CVE-YYYY-XXXXX/Dockerfile.patched` | Target container (patched version, when applicable) |
-| `CVE-YYYY-XXXXX/docker-compose.yml` | Stands up the full lab with one command |
-| `CVE-YYYY-XXXXX/intel_brief.md` | CVE intelligence pulled from EIP at forge time |
-| `CVE-YYYY-XXXXX/vulnerability_analysis.md` | Root cause trace and fix assessment |
-| `CVE-YYYY-XXXXX/poc_verification_report.md` | Test results: vulnerable vs patched |
-| `CVE-YYYY-XXXXX/bypass_analysis.md` | Present when fix didn't hold |
-| `README.md` | Root index — CVE table, quick start, how-to |
 
 ## Architecture
 
@@ -49,6 +32,23 @@ eip-pocs-and-cves/
 └── CVE-YYYY-YYYYY/
     └── ...
 ```
+
+Key paths:
+
+| Path | Purpose |
+|---|---|
+| `CVE-YYYY-XXXXX/` | One directory per CVE — self-contained lab + PoC |
+| `CVE-YYYY-XXXXX/README.md` | Full writeup: root cause, attack chain, fix analysis |
+| `CVE-YYYY-XXXXX/poc/poc.py` | Standalone exploit — Python 3, no external deps |
+| `CVE-YYYY-XXXXX/poc/control_test.py` | Control: proves auth is required without the bug |
+| `CVE-YYYY-XXXXX/Dockerfile.vulnerable` | Target container (vulnerable version) |
+| `CVE-YYYY-XXXXX/Dockerfile.patched` | Target container (patched version, when applicable) |
+| `CVE-YYYY-XXXXX/docker-compose.yml` | Stands up the full lab with one command |
+| `CVE-YYYY-XXXXX/intel_brief.md` | CVE intelligence pulled from EIP at forge time |
+| `CVE-YYYY-XXXXX/vulnerability_analysis.md` | Root cause trace and fix assessment |
+| `CVE-YYYY-XXXXX/poc_verification_report.md` | Test results: vulnerable vs patched |
+| `CVE-YYYY-XXXXX/bypass_analysis.md` | Present when fix didn't hold |
+| `README.md` | Root index — CVE table, blog links, quick start |
 
 CVEForge produces all files. The CODEX:RUNTIME_PORT block in each CVE README is auto-managed — do not edit it manually.
 
@@ -76,7 +76,13 @@ docker compose down
 
 Check the individual CVE README for target-specific ports, credentials, and expected output.
 
-## Adding a New CVE Entry
+## Usage
+
+### Running a Lab
+
+Each CVE directory is self-contained. See Setup above.
+
+### Adding a New CVE Entry
 
 CVEForge generates all files. To publish a forge run:
 1. Copy the generated `CVE-YYYY-XXXXX/` directory into the repo root
@@ -89,16 +95,24 @@ Keep entries sorted by CVSS score (descending). Format:
 | [CVE-YYYY-XXXXX](CVE-YYYY-XXXXX/) | Target | Vuln Class | **X.X** | No / **Yes** — brief bypass note |
 ```
 
-## Common Pitfalls
+### Common Pitfalls
 
 - **CODEX:RUNTIME_PORT blocks** — auto-generated markers in each CVE README. Do not edit them manually; they are overwritten by the forge pipeline on re-runs.
 - **PoC scripts use stdlib only** — never add external dependencies to `poc/poc.py`. If a new CVE needs one, it's a forge-level decision.
 - **Bypass entries** — the Bypass? column in README.md must match whether `bypass_analysis.md` exists in the directory. If you add a bypass manually, add the file too.
 - **Image rot** — upstream Docker images change; Dockerfiles may break over time. When fixing, update the Dockerfile but do not alter the PoC logic or vulnerability mechanics.
 
-## Git Workflow
+## Deploy
+
+All changes go through a branch and PR. Never push to `main` directly.
+
+```bash
+git checkout -b <branch-name>   # e.g. EXP-103
+# make changes
+git push origin <branch-name>
+gh pr create
+```
 
 - Branch from `main`, name after the issue (e.g. `EXP-103`).
-- No direct pushes to `main`.
 - Open a PR — QAGuy reviews and merges.
 - Post PR link as a deliverable comment before marking done.
