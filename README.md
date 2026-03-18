@@ -162,6 +162,21 @@ These proof-of-concept materials are provided for **authorized security testing 
 
 The authors assume no liability for misuse. This project follows responsible disclosure practices.
 
+## Git Workflow
+
+**Never push directly to `main`.** All changes go through a branch and PR.
+
+```bash
+git checkout -b <branch-name>
+# make changes
+git push origin <branch-name>
+gh pr create
+```
+
+PRs require review before merge.
+
+---
+
 ## License
 
 MIT
