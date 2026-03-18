@@ -88,7 +88,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 
 Nineteen out of sixty-four runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
-## What's In Each Directory
+## Architecture
 
 ```
 CVE-YYYY-XXXXX/
@@ -105,7 +105,7 @@ CVE-YYYY-XXXXX/
 └── bypass_analysis.md           # (When the fix didn't hold)
 ```
 
-## Quick Start
+## Setup
 
 Every CVE follows the same pattern:
 
