@@ -75,7 +75,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2024-56143](CVE-2024-56143/) | Strapi | IDOR via lookup Parameter Injection | **8.2** | No |
 | [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
 | [CVE-2026-24289](CVE-2026-24289/) | Windows Kernel (ntoskrnl.exe) | IOCP Race Condition Use-After-Free (LPE) | **7.8** | No |
-| [CVE-2026-2580](CVE-2026-2580/) | WP Maps (wp-google-map-plugin) | SQL Injection (Unauthenticated) | **7.5** | No |
+| [CVE-2026-2580](CVE-2026-2580/) | WP Maps (wp-google-map-plugin) | Broken Access Control + Stored XSS (Unauthenticated) | **7.3** | No |
 | [CVE-2026-26321](CVE-2026-26321/) | OpenClaw | Path Traversal / SSRF | **7.5** | No |
 | [CVE-2026-28372](CVE-2026-28372/) | GNU telnetd + util-linux | Privilege Escalation | **7.4** | No |
 | [CVE-2026-4105](CVE-2026-4105/) | systemd (systemd-machined) | Local Privilege Escalation (Improper Machine Class Access Control) | **6.7** | **Yes** — class=container + Varlink vl_method_open() missing namespace check |
