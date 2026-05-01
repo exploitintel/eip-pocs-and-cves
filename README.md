@@ -54,6 +54,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-0761](CVE-2026-0761/) | MetaGPT | Code Injection via `eval()` to RCE | **9.8** | **Yes** — `import_class()` + `pickle.loads()` bypass eval() fix |
 | [CVE-2025-50213](CVE-2025-50213/) | Apache Airflow (Snowflake) | SQL Injection via f-string Interpolation | **9.8** | **Yes** — fix validates 2/8 parameters, 6 remain injectable |
 | [CVE-2023-42117](CVE-2023-42117/) | Exim MTA | Improper IP Validation (PROXY Protocol) to DoS | **9.8** | No |
+| [CVE-2026-41940](CVE-2026-41940/) | cPanel & WHM | Pre-Auth CRLF Session Injection to Auth Bypass + RCE | **9.8** | No |
 | [CVE-2025-24490](CVE-2025-24490/) | Mattermost Server (Boards Plugin) | SQL Injection (Blind) | **9.6** | No |
 | [CVE-2026-26988](CVE-2026-26988/) | LibreNMS | SQL Injection (Blind) | **9.1** | No |
 | [CVE-2026-28370](CVE-2026-28370/) | OpenStack Vitrage | Eval Injection to RCE | **9.1** | No |
@@ -197,6 +198,7 @@ The full story, in order:
 7. [Five CVEs, Three Bypasses: A Java Case Study](https://exploit-intel.com/blog/posts/five-cves-three-bypasses-java-case-study/)
 8. [Foreman Command Injection and Telnetd Privilege Escalation](https://exploit-intel.com/blog/posts/two-cves-two-outcomes-foreman-command-injection-telnetd-privilege-escalation/)
 9. [WinForge vs. the Windows Kernel: Hunting CVE-2026-24289](https://exploit-intel.com/blog/posts/cve-2026-24289-winforge-kernel-iocp-race-condition/)
+10. [CVE-2026-41940: cPanel & WHM Pre-Auth RCE - Two Write Paths, One Filter](https://exploit-intel.com/blog/posts/cve-2026-41940-cpanel-whm-auth-bypass/)
 
 ---
 
