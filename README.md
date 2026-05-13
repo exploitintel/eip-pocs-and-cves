@@ -19,6 +19,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-47916](CVE-2025-47916/) | Invision Community | SSTI to RCE (Pre-Auth) | **10.0** | No |
 | [CVE-2025-53833](CVE-2025-53833/) | LaRecipe (Laravel) | SSTI to RCE | **10.0** | No |
 | [CVE-2024-45409](CVE-2024-45409/) | ruby-saml | XML Signature Wrapping Auth Bypass | **10.0** | No |
+| [CVE-2022-0735](CVE-2022-0735/) | GitLab CE/EE | Runner Token Info Disclosure to RCE (Pre-Auth) | **10.0** | No |
 | [CVE-2026-30860](CVE-2026-30860/) | WeKnora | SQL Injection Bypass (ARRAY/ROW AST) to RCE | **9.9** | No |
 | [CVE-2026-30861](CVE-2026-30861/) | WeKnora | OS Command Injection (MCP `-p` Flag Bypass) | **9.9** | No |
 | [CVE-2026-1868](CVE-2026-1868/) | GitLab AI Gateway | SSTI to DoS/Code Execution | **9.9** | **Yes** — filter abuse + `%` operator bypass patched sandbox |
@@ -74,6 +75,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-15566](CVE-2025-15566/) | ingress-nginx | Nginx Config Injection to RCE | **8.8** | No |
 | [CVE-2025-7734](CVE-2025-7734/) | GitLab CE/EE | Stored XSS via Code Navigation (Account Takeover) | **8.7** | No |
 | [CVE-2024-56143](CVE-2024-56143/) | Strapi | IDOR via lookup Parameter Injection | **8.2** | No |
+| [CVE-2026-42859](CVE-2026-42859/) | neatvnc | RSA-AES Pre-Auth Stack Buffer Overflow (RIP Hijack with No Canary) | **8.1** | No |
 | [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
 | [CVE-2026-24289](CVE-2026-24289/) | Windows Kernel (ntoskrnl.exe) | IOCP Race Condition Use-After-Free (LPE) | **7.8** | No |
 | [CVE-2026-2580](CVE-2026-2580/) | WP Maps (wp-google-map-plugin) | Broken Access Control + Stored XSS (Unauthenticated) | **7.3** | No |
