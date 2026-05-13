@@ -104,15 +104,15 @@ Keep entries sorted by CVSS score (descending). Format:
 
 ## Deploy
 
-All changes go through a branch and PR. Never push to `main` directly.
+Commit content drops (new CVE entries, fixes, README updates) directly to `main`.
 
 ```bash
-git checkout -b <branch-name>   # e.g. EXP-103
-# make changes
-git push origin <branch-name>
-gh pr create
+git add CVE-YYYY-XXXXX README.md
+git commit -m "Add CVE-YYYY-XXXXX <short description>"
+git push origin main
 ```
 
-- Branch from `main`, name after the issue (e.g. `EXP-103`).
-- Open a PR — QAGuy reviews and merges.
-- Post PR link as a deliverable comment before marking done.
+- Use a bot-style author identity matching recent commits (e.g. `Exploit Intelligence Platform <dev@exploit-intel.com>`). Override per-commit with `git -c user.name=... -c user.email=... commit ...` rather than modifying global config.
+- One commit per CVE entry where practical. Bundle related fixes (e.g. a CVE entry plus its row in the root README) into the same commit.
+- Verify before push: PoC parses (`python3 -c "import ast; ast.parse(...)"`), PoC imports are stdlib only, no machine-local paths or internal IPs leaked, executable bits set on scripts.
+- Strongly recommended before pushing a new lab: end-to-end smoke test (`docker compose up -d --build && python3 poc/poc.py ...`). The agent context cannot run this; it is the publisher's responsibility.
