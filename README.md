@@ -32,6 +32,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2024-37288](CVE-2024-37288/) | Kibana | YAML Deserialization (`!!js/function`) to RCE | **9.9** | No |
 | [CVE-2025-53606](CVE-2025-53606/) | Apache Seata (Fury) | Deserialization Whitelist Bypass to RCE | **9.8** | **Yes** — AllowListChecker pre-registration bypass |
 | [CVE-2025-32897](CVE-2025-32897/) | Apache Seata (Raft) | Insecure Deserialization to RCE | **9.8** | No |
+| [CVE-2026-3296](CVE-2026-3296/) | WPEverest Everest Forms | PHP Object Injection to RCE (Authenticated trigger, KEV-listed) | **9.8** | No |
 | [CVE-2025-67895](CVE-2025-67895/) | Apache Airflow Edge3 | Exposed Internal RPC API to RCE | **9.8** | No |
 | [CVE-2025-48913](CVE-2025-48913/) | Apache CXF (JMS Transport) | JNDI Injection to RCE | **9.8** | **Yes** — `AbstractMessageListenerContainer` bypasses `JndiHelper` fix |
 | [CVE-2025-54466](CVE-2025-54466/) | Apache OFBiz (Scrum Plugin) | SVN Argument Injection to RCE | **9.8** | No |
