@@ -78,6 +78,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2024-56143](CVE-2024-56143/) | Strapi | IDOR via lookup Parameter Injection | **8.2** | No |
 | [CVE-2026-42859](CVE-2026-42859/) | neatvnc | RSA-AES Pre-Auth Stack Buffer Overflow (RIP Hijack with No Canary) | **8.1** | No |
 | [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
+| [CVE-2026-41702](CVE-2026-41702/) | VMware Fusion 25.x | TOCTOU LPE via cnx-tmp Symlink Race (chown arbitrary file ownership) | **7.8** | No |
 | [CVE-2026-24289](CVE-2026-24289/) | Windows Kernel (ntoskrnl.exe) | IOCP Race Condition Use-After-Free (LPE) | **7.8** | No |
 | [CVE-2026-2580](CVE-2026-2580/) | WP Maps (wp-google-map-plugin) | Broken Access Control + Stored XSS (Unauthenticated) | **7.3** | No |
 | [CVE-2026-26321](CVE-2026-26321/) | OpenClaw | Path Traversal / SSRF | **7.5** | No |
