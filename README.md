@@ -13,6 +13,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 
 | CVE | Target | Class | CVSS | Bypass? |
 |-----|--------|-------|:----:|:-------:|
+| [CVE-2026-45829](CVE-2026-45829/) | Chroma ChromaDB (Python backend) | `trust_remote_code` Code Injection (Pre-Auth) to RCE | **10.0** | No |
 | [CVE-2025-14931](CVE-2025-14931/) | Hugging Face smolagents | Pickle Deserialization to RCE (Sandbox Escape) | **10.0** | No |
 | [CVE-2026-28289](CVE-2026-28289/) | FreeScout | TOCTOU File Upload Bypass to RCE | **10.0** | No |
 | [CVE-2026-28409](CVE-2026-28409/) | WeGIA | OS Command Injection to RCE | **10.0** | **Yes** — symlink file read + SQL injection in patched restore |
