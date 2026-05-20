@@ -104,7 +104,7 @@ Keep entries sorted by CVSS score (descending). Format:
 
 ## Deploy
 
-Commit content drops (new CVE entries, fixes, README updates) directly to `main`.
+CVEForge content drops (new CVE entries, README updates) commit directly to `main`. For non-trivial manual changes (Dockerfile overhauls, structural repo changes), use the standard branch convention (`fix/<slug>`, `chore/<slug>`) and open a PR.
 
 ```bash
 git add CVE-YYYY-XXXXX README.md
