@@ -31,6 +31,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-12421](CVE-2025-12421/) | Mattermost Server | Token Type Confusion to Account Takeover | **9.9** | No |
 | [CVE-2025-4981](CVE-2025-4981/) | Mattermost Server | Path Traversal to Arbitrary File Write | **9.9** | No |
 | [CVE-2024-37288](CVE-2024-37288/) | Kibana | YAML Deserialization (`!!js/function`) to RCE | **9.9** | No |
+| [CVE-2026-14364](CVE-2026-14364/) | themetechmount TrueBooker (WordPress plugin) | Unauthenticated Arbitrary Password Reset to Admin Account Takeover | **9.8** | No |
 | [CVE-2025-53606](CVE-2025-53606/) | Apache Seata (Fury) | Deserialization Whitelist Bypass to RCE | **9.8** | **Yes** — AllowListChecker pre-registration bypass |
 | [CVE-2025-32897](CVE-2025-32897/) | Apache Seata (Raft) | Insecure Deserialization to RCE | **9.8** | No |
 | [CVE-2026-3296](CVE-2026-3296/) | WPEverest Everest Forms | PHP Object Injection to RCE (Authenticated trigger, KEV-listed) | **9.8** | No |
