@@ -100,7 +100,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-16258](CVE-2026-16258/) | Ajax Search Lite | Unauthenticated PHP Object Injection | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-20 out of 84 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+20 out of 86 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ---
 
