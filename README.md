@@ -96,6 +96,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2021-32824](CVE-2021-32824/) | Apache Dubbo | Apache Dubbo Pre-Authentication Remote Code Execution | **9.8** | No |
 | [CVE-2025-15467](CVE-2025-15467/) | OpenSSL < 3.0.19 | CMS AEAD Stack Buffer Overflow | **9.8** | No |
 | [CVE-2025-62507](CVE-2025-62507/) | Redis 8.2.x (`XACKDEL`) | Redis 8.2 XACKDEL Stack Overflow Lab | **9.8** | No |
+| [CVE-2026-16258](CVE-2026-16258/) | Ajax Search Lite | Unauthenticated PHP Object Injection | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
 20 out of 84 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
