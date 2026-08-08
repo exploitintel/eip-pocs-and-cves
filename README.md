@@ -60,6 +60,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2023-42117](CVE-2023-42117/) | Exim MTA | Improper IP Validation (PROXY Protocol) to DoS | **9.8** | No |
 | [CVE-2026-41940](CVE-2026-41940/) | cPanel & WHM | Pre-Auth CRLF Session Injection to Auth Bypass + RCE | **9.8** | No |
 | [CVE-2026-45538](CVE-2026-45538/) | OpenSIPS | `sip_to_json()` Stack Buffer Overflow to DoS | **9.8** | No |
+| [CVE-2026-61808](CVE-2026-61808/) | HKUDS LightRAG | Missing Auth to Unauthenticated Read/Write/Delete | **9.8** | No |
 | [CVE-2025-24490](CVE-2025-24490/) | Mattermost Server (Boards Plugin) | SQL Injection (Blind) | **9.6** | No |
 | [CVE-2026-55971](CVE-2026-55971/) | Apache Thrift | Pre-Auth ZLIB Heap Buffer Overflow Write | **9.3** | No |
 | [CVE-2026-58154](CVE-2026-58154/) | Apache Traffic Server | OOB Write in MIME/Header Parsing | **9.2** | No |
@@ -104,7 +105,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-64608](CVE-2026-64608/) | Apache Fory (C++) | Compatible-Mode Heap Type Confusion | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-20 out of 90 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+20 out of 91 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ---
 
