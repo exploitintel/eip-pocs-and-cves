@@ -61,6 +61,8 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-41940](CVE-2026-41940/) | cPanel & WHM | Pre-Auth CRLF Session Injection to Auth Bypass + RCE | **9.8** | No |
 | [CVE-2026-45538](CVE-2026-45538/) | OpenSIPS | `sip_to_json()` Stack Buffer Overflow to DoS | **9.8** | No |
 | [CVE-2025-24490](CVE-2025-24490/) | Mattermost Server (Boards Plugin) | SQL Injection (Blind) | **9.6** | No |
+| [CVE-2026-55971](CVE-2026-55971/) | Apache Thrift | Pre-Auth ZLIB Heap Buffer Overflow Write | **9.3** | No |
+| [CVE-2026-58154](CVE-2026-58154/) | Apache Traffic Server | OOB Write in MIME/Header Parsing | **9.2** | No |
 | [CVE-2026-26988](CVE-2026-26988/) | LibreNMS | SQL Injection (Blind) | **9.1** | No |
 | [CVE-2026-28370](CVE-2026-28370/) | OpenStack Vitrage | Eval Injection to RCE | **9.1** | No |
 | [CVE-2026-28215](CVE-2026-28215/) | Hoppscotch | Auth Bypass to Config Overwrite | **9.1** | No |
@@ -98,9 +100,11 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-15467](CVE-2025-15467/) | OpenSSL < 3.0.19 | CMS AEAD Stack Buffer Overflow | **9.8** | No |
 | [CVE-2025-62507](CVE-2025-62507/) | Redis 8.2.x (`XACKDEL`) | Redis 8.2 XACKDEL Stack Overflow Lab | **9.8** | No |
 | [CVE-2026-16258](CVE-2026-16258/) | Ajax Search Lite | Unauthenticated PHP Object Injection | **9.8** | No |
+| [CVE-2026-41252](CVE-2026-41252/) | xrdp | Pre-Auth Remote Code Execution (Heap OOB Write) | **9.8** | No |
+| [CVE-2026-64608](CVE-2026-64608/) | Apache Fory (C++) | Compatible-Mode Heap Type Confusion | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-20 out of 86 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+20 out of 90 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ---
 
