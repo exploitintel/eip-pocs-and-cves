@@ -85,6 +85,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2025-26866](CVE-2025-26866/) | Apache HugeGraph PD | Hessian Deserialization to RCE | **8.8** | No |
 | [CVE-2025-15566](CVE-2025-15566/) | ingress-nginx | Nginx Config Injection to RCE | **8.8** | No |
 | [CVE-2025-7734](CVE-2025-7734/) | GitLab CE/EE | Stored XSS via Code Navigation (Account Takeover) | **8.7** | No |
+| [CVE-2026-10050](CVE-2026-10050/) | Eclipse Jetty | Digest Auth ISO-8859-1 Password-Collision Auth Bypass | **8.7** | No |
 | [CVE-2026-11349](CVE-2026-11349/) | Modern Events Calendar Lite | Unauthenticated Blind SQL Injection (DB Read) | **8.6** | No |
 | [CVE-2024-21626](CVE-2024-21626/) | runc | Container Escape via Leaked FD (Host FS R/W) | **8.6** | No |
 | [CVE-2026-47194](CVE-2026-47194/) | Frappe Framework | Host-Header Poisoning to Magic-Link Account Takeover | **8.6** | No |
@@ -112,7 +113,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-64608](CVE-2026-64608/) | Apache Fory (C++) | Compatible-Mode Heap Type Confusion | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-20 out of 98 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+20 out of 99 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ---
 
