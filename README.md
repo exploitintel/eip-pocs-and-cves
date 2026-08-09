@@ -87,6 +87,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2024-21626](CVE-2024-21626/) | runc | Container Escape via Leaked FD (Host FS R/W) | **8.6** | No |
 | [CVE-2026-47194](CVE-2026-47194/) | Frappe Framework | Host-Header Poisoning to Magic-Link Account Takeover | **8.6** | No |
 | [CVE-2026-63637](CVE-2026-63637/) | Dgraph | Unauthenticated DQL Injection via GraphQL Regexp Filter | **8.6** | No |
+| [CVE-2026-70632](CVE-2026-70632/) | FFmpeg | CFHD Decoder Heap OOB Write via Crafted AVI | **8.5** | No |
 | [CVE-2024-56143](CVE-2024-56143/) | Strapi | IDOR via lookup Parameter Injection | **8.2** | No |
 | [CVE-2026-42859](CVE-2026-42859/) | neatvnc | RSA-AES Pre-Auth Stack Buffer Overflow (RIP Hijack with No Canary) | **8.1** | No |
 | [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
@@ -109,7 +110,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-64608](CVE-2026-64608/) | Apache Fory (C++) | Compatible-Mode Heap Type Confusion | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-20 out of 95 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+20 out of 96 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ---
 
