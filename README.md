@@ -103,6 +103,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-41702](CVE-2026-41702/) | VMware Fusion 25.x | TOCTOU LPE via cnx-tmp Symlink Race (chown arbitrary file ownership) | **7.8** | No |
 | [CVE-2026-24289](CVE-2026-24289/) | Windows Kernel (ntoskrnl.exe) | IOCP Race Condition Use-After-Free (LPE) | **7.8** | No |
 | [CVE-2026-62242](CVE-2026-62242/) | Spring Boot Admin | Unauthenticated SSRF with Response Exfiltration | **7.7** | No |
+| [CVE-2026-20348](CVE-2026-20348/) | ClamAV libclamav XAR parser | ClamAV XAR File Format Processing Memory Corruption (DoS) | **7.5** | No |
 | [CVE-2026-2580](CVE-2026-2580/) | WP Maps (wp-google-map-plugin) | Broken Access Control + Stored XSS (Unauthenticated) | **7.3** | No |
 | [CVE-2026-26321](CVE-2026-26321/) | OpenClaw | Path Traversal / SSRF | **7.5** | No |
 | [CVE-2026-28372](CVE-2026-28372/) | GNU telnetd + util-linux | Privilege Escalation | **7.4** | No |
@@ -120,7 +121,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-64608](CVE-2026-64608/) | Apache Fory (C++) | Compatible-Mode Heap Type Confusion | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-23 out of 106 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+23 out of 107 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ---
 
