@@ -22,6 +22,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2024-45409](CVE-2024-45409/) | ruby-saml | XML Signature Wrapping Auth Bypass | **10.0** | No |
 | [CVE-2022-0735](CVE-2022-0735/) | GitLab CE/EE | Runner Token Info Disclosure to RCE (Authenticated, Reporter+) | **10.0** | No |
 | [CVE-2026-44182](CVE-2026-44182/) | Jupyter Enterprise Gateway | Kubernetes Manifest Injection via Jinja2 Template Rendering | **10.0** | **Yes** — fixed build still allows arbitrary kernel image + hostPath mounts by design; defense layers held |
+| [CVE-2026-65887](CVE-2026-65887/) | Balbooa Gridbox (Joomla) | Unauthenticated Arbitrary Password Reset | **10.0** | **Yes** — 2.20.2 fix leaks the reset code in the JSON response; full ATO still reachable |
 | [CVE-2026-30860](CVE-2026-30860/) | WeKnora | SQL Injection Bypass (ARRAY/ROW AST) to RCE | **9.9** | No |
 | [CVE-2026-30861](CVE-2026-30861/) | WeKnora | OS Command Injection (MCP `-p` Flag Bypass) | **9.9** | No |
 | [CVE-2026-1868](CVE-2026-1868/) | GitLab AI Gateway | SSTI to DoS/Code Execution | **9.9** | **Yes** — filter abuse + `%` operator bypass patched sandbox |
@@ -115,7 +116,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-64608](CVE-2026-64608/) | Apache Fory (C++) | Compatible-Mode Heap Type Confusion | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-21 out of 101 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+22 out of 102 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ---
 
