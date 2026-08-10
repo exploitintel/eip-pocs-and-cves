@@ -12,7 +12,11 @@ All entries are created by the CVEForge pipeline. Human/agent work in this repo 
 
 ## Architecture
 
-Each CVE directory is completely self-contained. There are no shared libraries or cross-CVE dependencies. The repo is a flat collection:
+Each CVE directory is completely self-contained. There are no shared libraries or cross-CVE dependencies.
+
+> **Self-contained means independent, not that every byte is vendored.** Small fixtures and upstream artifacts (plugin zips, npm tarballs, ≲10 MB) ship inside the package so builds survive link rot. Large inputs (VM images, toolchains, anything >50 MB) are fetched at build time from pinned, sha256-verified URLs — drift fails the build loudly rather than silently producing the wrong target.
+
+The repo is a flat collection:
 
 ```
 eip-pocs-and-cves/
