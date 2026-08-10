@@ -67,6 +67,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-48085](CVE-2026-48085/) | OpenReception | Missing Authorization to Unauthenticated GLOBAL_ADMIN Creation | **9.8** | No |
 | [CVE-2026-66713](CVE-2026-66713/) | Apache Axis2/Java | Unauthenticated Java Deserialization RCE via Tribes Clustering | **9.8** | No |
 | [CVE-2025-24490](CVE-2025-24490/) | Mattermost Server (Boards Plugin) | SQL Injection (Blind) | **9.6** | No |
+| [CVE-2026-50540](CVE-2026-50540/) | Kata Containers | Config Path Annotation Arbitrary File Loading to Host Root Exec | **9.6** | No |
 | [CVE-2026-55971](CVE-2026-55971/) | Apache Thrift | Pre-Auth ZLIB Heap Buffer Overflow Write | **9.3** | No |
 | [CVE-2026-58154](CVE-2026-58154/) | Apache Traffic Server | OOB Write in MIME/Header Parsing | **9.2** | No |
 | [CVE-2026-66914](CVE-2026-66914/) | SEBLOD CCK (Joomla) | Unauthenticated Path Traversal to Arbitrary File Read | **9.2** | No |
@@ -117,7 +118,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-64608](CVE-2026-64608/) | Apache Fory (C++) | Compatible-Mode Heap Type Confusion | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-23 out of 103 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+23 out of 104 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ---
 
