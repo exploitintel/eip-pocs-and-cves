@@ -1,0 +1,58 @@
+{
+  "name": "ps_facetedsearch",
+  "description": "Displays a block allowing multiple filters.",
+  "private": true,
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --require @babel/register --reporter spec \"./tests/**/*.spec.js\"",
+    "lint": "eslint --ext .js,.vue .",
+    "lint-fix": "eslint --fix --ext .js,.vue .",
+    "build": "webpack-cli --mode production",
+    "dev": "webpack-cli --mode development --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PrestaShop/ps_facetedsearch.git"
+  },
+  "keywords": [],
+  "author": "PrestaShop",
+  "license": "AFL-3.0",
+  "bugs": {
+    "url": "https://github.com/PrestaShop/ps_facetedsearch/issues"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "homepage": "https://github.com/PrestaShop/ps_facetedsearch#readme",
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.25.8",
+    "@babel/cli": "^7.26.4",
+    "@babel/core": "^7.28.5",
+    "@babel/node": "^7.24.8",
+    "@babel/preset-env": "^7.25.8",
+    "@babel/register": "^7.23.7",
+    "babel-loader": "^10.0.0",
+    "chai": "^4.3.10",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^7.1.2",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prestashop": "^0.2.1",
+    "eslint-plugin-import": "^2.29.1",
+    "mini-css-extract-plugin": "^1.0.0",
+    "mocha": "^10.4.0",
+    "node-sass": "^9.0.0",
+    "sass-loader": "^14.2.1",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^4.10.0"
+  },
+  "dependencies": {
+    "jquery-ui-touch-punch": "^0.2.3",
+    "lodash.escaperegexp": "^4.1.2"
+  }
+}
