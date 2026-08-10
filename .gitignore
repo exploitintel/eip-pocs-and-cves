@@ -36,7 +36,7 @@ runtime-ports.md
 .docker-compose.verify.yml
 .runtime-port-map.csv
 pipeline-run-report.md
-templates/
+/templates/
 RUN-DOCKER-SINGLE.md
 
 # Internal tooling — not part of the CVE collection itself
