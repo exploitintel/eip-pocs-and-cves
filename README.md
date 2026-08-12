@@ -76,6 +76,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-65520](CVE-2026-65520/) | miniOrange WP OAuth Server | <= 6.2.0 SQL Injection | **9.3** | No |
 | [CVE-2026-58154](CVE-2026-58154/) | Apache Traffic Server | OOB Write in MIME/Header Parsing | **9.2** | No |
 | [CVE-2026-66914](CVE-2026-66914/) | SEBLOD CCK (Joomla) | Unauthenticated Path Traversal to Arbitrary File Read | **9.2** | No |
+| [CVE-2026-43631](CVE-2026-43631/) | llama.cpp / llama-server | llama.cpp llama-server Use-After-Free via sleep-idle Race | **9.2** | No |
 | [CVE-2026-26988](CVE-2026-26988/) | LibreNMS | SQL Injection (Blind) | **9.1** | No |
 | [CVE-2026-28370](CVE-2026-28370/) | OpenStack Vitrage | Eval Injection to RCE | **9.1** | No |
 | [CVE-2026-28215](CVE-2026-28215/) | Hoppscotch | Auth Bypass to Config Overwrite | **9.1** | No |
