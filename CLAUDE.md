@@ -118,5 +118,5 @@ git push origin main
 
 - Use a bot-style author identity matching recent commits (e.g. `Exploit Intelligence Platform <dev@exploit-intel.com>`). Override per-commit with `git -c user.name=... -c user.email=... commit ...` rather than modifying global config.
 - One commit per CVE entry where practical. Bundle related fixes (e.g. a CVE entry plus its row in the root README) into the same commit.
-- Verify before push: PoC parses (`python3 -c "import ast; ast.parse(...)"`), PoC imports are stdlib only, no machine-local paths or internal IPs leaked, executable bits set on scripts.
+- Verify before push: PoC parses (`python3 -c "import ast; ast.parse(...)"`), PoC imports are stdlib only, no machine-local paths or internal IPs leaked.
 - Strongly recommended before pushing a new lab: end-to-end smoke test (`docker compose up -d --build && python3 poc/poc.py ...`). The agent context cannot run this; it is the publisher's responsibility.
