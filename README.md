@@ -27,6 +27,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-46339](CVE-2026-46339/) | 9router | Unauthenticated RCE via Unprotected MCP Custom Plugin Routes | **10.0** | No |
 | [CVE-2026-44181](CVE-2026-44181/) | Jupyter Enterprise Gateway | Jinja2 SSTI (RCE) | **10.0** | No |
 | [CVE-2026-54159](CVE-2026-54159/) | PrestaShop module `ps_facetedsearch` | PrestaShop ps_facetedsearch unauthenticated PHP object injection | **10.0** | No |
+| [CVE-2023-29509](CVE-2023-29509/) | xwiki-platform-flamingo-theme-ui | XWiki Platform Eval Injection (RCE) | **10.0** | No |
 | [CVE-2026-30860](CVE-2026-30860/) | WeKnora | SQL Injection Bypass (ARRAY/ROW AST) to RCE | **9.9** | No |
 | [CVE-2026-30861](CVE-2026-30861/) | WeKnora | OS Command Injection (MCP `-p` Flag Bypass) | **9.9** | No |
 | [CVE-2026-1868](CVE-2026-1868/) | GitLab AI Gateway | SSTI to DoS/Code Execution | **9.9** | **Yes** — filter abuse + `%` operator bypass patched sandbox |
