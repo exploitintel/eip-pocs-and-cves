@@ -27,6 +27,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-46339](CVE-2026-46339/) | 9router | Unauthenticated RCE via Unprotected MCP Custom Plugin Routes | **10.0** | No |
 | [CVE-2026-44181](CVE-2026-44181/) | Jupyter Enterprise Gateway | Jinja2 SSTI (RCE) | **10.0** | No |
 | [CVE-2026-54159](CVE-2026-54159/) | PrestaShop module `ps_facetedsearch` | PrestaShop ps_facetedsearch unauthenticated PHP object injection | **10.0** | No |
+| [CVE-2023-29509](CVE-2023-29509/) | xwiki-platform-flamingo-theme-ui | XWiki Platform Eval Injection (RCE) | **10.0** | No |
 | [CVE-2026-30860](CVE-2026-30860/) | WeKnora | SQL Injection Bypass (ARRAY/ROW AST) to RCE | **9.9** | No |
 | [CVE-2026-30861](CVE-2026-30861/) | WeKnora | OS Command Injection (MCP `-p` Flag Bypass) | **9.9** | No |
 | [CVE-2026-1868](CVE-2026-1868/) | GitLab AI Gateway | SSTI to DoS/Code Execution | **9.9** | **Yes** — filter abuse + `%` operator bypass patched sandbox |
@@ -123,7 +124,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-64608](CVE-2026-64608/) | Apache Fory (C++) | Compatible-Mode Heap Type Confusion | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-23 out of 109 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+23 out of 110 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ---
 
