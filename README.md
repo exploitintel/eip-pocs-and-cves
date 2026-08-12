@@ -78,6 +78,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-58154](CVE-2026-58154/) | Apache Traffic Server | OOB Write in MIME/Header Parsing | **9.2** | No |
 | [CVE-2026-66914](CVE-2026-66914/) | SEBLOD CCK (Joomla) | Unauthenticated Path Traversal to Arbitrary File Read | **9.2** | No |
 | [CVE-2026-43631](CVE-2026-43631/) | llama.cpp / llama-server | llama.cpp llama-server Use-After-Free via sleep-idle Race | **9.2** | No |
+| [CVE-2026-67285](CVE-2026-67285/) | SP Page Builder extension for Joomla | JoomShaper SP Page Builder Unauthenticated LFI | **9.2** | No |
 | [CVE-2026-26988](CVE-2026-26988/) | LibreNMS | SQL Injection (Blind) | **9.1** | No |
 | [CVE-2026-28370](CVE-2026-28370/) | OpenStack Vitrage | Eval Injection to RCE | **9.1** | No |
 | [CVE-2026-28215](CVE-2026-28215/) | Hoppscotch | Auth Bypass to Config Overwrite | **9.1** | No |
@@ -127,7 +128,7 @@ No hand-holding. No cherry-picked targets. One CVE number in, complete lab out.
 | [CVE-2026-64608](CVE-2026-64608/) | Apache Fory (C++) | Compatible-Mode Heap Type Confusion | **9.8** | No |
 | [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
 
-23 out of 111 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
+23 out of 112 runs ended with bypass or incomplete-fix findings. That's either bad luck or a pattern worth paying attention to.
 
 ---
 
