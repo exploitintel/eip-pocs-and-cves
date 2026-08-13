@@ -41,3 +41,6 @@ RUN-DOCKER-SINGLE.md
 
 # Internal tooling — not part of the CVE collection itself
 /.skills/
+
+# Lab-health audit output (never committed)
+.github/audit/runs/

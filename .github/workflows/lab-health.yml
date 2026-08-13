@@ -29,14 +29,38 @@ permissions:
   contents: read
 
 jobs:
+  plan:
+    # The shard count drives both the matrix and the runner argument. Deriving
+    # them from one value keeps them consistent: a hardcoded matrix silently
+    # under-covers the repo as soon as the input differs from it.
+    name: plan
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set.outputs.matrix }}
+      shards: ${{ steps.set.outputs.shards }}
+    steps:
+      - id: set
+        env:
+          SHARDS: ${{ github.event.inputs.shards || '8' }}
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os
+          n = int(os.environ["SHARDS"])
+          if not 1 <= n <= 64:
+              raise SystemExit(f"shards must be between 1 and 64, got {n}")
+          print(f"shards={n}")
+          print("matrix=" + json.dumps(list(range(n))))
+          PY
+
   health:
     name: labs (shard ${{ matrix.shard }})
+    needs: plan
     runs-on: ubuntu-latest
     timeout-minutes: 330
     strategy:
       fail-fast: false
       matrix:
-        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+        shard: ${{ fromJson(needs.plan.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -45,12 +69,12 @@ jobs:
         # own. Removing preinstalled toolchains we do not use frees ~20 GB.
         run: |
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
-                      /usr/local/share/boost "$AGENT_TOOLSDIRECTORY" || true
+                      /usr/local/share/boost "${AGENT_TOOLSDIRECTORY:-}" || true
           df -h / | tail -1
 
       - name: Audit shard
         env:
-          SHARDS: ${{ github.event.inputs.shards || '8' }}
+          SHARDS: ${{ needs.plan.outputs.shards }}
           ONLY: ${{ github.event.inputs.only || '' }}
         run: |
           only_args=""
@@ -66,7 +90,7 @@ jobs:
             --build-timeout 2400 \
             --up-timeout 900 \
             --disk-floor-gb 2 \
-            --disk-headroom-gb 12 \
+            --disk-headroom-gb 8 \
             $only_args
 
       - name: Upload shard results
@@ -79,7 +103,7 @@ jobs:
 
   report:
     name: report
-    needs: health
+    needs: [plan, health]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -91,10 +115,18 @@ jobs:
           path: shards
 
       - name: Build report and fail on regressions
+        # --repo lets the summary compare against every lab that should have
+        # been reported, so a shard that died without writing an artifact fails
+        # the run instead of quietly shrinking the coverage.
         run: |
-          find shards -name results.jsonl -exec cat {} + > all-results.jsonl
-          python3 .github/audit/ci_summary.py all-results.jsonl \
-            >> "$GITHUB_STEP_SUMMARY"
+          find shards -name results.jsonl -exec cat {} + > all-results.jsonl || true
+          set +e
+          python3 .github/audit/ci_summary.py all-results.jsonl --repo . > summary.md
+          rc=$?
+          set -e
+          cat summary.md >> "$GITHUB_STEP_SUMMARY"
+          cat summary.md
+          exit "$rc"
 
       - name: Upload combined report
         if: always()

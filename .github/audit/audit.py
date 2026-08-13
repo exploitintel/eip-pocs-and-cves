@@ -15,6 +15,7 @@ import os
 import pathlib
 import subprocess
 import sys
+import tempfile
 import time
 
 import inventory
@@ -22,7 +23,9 @@ import probes
 import safety
 
 REPO_DEFAULT = "."
-HARNESS_HOME = pathlib.Path(__file__).resolve().parent
+HARNESS_HOME = pathlib.Path(tempfile.gettempdir()) / "cve-lab-audit"
+# Never default inside the repository: run output would dirty the working
+# tree, and the dirty-tree guard would then refuse every subsequent run.
 RUNS_DIR = HARNESS_HOME / "runs"
 
 BUILD_TIMEOUT = 1200
@@ -31,7 +34,10 @@ PROBE_TIMEOUT = 180
 STABLE_SECONDS = 30
 BUILD_WORKERS = 6
 DISK_FLOOR_GB = safety.DISK_FLOOR_BYTES // 1024 ** 3
-DISK_HEADROOM_GB = 200
+# Prune images this run created once free space drops below this. Keep it
+# low: a large value fires after every lab on an ordinary disk and destroys
+# the layer cache, turning a warm re-run into a cold rebuild.
+DISK_HEADROOM_GB = 20
 
 INFRA_PATTERNS = (
     "toomanyrequests",
@@ -545,6 +551,22 @@ def run(args) -> int:
                     inventory.COHORT_VM: "NOT_DOCKER",
                 }.get(lab["cohort"], "SKIPPED"),
                 "reason": "not a docker lab", "recorded_at": _now(),
+            })
+
+    # Privileged labs excluded by policy are recorded, not silently dropped:
+    # a report that omits them reads as "everything passed" when 5 labs were
+    # never exercised.
+    if args.skip_privileged:
+        for lab in all_labs:
+            if lab["cohort"] != inventory.COHORT_DOCKER or not lab["privileged"]:
+                continue
+            if lab["cve"] in done:
+                continue
+            run_dir.append_result({
+                "cve": lab["cve"], "repo_sha": sha, "cohort": lab["cohort"],
+                "state": "SKIPPED", "privileged": True,
+                "reason": "privileged lab excluded by --skip-privileged",
+                "recorded_at": _now(),
             })
 
     if args.dry_run:
