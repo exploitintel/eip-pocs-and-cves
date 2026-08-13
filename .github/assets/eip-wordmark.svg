@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="120" viewBox="0 0 760 120" role="img" aria-labelledby="title description">
+  <title id="title">Exploit Intelligence Platform</title>
+  <desc id="description">The Exploit Intel terminal prompt mark and wordmark.</desc>
+  <style>
+    .word { fill: #15202b; }
+    .muted { fill: #627383; }
+    .mark-background { fill: #edf8ff; }
+    .mark-stroke { stroke: #1689d8; }
+    @media (prefers-color-scheme: dark) {
+      .word { fill: #edf6fc; }
+      .muted { fill: #9fb0bd; }
+      .mark-background { fill: #102b3d; }
+    }
+  </style>
+  <g transform="translate(74 22)">
+    <rect class="mark-background mark-stroke" width="76" height="76" rx="15" stroke-width="2"/>
+    <path class="mark-stroke" d="M22 22l22 16-22 16M48 56h12" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text class="word" x="174" y="61" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="38" font-weight="650" letter-spacing="-1.4">exploit<tspan fill="#1689d8">-intel</tspan></text>
+  <text class="muted" x="176" y="88" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600" letter-spacing="2.2">VULNERABILITY AND EXPLOIT INTELLIGENCE</text>
+</svg>
