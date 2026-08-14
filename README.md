@@ -138,6 +138,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;47194](CVE-2026-47194/) | **Frappe Framework**<br>Host-Header Poisoning to Magic-Link Account Takeover | **8.6** |
 | [CVE&#8209;2026&#8209;63637](CVE-2026-63637/) | **Dgraph**<br>Unauthenticated DQL Injection via GraphQL Regexp Filter | **8.6** |
 | [CVE&#8209;2026&#8209;70632](CVE-2026-70632/) | **FFmpeg**<br>CFHD Decoder Heap OOB Write via Crafted AVI | **8.5** |
+| [CVE&#8209;2026&#8209;64642](CVE-2026-64642/) | **Next.js**<br>Turbopack Middleware/Proxy Authentication Bypass (Single-Locale i18n) | **8.3** |
 | [CVE&#8209;2024&#8209;56143](CVE-2024-56143/) | **Strapi**<br>IDOR via lookup Parameter Injection | **8.2** |
 | [CVE&#8209;2026&#8209;42859](CVE-2026-42859/) | **neatvnc**<br>RSA-AES Pre-Auth Stack Buffer Overflow (RIP Hijack with No Canary) | **8.1** |
 | [CVE&#8209;2025&#8209;10622](CVE-2025-10622/) | **Foreman (Red Hat Satellite)**<br>OS Command Injection | **8.0** |
@@ -156,7 +157,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-23 of the 120 indexed packages record a bypass or incomplete-fix finding.
+23 of the 121 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
