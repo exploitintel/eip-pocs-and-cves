@@ -100,6 +100,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;64608](CVE-2026-64608/) | **Apache Fory (C++)**<br>Compatible-Mode Heap Type Confusion | **9.8** |
 | [CVE&#8209;2024&#8209;56325](CVE-2024-56325/) | **Apache Pinot**<br>Matrix Parameter Authentication Bypass | **9.8** |
 | [CVE&#8209;2026&#8209;33765](CVE-2026-33765/) | **Pi-hole AdminLTE**<br>OS Command Injection | **9.8** |
+| [CVE&#8209;2026&#8209;18366](CVE-2026-18366/) | **Events Manager**<br>< 7.4.1 Unauthenticated Privilege Escalation to Administrator | **9.8** |
 | [CVE&#8209;2025&#8209;24490](CVE-2025-24490/) | **Mattermost Server (Boards Plugin)**<br>SQL Injection (Blind) | **9.6** |
 | [CVE&#8209;2026&#8209;50540](CVE-2026-50540/) | **Kata Containers**<br>Config Path Annotation Arbitrary File Loading to Host Root Exec | **9.6** |
 | [CVE&#8209;2026&#8209;53488](CVE-2026-53488/) | **containerd CRI plugin**<br>Image LABEL Host Command Execution | **9.4** |
@@ -153,7 +154,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-23 of the 117 indexed packages record a bypass or incomplete-fix finding.
+23 of the 118 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
