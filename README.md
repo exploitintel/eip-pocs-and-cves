@@ -112,6 +112,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;66914](CVE-2026-66914/) | **SEBLOD CCK (Joomla)**<br>Unauthenticated Path Traversal to Arbitrary File Read | **9.2** |
 | [CVE&#8209;2026&#8209;43631](CVE-2026-43631/) | **llama.cpp / llama-server**<br>llama.cpp llama-server Use-After-Free via sleep-idle Race | **9.2** |
 | [CVE&#8209;2026&#8209;67285](CVE-2026-67285/) | **SP Page Builder extension for Joomla**<br>JoomShaper SP Page Builder Unauthenticated LFI | **9.2** |
+| [CVE&#8209;2026&#8209;70460](CVE-2026-70460/) | **rsync daemon receiver**<br>rsync Path Traversal via --partial-dir/--backup-dir Symlink | **9.2** |
 | [CVE&#8209;2026&#8209;26988](CVE-2026-26988/) | **LibreNMS**<br>SQL Injection (Blind) | **9.1** |
 | [CVE&#8209;2026&#8209;28370](CVE-2026-28370/) | **OpenStack Vitrage**<br>Eval Injection to RCE | **9.1** |
 | [CVE&#8209;2026&#8209;28215](CVE-2026-28215/) | **Hoppscotch**<br>Auth Bypass to Config Overwrite | **9.1** |
@@ -157,7 +158,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-23 of the 121 indexed packages record a bypass or incomplete-fix finding.
+23 of the 122 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
