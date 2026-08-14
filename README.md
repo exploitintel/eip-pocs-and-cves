@@ -131,6 +131,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2025&#8209;27818](CVE-2025-27818/) | **Apache Kafka Connect**<br>LdapLoginModule Denylist Bypass to RCE<br><br>**Bypass / fix review:** OAuthBearer SSRF bypasses patched denylist | **8.8** |
 | [CVE&#8209;2025&#8209;26866](CVE-2025-26866/) | **Apache HugeGraph PD**<br>Hessian Deserialization to RCE | **8.8** |
 | [CVE&#8209;2025&#8209;15566](CVE-2025-15566/) | **ingress-nginx**<br>Nginx Config Injection to RCE | **8.8** |
+| [CVE&#8209;2026&#8209;19385](CVE-2026-19385/) | **PostgreSQL `pg_dump` client utility**<br>PostgreSQL pg_dump heap buffer overflow (crafted transform list) | **8.8** |
 | [CVE&#8209;2025&#8209;7734](CVE-2025-7734/) | **GitLab CE/EE**<br>Stored XSS via Code Navigation (Account Takeover) | **8.7** |
 | [CVE&#8209;2026&#8209;10050](CVE-2026-10050/) | **Eclipse Jetty**<br>Digest Auth ISO-8859-1 Password-Collision Auth Bypass | **8.7** |
 | [CVE&#8209;2026&#8209;11349](CVE-2026-11349/) | **Modern Events Calendar Lite**<br>Unauthenticated Blind SQL Injection (DB Read) | **8.6** |
@@ -157,7 +158,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-23 of the 121 indexed packages record a bypass or incomplete-fix finding.
+23 of the 122 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
