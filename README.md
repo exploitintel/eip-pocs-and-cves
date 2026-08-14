@@ -33,125 +33,125 @@ environment that you own or are explicitly authorized to test.
 
 ## CVE index
 
-| CVE | Target | Class | CVSS | Bypass? |
-|-----|--------|-------|:----:|:-------:|
-| [CVE-2026-45829](CVE-2026-45829/) | Chroma ChromaDB (Python backend) | `trust_remote_code` Code Injection (Pre-Auth) to RCE | **10.0** | No |
-| [CVE-2025-14931](CVE-2025-14931/) | Hugging Face smolagents | Pickle Deserialization to RCE (Sandbox Escape) | **10.0** | No |
-| [CVE-2026-28289](CVE-2026-28289/) | FreeScout | TOCTOU File Upload Bypass to RCE | **10.0** | No |
-| [CVE-2026-28409](CVE-2026-28409/) | WeGIA | OS Command Injection to RCE | **10.0** | **Yes** - symlink file read + SQL injection in patched restore |
-| [CVE-2025-47916](CVE-2025-47916/) | Invision Community | SSTI to RCE (Pre-Auth) | **10.0** | No |
-| [CVE-2025-53833](CVE-2025-53833/) | LaRecipe (Laravel) | SSTI to RCE | **10.0** | No |
-| [CVE-2024-45409](CVE-2024-45409/) | ruby-saml | XML Signature Wrapping Auth Bypass | **10.0** | No |
-| [CVE-2022-0735](CVE-2022-0735/) | GitLab CE/EE | Runner Token Info Disclosure to RCE (Authenticated, Reporter+) | **10.0** | No |
-| [CVE-2026-44182](CVE-2026-44182/) | Jupyter Enterprise Gateway | Kubernetes Manifest Injection via Jinja2 Template Rendering | **10.0** | **Yes** - fixed build still allows arbitrary kernel image + hostPath mounts by design; defense layers held |
-| [CVE-2026-65887](CVE-2026-65887/) | Balbooa Gridbox (Joomla) | Unauthenticated Arbitrary Password Reset | **10.0** | **Yes** - 2.20.2 fix leaks the reset code in the JSON response; full ATO still reachable |
-| [CVE-2026-45336](CVE-2026-45336/) | HireFlow | Hard-coded Flask secret_key Auth Bypass | **10.0** | **Yes** - v1.3 "fix" never removed the key; auth/IDOR/CSRF all fall |
-| [CVE-2026-46339](CVE-2026-46339/) | 9router | Unauthenticated RCE via Unprotected MCP Custom Plugin Routes | **10.0** | No |
-| [CVE-2026-44181](CVE-2026-44181/) | Jupyter Enterprise Gateway | Jinja2 SSTI (RCE) | **10.0** | No |
-| [CVE-2026-54159](CVE-2026-54159/) | PrestaShop module `ps_facetedsearch` | PrestaShop ps_facetedsearch unauthenticated PHP object injection | **10.0** | No |
-| [CVE-2023-29509](CVE-2023-29509/) | xwiki-platform-flamingo-theme-ui | XWiki Platform Eval Injection (RCE) | **10.0** | No |
-| [CVE-2026-30860](CVE-2026-30860/) | WeKnora | SQL Injection Bypass (ARRAY/ROW AST) to RCE | **9.9** | No |
-| [CVE-2026-30861](CVE-2026-30861/) | WeKnora | OS Command Injection (MCP `-p` Flag Bypass) | **9.9** | No |
-| [CVE-2026-1868](CVE-2026-1868/) | GitLab AI Gateway | SSTI to DoS/Code Execution | **9.9** | **Yes** - filter abuse + `%` operator bypass patched sandbox |
-| [CVE-2025-58159](CVE-2025-58159/) | WeGIA | File Upload to RCE | **9.9** | No |
-| [CVE-2026-2749](CVE-2026-2749/) | Centreon Open Tickets | Path Traversal to RCE | **9.9** | No |
-| [CVE-2025-11539](CVE-2025-11539/) | Grafana Image Renderer | Arbitrary File Write to RCE | **9.9** | No |
-| [CVE-2016-15057](CVE-2016-15057/) | Apache Continuum | Command Injection (Pre-Auth) | **9.9** | No |
-| [CVE-2025-12421](CVE-2025-12421/) | Mattermost Server | Token Type Confusion to Account Takeover | **9.9** | No |
-| [CVE-2025-4981](CVE-2025-4981/) | Mattermost Server | Path Traversal to Arbitrary File Write | **9.9** | No |
-| [CVE-2024-37288](CVE-2024-37288/) | Kibana | YAML Deserialization (`!!js/function`) to RCE | **9.9** | No |
-| [CVE-2026-14364](CVE-2026-14364/) | themetechmount TrueBooker (WordPress plugin) | Unauthenticated Arbitrary Password Reset to Admin Account Takeover | **9.8** | No |
-| [CVE-2025-53606](CVE-2025-53606/) | Apache Seata (Fury) | Deserialization Whitelist Bypass to RCE | **9.8** | **Yes** - AllowListChecker pre-registration bypass |
-| [CVE-2025-32897](CVE-2025-32897/) | Apache Seata (Raft) | Insecure Deserialization to RCE | **9.8** | No |
-| [CVE-2026-3296](CVE-2026-3296/) | WPEverest Everest Forms | PHP Object Injection to RCE (Authenticated trigger, KEV-listed) | **9.8** | No |
-| [CVE-2025-67895](CVE-2025-67895/) | Apache Airflow Edge3 | Exposed Internal RPC API to RCE | **9.8** | No |
-| [CVE-2025-48913](CVE-2025-48913/) | Apache CXF (JMS Transport) | JNDI Injection to RCE | **9.8** | **Yes** - `AbstractMessageListenerContainer` bypasses `JndiHelper` fix |
-| [CVE-2025-54466](CVE-2025-54466/) | Apache OFBiz (Scrum Plugin) | SVN Argument Injection to RCE | **9.8** | No |
-| [CVE-2026-2635](CVE-2026-2635/) | MLflow | Default Credentials Auth Bypass | **9.8** | **Yes** - FastAPI route auth bypass |
-| [CVE-2026-23906](CVE-2026-23906/) | Apache Druid | LDAP Auth Bypass (Empty Password) | **9.8** | No |
-| [CVE-2025-59390](CVE-2025-59390/) | Apache Druid | Kerberos Auth Bypass (Weak PRNG Cookie Signing) | **9.8** | No |
-| [CVE-2026-28268](CVE-2026-28268/) | Vikunja | Auth Bypass via Password Reset Token Reuse | **9.8** | No |
-| [CVE-2025-69985](CVE-2025-69985/) | FUXA | Auth Bypass to RCE | **9.8** | **Yes** - JWT forgery + insecure defaults on patched |
-| [CVE-2025-60355](CVE-2025-60355/) | OneBlog (Java/FreeMarker) | SSTI to RCE | **9.8** | **Yes** - "fixed" version still exploitable |
-| [CVE-2025-58046](CVE-2025-58046/) | DataEase (Java/Spring Boot) | JNDI Injection to RCE | **9.8** | **Yes** - fix only patches Impala, CK/SQLServer unpatched |
-| [CVE-2025-66489](CVE-2025-66489/) | Cal.com | Auth Bypass via TOTP Code Injection | **9.8** | No |
-| [CVE-2026-28391](CVE-2026-28391/) | OpenClaw | Command Injection via cmd.exe Parsing Mismatch | **9.8** | No |
-| [CVE-2025-29953](CVE-2025-29953/) | Apache ActiveMQ NMS | Deserialization Filter Bypass | **9.8** | No |
-| [CVE-2025-27531](CVE-2025-27531/) | Apache InLong Manager | JDBC URL Sanitization Bypass to File Read/RCE | **9.8** | No |
-| [CVE-2025-62515](CVE-2025-62515/) | pyquokka FlightServer | Pickle Deserialization to RCE | **9.8** | **Yes** - do_get/do_put sinks bypass do_action-only fix |
-| [CVE-2026-0773](CVE-2026-0773/) | Upsonic | Cloudpickle Deserialization to RCE | **9.8** | No |
-| [CVE-2026-0760](CVE-2026-0760/) | MetaGPT | Pickle Deserialization + eval() to RCE | **9.8** | No |
-| [CVE-2024-31866](CVE-2024-31866/) | Apache Zeppelin | Environment Variable Injection to RCE | **9.8** | **Yes** - `ZEPPELIN_IMPERSONATE_CMD` bypasses `printf %q` fix |
-| [CVE-2026-0769](CVE-2026-0769/) | Langflow | Eval Injection via `exec()` to RCE (0-day) | **9.8** | No |
-| [CVE-2026-0768](CVE-2026-0768/) | Langflow | Code Injection via `exec()` to RCE | **9.8** | **Yes** - `AUTO_LOGIN=true` default bypasses auth fix |
-| [CVE-2026-0761](CVE-2026-0761/) | MetaGPT | Code Injection via `eval()` to RCE | **9.8** | **Yes** - `import_class()` + `pickle.loads()` bypass eval() fix |
-| [CVE-2025-50213](CVE-2025-50213/) | Apache Airflow (Snowflake) | SQL Injection via f-string Interpolation | **9.8** | **Yes** - fix validates 2/8 parameters, 6 remain injectable |
-| [CVE-2023-42117](CVE-2023-42117/) | Exim MTA | Improper IP Validation (PROXY Protocol) to DoS | **9.8** | No |
-| [CVE-2026-41940](CVE-2026-41940/) | cPanel & WHM | Pre-Auth CRLF Session Injection to Auth Bypass + RCE | **9.8** | No |
-| [CVE-2026-45538](CVE-2026-45538/) | OpenSIPS | `sip_to_json()` Stack Buffer Overflow to DoS | **9.8** | No |
-| [CVE-2026-61808](CVE-2026-61808/) | HKUDS LightRAG | Missing Auth to Unauthenticated Read/Write/Delete | **9.8** | No |
-| [CVE-2026-48085](CVE-2026-48085/) | OpenReception | Missing Authorization to Unauthenticated GLOBAL_ADMIN Creation | **9.8** | No |
-| [CVE-2026-66713](CVE-2026-66713/) | Apache Axis2/Java | Unauthenticated Java Deserialization RCE via Tribes Clustering | **9.8** | No |
-| [CVE-2021-32824](CVE-2021-32824/) | Apache Dubbo | Apache Dubbo Pre-Authentication Remote Code Execution | **9.8** | No |
-| [CVE-2025-15467](CVE-2025-15467/) | OpenSSL < 3.0.19 | CMS AEAD Stack Buffer Overflow | **9.8** | No |
-| [CVE-2025-62507](CVE-2025-62507/) | Redis 8.2.x (`XACKDEL`) | Redis 8.2 XACKDEL Stack Overflow Lab | **9.8** | No |
-| [CVE-2026-16258](CVE-2026-16258/) | Ajax Search Lite | Unauthenticated PHP Object Injection | **9.8** | No |
-| [CVE-2026-41252](CVE-2026-41252/) | xrdp | Pre-Auth Remote Code Execution (Heap OOB Write) | **9.8** | No |
-| [CVE-2026-64608](CVE-2026-64608/) | Apache Fory (C++) | Compatible-Mode Heap Type Confusion | **9.8** | No |
-| [CVE-2024-56325](CVE-2024-56325/) | Apache Pinot | Matrix Parameter Authentication Bypass | **9.8** | No |
-| [CVE-2026-33765](CVE-2026-33765/) | Pi-hole AdminLTE | OS Command Injection | **9.8** | No |
-| [CVE-2025-24490](CVE-2025-24490/) | Mattermost Server (Boards Plugin) | SQL Injection (Blind) | **9.6** | No |
-| [CVE-2026-50540](CVE-2026-50540/) | Kata Containers | Config Path Annotation Arbitrary File Loading to Host Root Exec | **9.6** | No |
-| [CVE-2026-53488](CVE-2026-53488/) | containerd CRI plugin | Image LABEL Host Command Execution | **9.4** | No |
-| [CVE-2026-55971](CVE-2026-55971/) | Apache Thrift | Pre-Auth ZLIB Heap Buffer Overflow Write | **9.3** | No |
-| [CVE-2026-65520](CVE-2026-65520/) | miniOrange WP OAuth Server | <= 6.2.0 SQL Injection | **9.3** | No |
-| [CVE-2026-58154](CVE-2026-58154/) | Apache Traffic Server | OOB Write in MIME/Header Parsing | **9.2** | No |
-| [CVE-2026-66914](CVE-2026-66914/) | SEBLOD CCK (Joomla) | Unauthenticated Path Traversal to Arbitrary File Read | **9.2** | No |
-| [CVE-2026-43631](CVE-2026-43631/) | llama.cpp / llama-server | llama.cpp llama-server Use-After-Free via sleep-idle Race | **9.2** | No |
-| [CVE-2026-67285](CVE-2026-67285/) | SP Page Builder extension for Joomla | JoomShaper SP Page Builder Unauthenticated LFI | **9.2** | No |
-| [CVE-2026-26988](CVE-2026-26988/) | LibreNMS | SQL Injection (Blind) | **9.1** | No |
-| [CVE-2026-28370](CVE-2026-28370/) | OpenStack Vitrage | Eval Injection to RCE | **9.1** | No |
-| [CVE-2026-28215](CVE-2026-28215/) | Hoppscotch | Auth Bypass to Config Overwrite | **9.1** | No |
-| [CVE-2025-55010](CVE-2025-55010/) | Kanboard | Deserialization to RCE | **9.1** | **Yes** - session handler bypass |
-| [CVE-2025-29927](CVE-2025-29927/) | Next.js | Middleware Authorization Bypass | **9.1** | No |
-| [CVE-2025-6000](CVE-2025-6000/) | HashiCorp Vault | Audit Log Prefix Code Injection to RCE | **9.1** | No |
-| [CVE-2025-68670](CVE-2025-68670/) | xrdp | Pre-Auth Stack Buffer Overflow (RIP Control / RCE Primitives) | **9.1** | **Yes** - v0.10.5 fix misses `xrdp_sec.c` heap overflow path |
-| [CVE-2026-59083](CVE-2026-59083/) | Apache Tomcat | RewriteValve URL-Decoding Security-Constraint Bypass | **9.1** | No |
-| [CVE-2025-27528](CVE-2025-27528/) | Apache InLong Manager | Apache InLong Manager JDBC URL Sensitive Parameter Filter Bypass | **9.1** | No |
-| [CVE-2026-23918](CVE-2026-23918/) | Apache HTTP Server (mod_http2) | Pre-Auth HTTP/2 Early-Reset Double Free (DoS) | **8.8** | No |
-| [CVE-2025-66524](CVE-2025-66524/) | Apache NiFi | Unsafe Deserialization via GetAsanaObject Processor | **8.8** | No |
-| [CVE-2026-0766](CVE-2026-0766/) | Open WebUI | exec() Code Injection to RCE | **8.8** | No |
-| [CVE-2026-0765](CVE-2026-0765/) | Open WebUI | pip Command Injection to RCE (0-day) | **8.8** | No |
-| [CVE-2025-49828](CVE-2025-49828/) | CyberArk Conjur | SSTI to RCE via ERB Policy Factory | **8.8** | No |
-| [CVE-2025-53192](CVE-2025-53192/) | Apache Commons OGNL | Expression Injection to RCE | **8.8** | No |
-| [CVE-2024-43115](CVE-2024-43115/) | Apache DolphinScheduler | Script Alert Plugin Authenticated RCE | **8.8** | **Yes** - 6 bypass techniques against `.sh` extension check |
-| [CVE-2025-27818](CVE-2025-27818/) | Apache Kafka Connect | LdapLoginModule Denylist Bypass to RCE | **8.8** | **Yes** - OAuthBearer SSRF bypasses patched denylist |
-| [CVE-2025-26866](CVE-2025-26866/) | Apache HugeGraph PD | Hessian Deserialization to RCE | **8.8** | No |
-| [CVE-2025-15566](CVE-2025-15566/) | ingress-nginx | Nginx Config Injection to RCE | **8.8** | No |
-| [CVE-2025-7734](CVE-2025-7734/) | GitLab CE/EE | Stored XSS via Code Navigation (Account Takeover) | **8.7** | No |
-| [CVE-2026-10050](CVE-2026-10050/) | Eclipse Jetty | Digest Auth ISO-8859-1 Password-Collision Auth Bypass | **8.7** | No |
-| [CVE-2026-11349](CVE-2026-11349/) | Modern Events Calendar Lite | Unauthenticated Blind SQL Injection (DB Read) | **8.6** | No |
-| [CVE-2024-21626](CVE-2024-21626/) | runc | Container Escape via Leaked FD (Host FS R/W) | **8.6** | No |
-| [CVE-2026-47194](CVE-2026-47194/) | Frappe Framework | Host-Header Poisoning to Magic-Link Account Takeover | **8.6** | No |
-| [CVE-2026-63637](CVE-2026-63637/) | Dgraph | Unauthenticated DQL Injection via GraphQL Regexp Filter | **8.6** | No |
-| [CVE-2026-70632](CVE-2026-70632/) | FFmpeg | CFHD Decoder Heap OOB Write via Crafted AVI | **8.5** | No |
-| [CVE-2024-56143](CVE-2024-56143/) | Strapi | IDOR via lookup Parameter Injection | **8.2** | No |
-| [CVE-2026-42859](CVE-2026-42859/) | neatvnc | RSA-AES Pre-Auth Stack Buffer Overflow (RIP Hijack with No Canary) | **8.1** | No |
-| [CVE-2025-10622](CVE-2025-10622/) | Foreman (Red Hat Satellite) | OS Command Injection | **8.0** | No |
-| [CVE-2026-41702](CVE-2026-41702/) | VMware Fusion 25.x | TOCTOU LPE via cnx-tmp Symlink Race (chown arbitrary file ownership) | **7.8** | No |
-| [CVE-2026-24289](CVE-2026-24289/) | Windows Kernel (ntoskrnl.exe) | IOCP Race Condition Use-After-Free (LPE) | **7.8** | No |
-| [CVE-2026-62242](CVE-2026-62242/) | Spring Boot Admin | Unauthenticated SSRF with Response Exfiltration | **7.7** | No |
-| [CVE-2026-20348](CVE-2026-20348/) | ClamAV libclamav XAR parser | ClamAV XAR File Format Processing Memory Corruption (DoS) | **7.5** | No |
-| [CVE-2026-26321](CVE-2026-26321/) | OpenClaw | Path Traversal / SSRF | **7.5** | No |
-| [CVE-2026-28372](CVE-2026-28372/) | GNU telnetd + util-linux | Privilege Escalation | **7.4** | No |
-| [CVE-2026-2580](CVE-2026-2580/) | WP Maps (wp-google-map-plugin) | Broken Access Control + Stored XSS (Unauthenticated) | **7.3** | No |
-| [CVE-2026-4105](CVE-2026-4105/) | systemd (systemd-machined) | Local Privilege Escalation (Improper Machine Class Access Control) | **6.7** | **Yes** - class=container + Varlink vl_method_open() missing namespace check |
-| [CVE-2025-2753](CVE-2025-2753/) | Assimp (LWS Importer) | Uninitialized Pointer Array (OOB Read / DoS) (0-day) | **6.3** | **Yes** - recommended fix bypassed via 2 NULL deref paths |
-| [CVE-2026-34980](CVE-2026-34980/) | OpenPrinting CUPS | PostScript PPD Injection to Code Execution as `lp` | **6.1** | No |
-| [CVE-2026-28417](CVE-2026-28417/) | Vim (netrw plugin) | OS Command Injection | **4.4** | No |
-| [CVE-2026-28296](CVE-2026-28296/) | GVFS FTP Backend | CRLF Command Injection | **4.3** | **Yes** - server-supplied path injection |
-| [CVE-2026-35414](CVE-2026-35414/) | OpenSSH | Certificate Principal Matching Authentication Bypass | **N/A** | No |
-| [CVE-2025-59060](CVE-2025-59060/) | Apache Ranger | Apache Ranger TLS Hostname Verification Bypass | **N/A** | No |
+| CVE | Research package | CVSS |
+|:----|:-----------------|:----:|
+| [CVE&#8209;2026&#8209;45829](CVE-2026-45829/) | **Chroma ChromaDB (Python backend)**<br>`trust_remote_code` Code Injection (Pre-Auth) to RCE | **10.0** |
+| [CVE&#8209;2025&#8209;14931](CVE-2025-14931/) | **Hugging Face smolagents**<br>Pickle Deserialization to RCE (Sandbox Escape) | **10.0** |
+| [CVE&#8209;2026&#8209;28289](CVE-2026-28289/) | **FreeScout**<br>TOCTOU File Upload Bypass to RCE | **10.0** |
+| [CVE&#8209;2026&#8209;28409](CVE-2026-28409/) | **WeGIA**<br>OS Command Injection to RCE<br><br>**Bypass / fix review:** symlink file read + SQL injection in patched restore | **10.0** |
+| [CVE&#8209;2025&#8209;47916](CVE-2025-47916/) | **Invision Community**<br>SSTI to RCE (Pre-Auth) | **10.0** |
+| [CVE&#8209;2025&#8209;53833](CVE-2025-53833/) | **LaRecipe (Laravel)**<br>SSTI to RCE | **10.0** |
+| [CVE&#8209;2024&#8209;45409](CVE-2024-45409/) | **ruby-saml**<br>XML Signature Wrapping Auth Bypass | **10.0** |
+| [CVE&#8209;2022&#8209;0735](CVE-2022-0735/) | **GitLab CE/EE**<br>Runner Token Info Disclosure to RCE (Authenticated, Reporter+) | **10.0** |
+| [CVE&#8209;2026&#8209;44182](CVE-2026-44182/) | **Jupyter Enterprise Gateway**<br>Kubernetes Manifest Injection via Jinja2 Template Rendering<br><br>**Bypass / fix review:** fixed build still allows arbitrary kernel image + hostPath mounts by design; defense layers held | **10.0** |
+| [CVE&#8209;2026&#8209;65887](CVE-2026-65887/) | **Balbooa Gridbox (Joomla)**<br>Unauthenticated Arbitrary Password Reset<br><br>**Bypass / fix review:** 2.20.2 fix leaks the reset code in the JSON response; full ATO still reachable | **10.0** |
+| [CVE&#8209;2026&#8209;45336](CVE-2026-45336/) | **HireFlow**<br>Hard-coded Flask secret_key Auth Bypass<br><br>**Bypass / fix review:** v1.3 "fix" never removed the key; auth/IDOR/CSRF all fall | **10.0** |
+| [CVE&#8209;2026&#8209;46339](CVE-2026-46339/) | **9router**<br>Unauthenticated RCE via Unprotected MCP Custom Plugin Routes | **10.0** |
+| [CVE&#8209;2026&#8209;44181](CVE-2026-44181/) | **Jupyter Enterprise Gateway**<br>Jinja2 SSTI (RCE) | **10.0** |
+| [CVE&#8209;2026&#8209;54159](CVE-2026-54159/) | **PrestaShop module `ps_facetedsearch`**<br>PrestaShop ps_facetedsearch unauthenticated PHP object injection | **10.0** |
+| [CVE&#8209;2023&#8209;29509](CVE-2023-29509/) | **xwiki-platform-flamingo-theme-ui**<br>XWiki Platform Eval Injection (RCE) | **10.0** |
+| [CVE&#8209;2026&#8209;30860](CVE-2026-30860/) | **WeKnora**<br>SQL Injection Bypass (ARRAY/ROW AST) to RCE | **9.9** |
+| [CVE&#8209;2026&#8209;30861](CVE-2026-30861/) | **WeKnora**<br>OS Command Injection (MCP `-p` Flag Bypass) | **9.9** |
+| [CVE&#8209;2026&#8209;1868](CVE-2026-1868/) | **GitLab AI Gateway**<br>SSTI to DoS/Code Execution<br><br>**Bypass / fix review:** filter abuse + `%` operator bypass patched sandbox | **9.9** |
+| [CVE&#8209;2025&#8209;58159](CVE-2025-58159/) | **WeGIA**<br>File Upload to RCE | **9.9** |
+| [CVE&#8209;2026&#8209;2749](CVE-2026-2749/) | **Centreon Open Tickets**<br>Path Traversal to RCE | **9.9** |
+| [CVE&#8209;2025&#8209;11539](CVE-2025-11539/) | **Grafana Image Renderer**<br>Arbitrary File Write to RCE | **9.9** |
+| [CVE&#8209;2016&#8209;15057](CVE-2016-15057/) | **Apache Continuum**<br>Command Injection (Pre-Auth) | **9.9** |
+| [CVE&#8209;2025&#8209;12421](CVE-2025-12421/) | **Mattermost Server**<br>Token Type Confusion to Account Takeover | **9.9** |
+| [CVE&#8209;2025&#8209;4981](CVE-2025-4981/) | **Mattermost Server**<br>Path Traversal to Arbitrary File Write | **9.9** |
+| [CVE&#8209;2024&#8209;37288](CVE-2024-37288/) | **Kibana**<br>YAML Deserialization (`!!js/function`) to RCE | **9.9** |
+| [CVE&#8209;2026&#8209;14364](CVE-2026-14364/) | **themetechmount TrueBooker (WordPress plugin)**<br>Unauthenticated Arbitrary Password Reset to Admin Account Takeover | **9.8** |
+| [CVE&#8209;2025&#8209;53606](CVE-2025-53606/) | **Apache Seata (Fury)**<br>Deserialization Whitelist Bypass to RCE<br><br>**Bypass / fix review:** AllowListChecker pre-registration bypass | **9.8** |
+| [CVE&#8209;2025&#8209;32897](CVE-2025-32897/) | **Apache Seata (Raft)**<br>Insecure Deserialization to RCE | **9.8** |
+| [CVE&#8209;2026&#8209;3296](CVE-2026-3296/) | **WPEverest Everest Forms**<br>PHP Object Injection to RCE (Authenticated trigger, KEV-listed) | **9.8** |
+| [CVE&#8209;2025&#8209;67895](CVE-2025-67895/) | **Apache Airflow Edge3**<br>Exposed Internal RPC API to RCE | **9.8** |
+| [CVE&#8209;2025&#8209;48913](CVE-2025-48913/) | **Apache CXF (JMS Transport)**<br>JNDI Injection to RCE<br><br>**Bypass / fix review:** `AbstractMessageListenerContainer` bypasses `JndiHelper` fix | **9.8** |
+| [CVE&#8209;2025&#8209;54466](CVE-2025-54466/) | **Apache OFBiz (Scrum Plugin)**<br>SVN Argument Injection to RCE | **9.8** |
+| [CVE&#8209;2026&#8209;2635](CVE-2026-2635/) | **MLflow**<br>Default Credentials Auth Bypass<br><br>**Bypass / fix review:** FastAPI route auth bypass | **9.8** |
+| [CVE&#8209;2026&#8209;23906](CVE-2026-23906/) | **Apache Druid**<br>LDAP Auth Bypass (Empty Password) | **9.8** |
+| [CVE&#8209;2025&#8209;59390](CVE-2025-59390/) | **Apache Druid**<br>Kerberos Auth Bypass (Weak PRNG Cookie Signing) | **9.8** |
+| [CVE&#8209;2026&#8209;28268](CVE-2026-28268/) | **Vikunja**<br>Auth Bypass via Password Reset Token Reuse | **9.8** |
+| [CVE&#8209;2025&#8209;69985](CVE-2025-69985/) | **FUXA**<br>Auth Bypass to RCE<br><br>**Bypass / fix review:** JWT forgery + insecure defaults on patched | **9.8** |
+| [CVE&#8209;2025&#8209;60355](CVE-2025-60355/) | **OneBlog (Java/FreeMarker)**<br>SSTI to RCE<br><br>**Bypass / fix review:** "fixed" version still exploitable | **9.8** |
+| [CVE&#8209;2025&#8209;58046](CVE-2025-58046/) | **DataEase (Java/Spring Boot)**<br>JNDI Injection to RCE<br><br>**Bypass / fix review:** fix only patches Impala, CK/SQLServer unpatched | **9.8** |
+| [CVE&#8209;2025&#8209;66489](CVE-2025-66489/) | **Cal.com**<br>Auth Bypass via TOTP Code Injection | **9.8** |
+| [CVE&#8209;2026&#8209;28391](CVE-2026-28391/) | **OpenClaw**<br>Command Injection via cmd.exe Parsing Mismatch | **9.8** |
+| [CVE&#8209;2025&#8209;29953](CVE-2025-29953/) | **Apache ActiveMQ NMS**<br>Deserialization Filter Bypass | **9.8** |
+| [CVE&#8209;2025&#8209;27531](CVE-2025-27531/) | **Apache InLong Manager**<br>JDBC URL Sanitization Bypass to File Read/RCE | **9.8** |
+| [CVE&#8209;2025&#8209;62515](CVE-2025-62515/) | **pyquokka FlightServer**<br>Pickle Deserialization to RCE<br><br>**Bypass / fix review:** do_get/do_put sinks bypass do_action-only fix | **9.8** |
+| [CVE&#8209;2026&#8209;0773](CVE-2026-0773/) | **Upsonic**<br>Cloudpickle Deserialization to RCE | **9.8** |
+| [CVE&#8209;2026&#8209;0760](CVE-2026-0760/) | **MetaGPT**<br>Pickle Deserialization + eval() to RCE | **9.8** |
+| [CVE&#8209;2024&#8209;31866](CVE-2024-31866/) | **Apache Zeppelin**<br>Environment Variable Injection to RCE<br><br>**Bypass / fix review:** `ZEPPELIN_IMPERSONATE_CMD` bypasses `printf %q` fix | **9.8** |
+| [CVE&#8209;2026&#8209;0769](CVE-2026-0769/) | **Langflow**<br>Eval Injection via `exec()` to RCE (0-day) | **9.8** |
+| [CVE&#8209;2026&#8209;0768](CVE-2026-0768/) | **Langflow**<br>Code Injection via `exec()` to RCE<br><br>**Bypass / fix review:** `AUTO_LOGIN=true` default bypasses auth fix | **9.8** |
+| [CVE&#8209;2026&#8209;0761](CVE-2026-0761/) | **MetaGPT**<br>Code Injection via `eval()` to RCE<br><br>**Bypass / fix review:** `import_class()` + `pickle.loads()` bypass eval() fix | **9.8** |
+| [CVE&#8209;2025&#8209;50213](CVE-2025-50213/) | **Apache Airflow (Snowflake)**<br>SQL Injection via f-string Interpolation<br><br>**Bypass / fix review:** fix validates 2/8 parameters, 6 remain injectable | **9.8** |
+| [CVE&#8209;2023&#8209;42117](CVE-2023-42117/) | **Exim MTA**<br>Improper IP Validation (PROXY Protocol) to DoS | **9.8** |
+| [CVE&#8209;2026&#8209;41940](CVE-2026-41940/) | **cPanel & WHM**<br>Pre-Auth CRLF Session Injection to Auth Bypass + RCE | **9.8** |
+| [CVE&#8209;2026&#8209;45538](CVE-2026-45538/) | **OpenSIPS**<br>`sip_to_json()` Stack Buffer Overflow to DoS | **9.8** |
+| [CVE&#8209;2026&#8209;61808](CVE-2026-61808/) | **HKUDS LightRAG**<br>Missing Auth to Unauthenticated Read/Write/Delete | **9.8** |
+| [CVE&#8209;2026&#8209;48085](CVE-2026-48085/) | **OpenReception**<br>Missing Authorization to Unauthenticated GLOBAL_ADMIN Creation | **9.8** |
+| [CVE&#8209;2026&#8209;66713](CVE-2026-66713/) | **Apache Axis2/Java**<br>Unauthenticated Java Deserialization RCE via Tribes Clustering | **9.8** |
+| [CVE&#8209;2021&#8209;32824](CVE-2021-32824/) | **Apache Dubbo**<br>Apache Dubbo Pre-Authentication Remote Code Execution | **9.8** |
+| [CVE&#8209;2025&#8209;15467](CVE-2025-15467/) | **OpenSSL < 3.0.19**<br>CMS AEAD Stack Buffer Overflow | **9.8** |
+| [CVE&#8209;2025&#8209;62507](CVE-2025-62507/) | **Redis 8.2.x (`XACKDEL`)**<br>Redis 8.2 XACKDEL Stack Overflow Lab | **9.8** |
+| [CVE&#8209;2026&#8209;16258](CVE-2026-16258/) | **Ajax Search Lite**<br>Unauthenticated PHP Object Injection | **9.8** |
+| [CVE&#8209;2026&#8209;41252](CVE-2026-41252/) | **xrdp**<br>Pre-Auth Remote Code Execution (Heap OOB Write) | **9.8** |
+| [CVE&#8209;2026&#8209;64608](CVE-2026-64608/) | **Apache Fory (C++)**<br>Compatible-Mode Heap Type Confusion | **9.8** |
+| [CVE&#8209;2024&#8209;56325](CVE-2024-56325/) | **Apache Pinot**<br>Matrix Parameter Authentication Bypass | **9.8** |
+| [CVE&#8209;2026&#8209;33765](CVE-2026-33765/) | **Pi-hole AdminLTE**<br>OS Command Injection | **9.8** |
+| [CVE&#8209;2025&#8209;24490](CVE-2025-24490/) | **Mattermost Server (Boards Plugin)**<br>SQL Injection (Blind) | **9.6** |
+| [CVE&#8209;2026&#8209;50540](CVE-2026-50540/) | **Kata Containers**<br>Config Path Annotation Arbitrary File Loading to Host Root Exec | **9.6** |
+| [CVE&#8209;2026&#8209;53488](CVE-2026-53488/) | **containerd CRI plugin**<br>Image LABEL Host Command Execution | **9.4** |
+| [CVE&#8209;2026&#8209;55971](CVE-2026-55971/) | **Apache Thrift**<br>Pre-Auth ZLIB Heap Buffer Overflow Write | **9.3** |
+| [CVE&#8209;2026&#8209;65520](CVE-2026-65520/) | **miniOrange WP OAuth Server**<br><= 6.2.0 SQL Injection | **9.3** |
+| [CVE&#8209;2026&#8209;58154](CVE-2026-58154/) | **Apache Traffic Server**<br>OOB Write in MIME/Header Parsing | **9.2** |
+| [CVE&#8209;2026&#8209;66914](CVE-2026-66914/) | **SEBLOD CCK (Joomla)**<br>Unauthenticated Path Traversal to Arbitrary File Read | **9.2** |
+| [CVE&#8209;2026&#8209;43631](CVE-2026-43631/) | **llama.cpp / llama-server**<br>llama.cpp llama-server Use-After-Free via sleep-idle Race | **9.2** |
+| [CVE&#8209;2026&#8209;67285](CVE-2026-67285/) | **SP Page Builder extension for Joomla**<br>JoomShaper SP Page Builder Unauthenticated LFI | **9.2** |
+| [CVE&#8209;2026&#8209;26988](CVE-2026-26988/) | **LibreNMS**<br>SQL Injection (Blind) | **9.1** |
+| [CVE&#8209;2026&#8209;28370](CVE-2026-28370/) | **OpenStack Vitrage**<br>Eval Injection to RCE | **9.1** |
+| [CVE&#8209;2026&#8209;28215](CVE-2026-28215/) | **Hoppscotch**<br>Auth Bypass to Config Overwrite | **9.1** |
+| [CVE&#8209;2025&#8209;55010](CVE-2025-55010/) | **Kanboard**<br>Deserialization to RCE<br><br>**Bypass / fix review:** session handler bypass | **9.1** |
+| [CVE&#8209;2025&#8209;29927](CVE-2025-29927/) | **Next.js**<br>Middleware Authorization Bypass | **9.1** |
+| [CVE&#8209;2025&#8209;6000](CVE-2025-6000/) | **HashiCorp Vault**<br>Audit Log Prefix Code Injection to RCE | **9.1** |
+| [CVE&#8209;2025&#8209;68670](CVE-2025-68670/) | **xrdp**<br>Pre-Auth Stack Buffer Overflow (RIP Control / RCE Primitives)<br><br>**Bypass / fix review:** v0.10.5 fix misses `xrdp_sec.c` heap overflow path | **9.1** |
+| [CVE&#8209;2026&#8209;59083](CVE-2026-59083/) | **Apache Tomcat**<br>RewriteValve URL-Decoding Security-Constraint Bypass | **9.1** |
+| [CVE&#8209;2025&#8209;27528](CVE-2025-27528/) | **Apache InLong Manager**<br>Apache InLong Manager JDBC URL Sensitive Parameter Filter Bypass | **9.1** |
+| [CVE&#8209;2026&#8209;23918](CVE-2026-23918/) | **Apache HTTP Server (mod_http2)**<br>Pre-Auth HTTP/2 Early-Reset Double Free (DoS) | **8.8** |
+| [CVE&#8209;2025&#8209;66524](CVE-2025-66524/) | **Apache NiFi**<br>Unsafe Deserialization via GetAsanaObject Processor | **8.8** |
+| [CVE&#8209;2026&#8209;0766](CVE-2026-0766/) | **Open WebUI**<br>exec() Code Injection to RCE | **8.8** |
+| [CVE&#8209;2026&#8209;0765](CVE-2026-0765/) | **Open WebUI**<br>pip Command Injection to RCE (0-day) | **8.8** |
+| [CVE&#8209;2025&#8209;49828](CVE-2025-49828/) | **CyberArk Conjur**<br>SSTI to RCE via ERB Policy Factory | **8.8** |
+| [CVE&#8209;2025&#8209;53192](CVE-2025-53192/) | **Apache Commons OGNL**<br>Expression Injection to RCE | **8.8** |
+| [CVE&#8209;2024&#8209;43115](CVE-2024-43115/) | **Apache DolphinScheduler**<br>Script Alert Plugin Authenticated RCE<br><br>**Bypass / fix review:** 6 bypass techniques against `.sh` extension check | **8.8** |
+| [CVE&#8209;2025&#8209;27818](CVE-2025-27818/) | **Apache Kafka Connect**<br>LdapLoginModule Denylist Bypass to RCE<br><br>**Bypass / fix review:** OAuthBearer SSRF bypasses patched denylist | **8.8** |
+| [CVE&#8209;2025&#8209;26866](CVE-2025-26866/) | **Apache HugeGraph PD**<br>Hessian Deserialization to RCE | **8.8** |
+| [CVE&#8209;2025&#8209;15566](CVE-2025-15566/) | **ingress-nginx**<br>Nginx Config Injection to RCE | **8.8** |
+| [CVE&#8209;2025&#8209;7734](CVE-2025-7734/) | **GitLab CE/EE**<br>Stored XSS via Code Navigation (Account Takeover) | **8.7** |
+| [CVE&#8209;2026&#8209;10050](CVE-2026-10050/) | **Eclipse Jetty**<br>Digest Auth ISO-8859-1 Password-Collision Auth Bypass | **8.7** |
+| [CVE&#8209;2026&#8209;11349](CVE-2026-11349/) | **Modern Events Calendar Lite**<br>Unauthenticated Blind SQL Injection (DB Read) | **8.6** |
+| [CVE&#8209;2024&#8209;21626](CVE-2024-21626/) | **runc**<br>Container Escape via Leaked FD (Host FS R/W) | **8.6** |
+| [CVE&#8209;2026&#8209;47194](CVE-2026-47194/) | **Frappe Framework**<br>Host-Header Poisoning to Magic-Link Account Takeover | **8.6** |
+| [CVE&#8209;2026&#8209;63637](CVE-2026-63637/) | **Dgraph**<br>Unauthenticated DQL Injection via GraphQL Regexp Filter | **8.6** |
+| [CVE&#8209;2026&#8209;70632](CVE-2026-70632/) | **FFmpeg**<br>CFHD Decoder Heap OOB Write via Crafted AVI | **8.5** |
+| [CVE&#8209;2024&#8209;56143](CVE-2024-56143/) | **Strapi**<br>IDOR via lookup Parameter Injection | **8.2** |
+| [CVE&#8209;2026&#8209;42859](CVE-2026-42859/) | **neatvnc**<br>RSA-AES Pre-Auth Stack Buffer Overflow (RIP Hijack with No Canary) | **8.1** |
+| [CVE&#8209;2025&#8209;10622](CVE-2025-10622/) | **Foreman (Red Hat Satellite)**<br>OS Command Injection | **8.0** |
+| [CVE&#8209;2026&#8209;41702](CVE-2026-41702/) | **VMware Fusion 25.x**<br>TOCTOU LPE via cnx-tmp Symlink Race (chown arbitrary file ownership) | **7.8** |
+| [CVE&#8209;2026&#8209;24289](CVE-2026-24289/) | **Windows Kernel (ntoskrnl.exe)**<br>IOCP Race Condition Use-After-Free (LPE) | **7.8** |
+| [CVE&#8209;2026&#8209;62242](CVE-2026-62242/) | **Spring Boot Admin**<br>Unauthenticated SSRF with Response Exfiltration | **7.7** |
+| [CVE&#8209;2026&#8209;20348](CVE-2026-20348/) | **ClamAV libclamav XAR parser**<br>ClamAV XAR File Format Processing Memory Corruption (DoS) | **7.5** |
+| [CVE&#8209;2026&#8209;26321](CVE-2026-26321/) | **OpenClaw**<br>Path Traversal / SSRF | **7.5** |
+| [CVE&#8209;2026&#8209;28372](CVE-2026-28372/) | **GNU telnetd + util-linux**<br>Privilege Escalation | **7.4** |
+| [CVE&#8209;2026&#8209;2580](CVE-2026-2580/) | **WP Maps (wp-google-map-plugin)**<br>Broken Access Control + Stored XSS (Unauthenticated) | **7.3** |
+| [CVE&#8209;2026&#8209;4105](CVE-2026-4105/) | **systemd (systemd-machined)**<br>Local Privilege Escalation (Improper Machine Class Access Control)<br><br>**Bypass / fix review:** class=container + Varlink vl_method_open() missing namespace check | **6.7** |
+| [CVE&#8209;2025&#8209;2753](CVE-2025-2753/) | **Assimp (LWS Importer)**<br>Uninitialized Pointer Array (OOB Read / DoS) (0-day)<br><br>**Bypass / fix review:** recommended fix bypassed via 2 NULL deref paths | **6.3** |
+| [CVE&#8209;2026&#8209;34980](CVE-2026-34980/) | **OpenPrinting CUPS**<br>PostScript PPD Injection to Code Execution as `lp` | **6.1** |
+| [CVE&#8209;2026&#8209;28417](CVE-2026-28417/) | **Vim (netrw plugin)**<br>OS Command Injection | **4.4** |
+| [CVE&#8209;2026&#8209;28296](CVE-2026-28296/) | **GVFS FTP Backend**<br>CRLF Command Injection<br><br>**Bypass / fix review:** server-supplied path injection | **4.3** |
+| [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
+| [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
 23 of the 117 indexed packages record a bypass or incomplete-fix finding.
 
