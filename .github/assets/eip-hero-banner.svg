@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="280" viewBox="0 0 1200 280" role="img" aria-labelledby="title description">
+  <title id="title">Exploit Intelligence Platform</title>
+  <desc id="description">Hero banner: dark panel with dot grid, the production terminal prompt mark in brand green, and the exploit-intel wordmark.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0e12"/>
+      <stop offset="0.55" stop-color="#10161c"/>
+      <stop offset="1" stop-color="#17222b"/>
+    </linearGradient>
+    <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#34e0a4" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#34e0a4"/>
+      <stop offset="1" stop-color="#34e0a4" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="#34e0a4" opacity="0.10"/>
+    </pattern>
+  </defs>
+  <style>
+    .cursor { animation: eip-blink 2.8s ease-in-out infinite; }
+    @keyframes eip-blink {
+      0%, 45% { opacity: 1; }
+      55%, 75% { opacity: 0; }
+      85%, 100% { opacity: 1; }
+    }
+    .tile-ring { animation: eip-ring 6s ease-in-out infinite; }
+    @keyframes eip-ring {
+      0%, 100% { stroke-opacity: 0.35; }
+      50% { stroke-opacity: 0.7; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cursor, .tile-ring { animation: none; }
+    }
+  </style>
+  <rect width="1200" height="280" rx="24" fill="url(#panel)"/>
+  <rect width="1200" height="280" rx="24" fill="url(#dots)"/>
+  <g transform="translate(567 45)">
+    <rect class="tile-ring" width="66" height="66" rx="15" fill="#17222b" stroke="#34e0a4" stroke-opacity="0.35"/>
+    <g transform="translate(1 1) scale(1)">
+      <path d="M 13.8 16.5 L 18.8 12.5 L 35.8 32.5 L 18.8 52.5 L 13.8 48.5 L 27.8 32.5 Z" fill="#34e0a4"/>
+      <rect class="cursor" x="35.8" y="43.5" width="16" height="6" rx="3" fill="#34e0a4"/>
+    </g>
+  </g>
+  <text x="600" y="182" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="52" font-weight="700" letter-spacing="-1.8" fill="#eef4f8">exploit<tspan fill="#34e0a4">-intel</tspan></text>
+  <rect x="480" y="200" width="240" height="2" fill="url(#rule)"/>
+  <text x="600" y="234" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600" letter-spacing="3.4" fill="#98a6b3">VULNERABILITY AND EXPLOIT INTELLIGENCE</text>
+</svg>
