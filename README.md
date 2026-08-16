@@ -163,7 +163,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-23 of the 124 indexed packages record a bypass or incomplete-fix finding.
+23 of the 127 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
