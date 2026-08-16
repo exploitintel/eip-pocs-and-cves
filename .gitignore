@@ -25,6 +25,9 @@ WORKING-DOCKER.md
 check-all-docker.sh
 
 # Docker/lab runtime artifacts
+**/.env
+**/.env.control
+**/reg-page-id.txt
 *.log
 *.pid
 **/data/
