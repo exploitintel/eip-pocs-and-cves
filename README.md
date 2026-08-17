@@ -137,7 +137,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2025&#8209;26866](CVE-2025-26866/) | **Apache HugeGraph PD**<br>Hessian Deserialization to RCE | **8.8** |
 | [CVE&#8209;2025&#8209;15566](CVE-2025-15566/) | **ingress-nginx**<br>Nginx Config Injection to RCE | **8.8** |
 | [CVE&#8209;2026&#8209;19385](CVE-2026-19385/) | **PostgreSQL `pg_dump` client utility**<br>PostgreSQL pg_dump heap buffer overflow (crafted transform list) | **8.8** |
-| [CVE&#8209;2026&#8209;70456](CVE-2026-70456/) | **rsync daemon**<br>rsync read_args() Heap Out-of-Bounds Write<br><br>**Bypass / fix review:** Disclosure basis: the vulnerability, the fix commit | **8.8** |
+| [CVE&#8209;2026&#8209;70456](CVE-2026-70456/) | **rsync daemon**<br>rsync read_args() Heap Out-of-Bounds Write<br><br>**Bypass / fix review:** v3.5.0 fix reviewed; no bypass or sibling variant found | **8.8** |
 | [CVE&#8209;2025&#8209;7734](CVE-2025-7734/) | **GitLab CE/EE**<br>Stored XSS via Code Navigation (Account Takeover) | **8.7** |
 | [CVE&#8209;2026&#8209;10050](CVE-2026-10050/) | **Eclipse Jetty**<br>Digest Auth ISO-8859-1 Password-Collision Auth Bypass | **8.7** |
 | [CVE&#8209;2026&#8209;48489](CVE-2026-48489/) | **symfony/security-http**<br>Symfony security-http: Firewall Bypass via failure_forward Subrequest | **8.7** |
