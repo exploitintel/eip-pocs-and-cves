@@ -108,7 +108,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;50540](CVE-2026-50540/) | **Kata Containers**<br>Config Path Annotation Arbitrary File Loading to Host Root Exec | **9.6** |
 | [CVE&#8209;2026&#8209;53488](CVE-2026-53488/) | **containerd CRI plugin**<br>Image LABEL Host Command Execution | **9.4** |
 | [CVE&#8209;2026&#8209;63221](CVE-2026-63221/) | **CodeIgniter4 Query Builder `deleteBatch()`**<br>CodeIgniter4 deleteBatch() SQL Injection | **9.4** |
-| [CVE&#8209;2026&#8209;50561](CVE-2026-50561/) | **xerrors Yuxi**<br>Yuxi JWT Authentication Bypass<br><br>**Bypass / fix review:** **Yes.** The fix (commit 1e8b20e30b1258d1cd3ebf3af5c6212da4b84b48) addresses all reachable paths: | **9.4** |
+| [CVE&#8209;2026&#8209;50561](CVE-2026-50561/) | **xerrors Yuxi**<br>Yuxi JWT Authentication Bypass<br><br>**Bypass / fix review:** v0.6.2 fix sufficient; no bypass or sibling variant found | **9.4** |
 | [CVE&#8209;2026&#8209;55971](CVE-2026-55971/) | **Apache Thrift**<br>Pre-Auth ZLIB Heap Buffer Overflow Write | **9.3** |
 | [CVE&#8209;2026&#8209;65520](CVE-2026-65520/) | **miniOrange WP OAuth Server**<br><= 6.2.0 SQL Injection | **9.3** |
 | [CVE&#8209;2026&#8209;66659](CVE-2026-66659/) | **Tablesome Table**<br>Authenticated Blind SQL Injection | **9.3** |
