@@ -110,6 +110,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;53488](CVE-2026-53488/) | **containerd CRI plugin**<br>Image LABEL Host Command Execution | **9.4** |
 | [CVE&#8209;2026&#8209;63221](CVE-2026-63221/) | **CodeIgniter4 Query Builder `deleteBatch()`**<br>CodeIgniter4 deleteBatch() SQL Injection | **9.4** |
 | [CVE&#8209;2026&#8209;50561](CVE-2026-50561/) | **xerrors Yuxi**<br>Yuxi JWT Authentication Bypass<br><br>**Bypass / fix review:** v0.6.2 fix sufficient; no bypass or sibling variant found | **9.4** |
+| [CVE&#8209;2026&#8209;19478](CVE-2026-19478/) | **GitLab CE/EE GraphQL API**<br>GitLab GraphQL Multiplex Query Swap (Unauthenticated Code Injection)<br><br>**Bypass / fix review:** Disclosure basis: this analysis covers ONLY the already-patched, already-disclosed | **9.4** |
 | [CVE&#8209;2026&#8209;55971](CVE-2026-55971/) | **Apache Thrift**<br>Pre-Auth ZLIB Heap Buffer Overflow Write | **9.3** |
 | [CVE&#8209;2026&#8209;65520](CVE-2026-65520/) | **miniOrange WP OAuth Server**<br><= 6.2.0 SQL Injection | **9.3** |
 | [CVE&#8209;2026&#8209;66659](CVE-2026-66659/) | **Tablesome Table**<br>Authenticated Blind SQL Injection | **9.3** |
@@ -169,7 +170,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-25 of the 132 indexed packages record a bypass or incomplete-fix finding.
+26 of the 134 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
