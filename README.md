@@ -151,6 +151,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;63637](CVE-2026-63637/) | **Dgraph**<br>Unauthenticated DQL Injection via GraphQL Regexp Filter | **8.6** |
 | [CVE&#8209;2026&#8209;70632](CVE-2026-70632/) | **FFmpeg**<br>CFHD Decoder Heap OOB Write via Crafted AVI | **8.5** |
 | [CVE&#8209;2026&#8209;64642](CVE-2026-64642/) | **Next.js**<br>Turbopack Middleware/Proxy Authentication Bypass (Single-Locale i18n) | **8.3** |
+| [CVE&#8209;2026&#8209;29035](CVE-2026-29035/) | **civetweb `read_websocket()`**<br>CivetWeb WebSocket permessage-deflate Out-of-Bounds Write | **8.3** |
 | [CVE&#8209;2024&#8209;56143](CVE-2024-56143/) | **Strapi**<br>IDOR via lookup Parameter Injection | **8.2** |
 | [CVE&#8209;2026&#8209;42859](CVE-2026-42859/) | **neatvnc**<br>RSA-AES Pre-Auth Stack Buffer Overflow (RIP Hijack with No Canary) | **8.1** |
 | [CVE&#8209;2026&#8209;18039](CVE-2026-18039/) | **Essential Addons for Elementor**<br>< 6.7.2 Unauthenticated Privilege Escalation | **8.1** |
