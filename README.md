@@ -104,6 +104,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;19089](CVE-2026-19089/) | **Product Input Fields for WooCommerce**<br>Unauthenticated Arbitrary File Upload / RCE | **9.8** |
 | [CVE&#8209;2026&#8209;16299](CVE-2026-16299/) | **Single Sign On For TNG**<br>< 2.2.0 Unauthenticated Arbitrary Password Reset | **9.8** |
 | [CVE&#8209;2026&#8209;50027](CVE-2026-50027/) | **mcp-memory-service**<br>missing authentication on /api/documents/* | **9.8** |
+| [CVE&#8209;2026&#8209;46670](CVE-2026-46670/) | **YesWiki `yeswiki/yeswiki`**<br>YesWiki < 4.6.4 Unauthenticated SQL Injection | **9.8** |
 | [CVE&#8209;2025&#8209;24490](CVE-2025-24490/) | **Mattermost Server (Boards Plugin)**<br>SQL Injection (Blind) | **9.6** |
 | [CVE&#8209;2026&#8209;50540](CVE-2026-50540/) | **Kata Containers**<br>Config Path Annotation Arbitrary File Loading to Host Root Exec | **9.6** |
 | [CVE&#8209;2026&#8209;71319](CVE-2026-71319/) | **@nuxt/devtools**<br>Nuxt DevTools Unauthenticated WebSocket RPC Remote Code Execution | **9.6** |
@@ -170,7 +171,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-26 of the 134 indexed packages record a bypass or incomplete-fix finding.
+26 of the 135 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
