@@ -107,7 +107,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;46670](CVE-2026-46670/) | **YesWiki `yeswiki/yeswiki`**<br>YesWiki < 4.6.4 Unauthenticated SQL Injection | **9.8** |
 | [CVE&#8209;2025&#8209;24490](CVE-2025-24490/) | **Mattermost Server (Boards Plugin)**<br>SQL Injection (Blind) | **9.6** |
 | [CVE&#8209;2026&#8209;50540](CVE-2026-50540/) | **Kata Containers**<br>Config Path Annotation Arbitrary File Loading to Host Root Exec | **9.6** |
-| [CVE&#8209;2026&#8209;71319](CVE-2026-71319/) | **@nuxt/devtools**<br>Nuxt DevTools Unauthenticated WebSocket RPC Remote Code Execution | **9.6** |
+| [CVE&#8209;2026&#8209;73843](CVE-2026-73843/) | **OpenChoreo control-plane `cluster-gateway`**<br>OpenChoreo cluster-gateway unauthenticated data-plane management APIs | **9.6** |
 | [CVE&#8209;2026&#8209;53488](CVE-2026-53488/) | **containerd CRI plugin**<br>Image LABEL Host Command Execution | **9.4** |
 | [CVE&#8209;2026&#8209;63221](CVE-2026-63221/) | **CodeIgniter4 Query Builder `deleteBatch()`**<br>CodeIgniter4 deleteBatch() SQL Injection | **9.4** |
 | [CVE&#8209;2026&#8209;50561](CVE-2026-50561/) | **xerrors Yuxi**<br>Yuxi JWT Authentication Bypass<br><br>**Bypass / fix review:** v0.6.2 fix sufficient; no bypass or sibling variant found | **9.4** |
