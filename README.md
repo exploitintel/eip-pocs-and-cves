@@ -118,6 +118,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;55971](CVE-2026-55971/) | **Apache Thrift**<br>Pre-Auth ZLIB Heap Buffer Overflow Write | **9.3** |
 | [CVE&#8209;2026&#8209;65520](CVE-2026-65520/) | **miniOrange WP OAuth Server**<br><= 6.2.0 SQL Injection | **9.3** |
 | [CVE&#8209;2026&#8209;66659](CVE-2026-66659/) | **Tablesome Table**<br>Authenticated Blind SQL Injection | **9.3** |
+| [CVE&#8209;2026&#8209;59683](CVE-2026-59683/) | **CalcProgrammer1 OpenRGB SDK network server (`ProfileManager`)**<br>— OpenRGB Arbitrary File Write via SDK Profile Name | **9.3** |
 | [CVE&#8209;2026&#8209;58154](CVE-2026-58154/) | **Apache Traffic Server**<br>OOB Write in MIME/Header Parsing | **9.2** |
 | [CVE&#8209;2026&#8209;66914](CVE-2026-66914/) | **SEBLOD CCK (Joomla)**<br>Unauthenticated Path Traversal to Arbitrary File Read | **9.2** |
 | [CVE&#8209;2026&#8209;43631](CVE-2026-43631/) | **llama.cpp / llama-server**<br>llama.cpp llama-server Use-After-Free via sleep-idle Race | **9.2** |
