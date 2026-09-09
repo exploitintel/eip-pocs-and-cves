@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://exploit-intel.com">
-    <img src=".github/assets/eip-hero-banner.svg" alt="Exploit Intelligence Platform" width="100%">
+    <img src=".github/assets/eip-hero-banner.png" alt="Exploit Intelligence Platform" width="100%">
   </a>
 </p>
 
