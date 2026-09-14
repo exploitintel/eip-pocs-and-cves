@@ -109,6 +109,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;52889](CVE-2026-52889/) | **verbb/formie**<br>Verbb Formie SSTI in Hidden field defaults | **9.8** |
 | [CVE&#8209;2026&#8209;85506](CVE-2026-85506/) | **FreeIPMI `ipmi-oem` — Dell `get-system-info idrac-info` subcommand**<br>— FreeIPMI `ipmi-oem` Stack-Based Buffer Overflow | **9.8** |
 | [CVE&#8209;2026&#8209;85509](CVE-2026-85509/) | **FreeIPMI client tools — `bmc-device --read-fru` (`libfreeipmi/fru/ipmi-fru.c`)**<br>— FreeIPMI `_read_fru_data` Stack-Based Buffer Overflow | **9.8** |
+| [CVE&#8209;2026&#8209;56207](CVE-2026-56207/) | **impalad hs2-http SAML2 authentication (`HiveSamlAuthTokenGenerator`)**<br>— Apache Impala SAML2 Bearer-Token Authentication Bypass | **9.8** |
 | [CVE&#8209;2025&#8209;24490](CVE-2025-24490/) | **Mattermost Server (Boards Plugin)**<br>SQL Injection (Blind) | **9.6** |
 | [CVE&#8209;2026&#8209;50540](CVE-2026-50540/) | **Kata Containers**<br>Config Path Annotation Arbitrary File Loading to Host Root Exec | **9.6** |
 | [CVE&#8209;2026&#8209;73843](CVE-2026-73843/) | **OpenChoreo control-plane `cluster-gateway`**<br>OpenChoreo cluster-gateway unauthenticated data-plane management APIs | **9.6** |
@@ -182,7 +183,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-26 of the 146 indexed packages record a bypass or incomplete-fix finding.
+26 of the 147 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
