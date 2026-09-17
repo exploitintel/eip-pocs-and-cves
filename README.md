@@ -169,6 +169,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2025&#8209;10622](CVE-2025-10622/) | **Foreman (Red Hat Satellite)**<br>OS Command Injection | **8.0** |
 | [CVE&#8209;2026&#8209;41702](CVE-2026-41702/) | **VMware Fusion 25.x**<br>TOCTOU LPE via cnx-tmp Symlink Race (chown arbitrary file ownership) | **7.8** |
 | [CVE&#8209;2026&#8209;24289](CVE-2026-24289/) | **Windows Kernel (ntoskrnl.exe)**<br>IOCP Race Condition Use-After-Free (LPE) | **7.8** |
+| [CVE&#8209;2026&#8209;19624](CVE-2026-19624/) | **NetworkManager-l2tp VPN plugin (`nm-l2tp-service`, root daemon)**<br>— NetworkManager-l2tp vpn.data Newline Injection → Root Code Execution | **7.8** |
 | [CVE&#8209;2026&#8209;62242](CVE-2026-62242/) | **Spring Boot Admin**<br>Unauthenticated SSRF with Response Exfiltration | **7.7** |
 | [CVE&#8209;2026&#8209;20348](CVE-2026-20348/) | **ClamAV libclamav XAR parser**<br>ClamAV XAR File Format Processing Memory Corruption (DoS) | **7.5** |
 | [CVE&#8209;2026&#8209;26321](CVE-2026-26321/) | **OpenClaw**<br>Path Traversal / SSRF | **7.5** |
@@ -183,7 +184,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-26 of the 147 indexed packages record a bypass or incomplete-fix finding.
+26 of the 148 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
