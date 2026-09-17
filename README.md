@@ -154,6 +154,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2025&#8209;7734](CVE-2025-7734/) | **GitLab CE/EE**<br>Stored XSS via Code Navigation (Account Takeover) | **8.7** |
 | [CVE&#8209;2026&#8209;10050](CVE-2026-10050/) | **Eclipse Jetty**<br>Digest Auth ISO-8859-1 Password-Collision Auth Bypass | **8.7** |
 | [CVE&#8209;2026&#8209;48489](CVE-2026-48489/) | **symfony/security-http**<br>Symfony security-http: Firewall Bypass via failure_forward Subrequest | **8.7** |
+| [CVE&#8209;2026&#8209;92593](CVE-2026-92593/) | **fixture**<br>— Craft CMS 5.10.0–5.10.12 Authenticated RCE (returnUrl HMAC oracle → unsandboxed Twig) | **8.7** |
 | [CVE&#8209;2026&#8209;11349](CVE-2026-11349/) | **Modern Events Calendar Lite**<br>Unauthenticated Blind SQL Injection (DB Read) | **8.6** |
 | [CVE&#8209;2024&#8209;21626](CVE-2024-21626/) | **runc**<br>Container Escape via Leaked FD (Host FS R/W) | **8.6** |
 | [CVE&#8209;2026&#8209;47194](CVE-2026-47194/) | **Frappe Framework**<br>Host-Header Poisoning to Magic-Link Account Takeover | **8.6** |
@@ -184,7 +185,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-26 of the 148 indexed packages record a bypass or incomplete-fix finding.
+26 of the 149 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
