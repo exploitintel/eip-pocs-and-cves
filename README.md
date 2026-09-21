@@ -140,6 +140,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2025&#8209;68670](CVE-2025-68670/) | **xrdp**<br>Pre-Auth Stack Buffer Overflow (RIP Control / RCE Primitives)<br><br>**Bypass / fix review:** v0.10.5 fix misses `xrdp_sec.c` heap overflow path | **9.1** |
 | [CVE&#8209;2026&#8209;59083](CVE-2026-59083/) | **Apache Tomcat**<br>RewriteValve URL-Decoding Security-Constraint Bypass | **9.1** |
 | [CVE&#8209;2025&#8209;27528](CVE-2025-27528/) | **Apache InLong Manager**<br>Apache InLong Manager JDBC URL Sensitive Parameter Filter Bypass | **9.1** |
+| [CVE&#8209;2026&#8209;48019](CVE-2026-48019/) | **`laravel/framework` (default `email` validation rule + Mail address layer)**<br>— Laravel Framework CRLF Injection in Default Email Rule (SMTP Smuggling) | **8.9** |
 | [CVE&#8209;2026&#8209;23918](CVE-2026-23918/) | **Apache HTTP Server (mod_http2)**<br>Pre-Auth HTTP/2 Early-Reset Double Free (DoS) | **8.8** |
 | [CVE&#8209;2025&#8209;66524](CVE-2025-66524/) | **Apache NiFi**<br>Unsafe Deserialization via GetAsanaObject Processor | **8.8** |
 | [CVE&#8209;2026&#8209;0766](CVE-2026-0766/) | **Open WebUI**<br>exec() Code Injection to RCE | **8.8** |
@@ -187,7 +188,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-26 of the 151 indexed packages record a bypass or incomplete-fix finding.
+26 of the 152 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
