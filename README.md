@@ -162,6 +162,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2024&#8209;21626](CVE-2024-21626/) | **runc**<br>Container Escape via Leaked FD (Host FS R/W) | **8.6** |
 | [CVE&#8209;2026&#8209;47194](CVE-2026-47194/) | **Frappe Framework**<br>Host-Header Poisoning to Magic-Link Account Takeover | **8.6** |
 | [CVE&#8209;2026&#8209;63637](CVE-2026-63637/) | **Dgraph**<br>Unauthenticated DQL Injection via GraphQL Regexp Filter | **8.6** |
+| [CVE&#8209;2026&#8209;88926](CVE-2026-88926/) | **WordPress plugin `vikrentitems` (E4J s.r.l.)**<br>— VikRentItems Flexible Rental Management System: Unauthenticated SQL Injection | **8.6** |
 | [CVE&#8209;2026&#8209;70632](CVE-2026-70632/) | **FFmpeg**<br>CFHD Decoder Heap OOB Write via Crafted AVI | **8.5** |
 | [CVE&#8209;2026&#8209;64642](CVE-2026-64642/) | **Next.js**<br>Turbopack Middleware/Proxy Authentication Bypass (Single-Locale i18n) | **8.3** |
 | [CVE&#8209;2026&#8209;29035](CVE-2026-29035/) | **civetweb `read_websocket()`**<br>CivetWeb WebSocket permessage-deflate Out-of-Bounds Write | **8.3** |
@@ -188,7 +189,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-26 of the 152 indexed packages record a bypass or incomplete-fix finding.
+26 of the 153 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
