@@ -26,6 +26,8 @@ check-all-docker.sh
 
 # Docker/lab runtime artifacts
 **/.env
+# v4 pipeline packages deliberately ship a reviewed lab-only .env
+!CVE-*/.env
 **/.env.control
 **/reg-page-id.txt
 *.log
