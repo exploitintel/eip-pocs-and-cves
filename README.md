@@ -126,6 +126,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;66659](CVE-2026-66659/) | **Tablesome Table**<br>Authenticated Blind SQL Injection | **9.3** |
 | [CVE&#8209;2026&#8209;59683](CVE-2026-59683/) | **CalcProgrammer1 OpenRGB SDK network server (`ProfileManager`)**<br>— OpenRGB Arbitrary File Write via SDK Profile Name | **9.3** |
 | [CVE&#8209;2026&#8209;88877](CVE-2026-88877/) | **Traefik Kubernetes ingress-nginx provider**<br>— Traefik ingress-nginx from-to-www-redirect Authentication Bypass | **9.3** |
+| [CVE&#8209;2026&#8209;95601](CVE-2026-95601/) | **`woo-product-filter` — Product Filter by WBW (WBW Plugins), WordPress plugin**<br>Product Filter by WBW unauthenticated SQL injection | **9.3** |
 | [CVE&#8209;2026&#8209;58154](CVE-2026-58154/) | **Apache Traffic Server**<br>OOB Write in MIME/Header Parsing | **9.2** |
 | [CVE&#8209;2026&#8209;66914](CVE-2026-66914/) | **SEBLOD CCK (Joomla)**<br>Unauthenticated Path Traversal to Arbitrary File Read | **9.2** |
 | [CVE&#8209;2026&#8209;43631](CVE-2026-43631/) | **llama.cpp / llama-server**<br>llama.cpp llama-server Use-After-Free via sleep-idle Race | **9.2** |
@@ -197,7 +198,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-26 of the 161 indexed packages record a bypass or incomplete-fix finding.
+26 of the 162 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
