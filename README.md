@@ -112,6 +112,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;56207](CVE-2026-56207/) | **impalad hs2-http SAML2 authentication (`HiveSamlAuthTokenGenerator`)**<br>— Apache Impala SAML2 Bearer-Token Authentication Bypass | **9.8** |
 | [CVE&#8209;2026&#8209;14349](CVE-2026-14349/) | **TrueBooker – Appointment Booking and Scheduler System (WordPress plugin, slug `truebooker-appointment-booking`)**<br>— TrueBooker Unauthenticated Arbitrary User Email Modification | **9.8** |
 | [CVE&#8209;2026&#8209;97359](CVE-2026-97359/) | **fixture**<br>HFS 2.4.0 unauthenticated RCE via multipart upload-filename template injection | **9.8** |
+| [CVE&#8209;2026&#8209;12227](CVE-2026-12227/) | **Visual Composer Website Builder (WordPress plugin, `visualcomposer`)**<br>— Visual Composer Website Builder unauthenticated LFI | **9.8** |
 | [CVE&#8209;2025&#8209;24490](CVE-2025-24490/) | **Mattermost Server (Boards Plugin)**<br>SQL Injection (Blind) | **9.6** |
 | [CVE&#8209;2026&#8209;50540](CVE-2026-50540/) | **Kata Containers**<br>Config Path Annotation Arbitrary File Loading to Host Root Exec | **9.6** |
 | [CVE&#8209;2026&#8209;73843](CVE-2026-73843/) | **OpenChoreo control-plane `cluster-gateway`**<br>OpenChoreo cluster-gateway unauthenticated data-plane management APIs | **9.6** |
@@ -198,7 +199,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-26 of the 162 indexed packages record a bypass or incomplete-fix finding.
+26 of the 163 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
