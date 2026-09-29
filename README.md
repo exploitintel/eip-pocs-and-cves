@@ -196,12 +196,13 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;4105](CVE-2026-4105/) | **systemd (systemd-machined)**<br>Local Privilege Escalation (Improper Machine Class Access Control)<br><br>**Bypass / fix review:** class=container + Varlink vl_method_open() missing namespace check | **6.7** |
 | [CVE&#8209;2025&#8209;2753](CVE-2025-2753/) | **Assimp (LWS Importer)**<br>Uninitialized Pointer Array (OOB Read / DoS) (0-day)<br><br>**Bypass / fix review:** recommended fix bypassed via 2 NULL deref paths | **6.3** |
 | [CVE&#8209;2026&#8209;34980](CVE-2026-34980/) | **OpenPrinting CUPS**<br>PostScript PPD Injection to Code Execution as `lp` | **6.1** |
+| [CVE&#8209;2026&#8209;18335](CVE-2026-18335/) | **Kirki – Freeform Page Builder, Website Builder & Customizer (WordPress plugin)**<br>— Kirki (WordPress plugin) Unauthenticated Blind SSRF | **5.4** |
 | [CVE&#8209;2026&#8209;28417](CVE-2026-28417/) | **Vim (netrw plugin)**<br>OS Command Injection | **4.4** |
 | [CVE&#8209;2026&#8209;28296](CVE-2026-28296/) | **GVFS FTP Backend**<br>CRLF Command Injection<br><br>**Bypass / fix review:** server-supplied path injection | **4.3** |
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-26 of the 165 indexed packages record a bypass or incomplete-fix finding.
+26 of the 166 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
