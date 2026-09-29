@@ -1,0 +1,311 @@
+package bearer
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+	"strings"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
+
+	"github.com/canonical/lxd/lxd/auth"
+	"github.com/canonical/lxd/lxd/auth/encryption"
+	"github.com/canonical/lxd/lxd/identity"
+	"github.com/canonical/lxd/lxd/request"
+	"github.com/canonical/lxd/lxd/request/security"
+	"github.com/canonical/lxd/shared/api"
+)
+
+// CookieNameSession is the name of the cookie used to store session bearer tokens.
+const CookieNameSession = "token_bearer_session"
+
+// IsDevLXDRequest returns true if the caller sent a bearer token in the Authorization header that is a JWT and appears to
+// have this LXD cluster as the issuer. If true, it returns the raw token, and the subject.
+func IsDevLXDRequest(r *http.Request, clusterUUID string) (isRequest bool, token string, subject string) {
+	return isAuthorizationHeaderRequestFromAudience(r, clusterUUID, encryption.DevLXDAudience(clusterUUID))
+}
+
+// IsAPIRequest returns true if the caller sent a JWT that has this LXD cluster as the issuer.
+// If true, it returns the location that the token was found, the raw token, and the subject.
+// The JWT is not verified. The caller must call [Authenticate] to verify the returned raw token.
+func IsAPIRequest(r *http.Request, clusterUUID string) (isRequest bool, location auth.TokenLocation, token string, subject string) {
+	isRequest, token, subject = isAuthorizationHeaderRequestFromAudience(r, clusterUUID, encryption.LXDAudience(clusterUUID))
+	if isRequest {
+		return true, auth.TokenLocationAuthorizationBearer, token, subject
+	}
+
+	isRequest, token, subject = isQueryRequest(r, clusterUUID)
+	if isRequest {
+		return true, auth.TokenLocationQuery, token, subject
+	}
+
+	isRequest, token, subject = isCookieRequest(r, clusterUUID)
+	if isRequest {
+		return true, auth.TokenLocationCookie, token, subject
+	}
+
+	return false, 0, "", ""
+}
+
+// isQueryRequest returns true if the caller sent a bearer token in the "token" query parameter that is a JWT and appears
+// to have this LXD cluster as the issuer. If true, it returns the raw token, and the subject.
+func isQueryRequest(r *http.Request, clusterUUID string) (isRequest bool, token string, subject string) {
+	token = r.URL.Query().Get("token")
+	if token == "" {
+		return false, "", ""
+	}
+
+	subject, _, err := isLXDToken(token, clusterUUID, encryption.LXDAudience(clusterUUID))
+	if err != nil {
+		return false, "", ""
+	}
+
+	return true, token, subject
+}
+
+// isCookieRequest returns true if the caller sent a cookie [CookieNameSession] that is a JWT and appears
+// to have this LXD cluster as the issuer. If true, it returns the raw token, and the subject.
+func isCookieRequest(r *http.Request, clusterUUID string) (isRequest bool, token string, subject string) {
+	cookie, err := r.Cookie(CookieNameSession)
+	if err != nil {
+		return false, "", ""
+	}
+
+	token = cookie.Value
+	if token == "" {
+		return false, "", ""
+	}
+
+	subject, _, err = isLXDToken(token, clusterUUID, encryption.LXDAudience(clusterUUID))
+	if err != nil {
+		return false, "", ""
+	}
+
+	return true, token, subject
+}
+
+// isAuthorizationHeaderRequestFromAudience returns true if the caller sent a bearer token in the Authorization header that is a
+// JWT and appears to have this LXD cluster as the issuer. If true, it returns the raw token, and the subject.
+func isAuthorizationHeaderRequestFromAudience(r *http.Request, clusterUUID string, audience string) (isRequest bool, token string, subject string) {
+	// Check Authorization header for bearer token.
+	token, ok := strings.CutPrefix(r.Header.Get("Authorization"), "Bearer ")
+	if !ok || token == "" {
+		return false, "", ""
+	}
+
+	subject, _, err := isLXDToken(token, clusterUUID, audience)
+	if err != nil {
+		return false, "", ""
+	}
+
+	return true, token, subject
+}
+
+// IsSessionToken returns the session UUID and the issued at claim, or an error if it is not a LXD token.
+// The issued at claim is used to determine the cluster secret used when the signing key was derived.
+// The session ID is used as a salt when deriving the signing key from the cluster secret.
+// LXD sets session tokens as cookies. If this function returns an error, the session cookie should be deleted
+// to force the caller to reauthenticate.
+func IsSessionToken(token string, clusterUUID string) (*uuid.UUID, *time.Time, error) {
+	sub, issuedAt, err := isLXDToken(token, clusterUUID, encryption.LXDAudience(clusterUUID))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	sessionID, err := uuid.Parse(sub)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return &sessionID, issuedAt, nil
+}
+
+// isLXDToken checks if the given token looks like it was issued by this LXD cluster and returns an error if it doesn't.
+// It does not verify the token signature.
+func isLXDToken(token string, clusterUUID string, expectedAudience string) (string, *time.Time, error) {
+	// Check we can parse it as a JWT.
+	claims := jwt.MapClaims{}
+	t, _, err := jwt.NewParser().ParseUnverified(token, claims)
+	if err != nil {
+		return "", nil, fmt.Errorf("Failed parsing JWT: %w", err)
+	}
+
+	// There must be an issuer
+	issuer, err := t.Claims.GetIssuer()
+	if err != nil {
+		return "", nil, fmt.Errorf("Failed getting token issuer: %w", err)
+	}
+
+	// There must be a subject
+	sub, err := t.Claims.GetSubject()
+	if err != nil {
+		return "", nil, fmt.Errorf("Failed getting token subject: %w", err)
+	}
+
+	// Expect the issuer to be "lxd:{cluster_uuid}".
+	expectIssuer := encryption.Issuer(clusterUUID)
+	if issuer != expectIssuer {
+		return "", nil, errors.New("Token issuer does not match")
+	}
+
+	audience, err := t.Claims.GetAudience()
+	if err != nil {
+		return "", nil, fmt.Errorf("Failed getting token audience: %w", err)
+	}
+
+	if len(audience) != 1 || audience[0] != expectedAudience {
+		return "", nil, errors.New("Token does not contain the expected audience")
+	}
+
+	issuedAt, err := t.Claims.GetIssuedAt()
+	if err != nil {
+		return "", nil, fmt.Errorf("Failed getting token issued at: %w", err)
+	}
+
+	return sub, &issuedAt.Time, nil
+}
+
+// Authenticate gets a bearer identity from the cache using the given subject, and verifies that it is of the expected
+// type. It then verifies that the token was signed by the secret associated with that identity, and that the token has
+// not expired.
+//
+// emit is invoked at the moment of the auth decision for failure paths that
+// look like a real LXD JWT being misused (the spec's authn_token_reuse case),
+// so security event emission stays adjacent to the auth decision and bearer
+// does not have to depend on the events package.
+func Authenticate(ctx context.Context, subject string, token string, tokenLocation auth.TokenLocation, identityCache *identity.Cache, emit func(*api.EventSecurity)) (*request.RequestorArgs, error) {
+	var secret []byte
+	var getSecretErr error
+	switch tokenLocation {
+	case auth.TokenLocationAuthorizationBearer:
+		// Get the identity from the cache by the subject.
+		secret, getSecretErr = identityCache.GetSecret(subject)
+		if getSecretErr != nil {
+			// If not found, check if the token is for the initial UI identity and report misuse
+			// (the initial UI token should not be set in the authorization header).
+			initialUISecret, err := identityCache.GetInitialUISecret()
+			if err != nil {
+				emit(tokenReuseEvent(ctx, subject, "Unrecognised bearer token subject"))
+				return nil, api.StatusErrorf(http.StatusForbidden, "Unrecognized token subject: %w", getSecretErr)
+			}
+
+			_, err = verifyToken(token, func() ([]byte, error) {
+				return initialUISecret, nil
+			})
+			if err == nil {
+				emit(tokenReuseEvent(ctx, subject, "Initial UI access token presented in Authorization header"))
+				return nil, api.NewStatusError(http.StatusForbidden, "The initial UI access token may not be set in the Authorization header")
+			}
+
+			emit(tokenReuseEvent(ctx, subject, "Unrecognised bearer token subject"))
+			return nil, api.StatusErrorf(http.StatusForbidden, "Unrecognized token subject: %w", getSecretErr)
+		}
+
+	case auth.TokenLocationQuery, auth.TokenLocationCookie:
+		secret, getSecretErr = identityCache.GetInitialUISecret()
+		if getSecretErr != nil {
+			// If not available, check if token is standard bearer token and report misuse (it should not be set in this location).
+			bearerSecret, err := identityCache.GetSecret(subject)
+			if err != nil {
+				return nil, api.StatusErrorf(http.StatusForbidden, "Initial UI authentication not configured: %w", getSecretErr)
+			}
+
+			_, err = verifyToken(token, func() ([]byte, error) {
+				return bearerSecret, nil
+			})
+			if err == nil {
+				emit(tokenReuseEvent(ctx, subject, "Bearer token presented as query parameter or cookie"))
+				return nil, api.NewStatusError(http.StatusForbidden, "Bearer tokens may not be set as a query parameter or as a cookie")
+			}
+
+			return nil, api.StatusErrorf(http.StatusForbidden, "Initial UI authentication not configured: %w", getSecretErr)
+		}
+
+	default:
+		return nil, fmt.Errorf("Invalid token location %d", tokenLocation)
+	}
+
+	expiresAt, getSecretErr := verifyToken(token, func() ([]byte, error) {
+		return secret, nil
+	})
+	if getSecretErr != nil {
+		emit(tokenReuseEvent(ctx, subject, "Bearer token verification failed"))
+		return nil, fmt.Errorf("Failed authenticating bearer token: %w", getSecretErr)
+	}
+
+	return &request.RequestorArgs{
+		Trusted:   true,
+		Protocol:  api.AuthenticationMethodBearer,
+		Username:  subject,
+		ExpiresAt: expiresAt,
+	}, nil
+}
+
+// tokenReuseEvent builds an authn_token_reuse audit event for a bearer-auth
+// failure. The subject is recorded via WithRequestorOverride because the
+// requestor has not yet been built (the identity could not be authenticated);
+// the override merges over the address/user-agent populated by UserEvent
+// from the per-request audit info.
+func tokenReuseEvent(ctx context.Context, subject string, description string) *api.EventSecurity {
+	return security.AuthnTokenReuse.UserEvent(
+		ctx,
+		security.LevelWarning,
+		description,
+		security.WithRequestorOverride(&api.EventSecurityRequestor{
+			Username: subject,
+			Protocol: api.AuthenticationMethodBearer,
+		}),
+	)
+}
+
+// VerifySessionToken verifies that a given OIDC session token was signed by a key derived from the given cluster secret
+// using the session ID as a salt.
+func VerifySessionToken(token string, clusterSecret []byte, sessionID uuid.UUID) error {
+	_, err := verifyToken(token, func() ([]byte, error) {
+		return encryption.TokenSigningKey(clusterSecret, sessionID[:])
+	})
+
+	return err
+}
+
+// verifyToken verifies that the given token was signed by the key returned by the given key func.
+// For a valid token, an expiration time is returned.
+func verifyToken(token string, keyFunc func() ([]byte, error)) (expiresAt *time.Time, err error) {
+	// Always use UTC time.
+	timeFunc := func() time.Time {
+		return time.Now().UTC()
+	}
+
+	// Get a parser. We don't need to verify the issuer or audience because we have already inspected the payload to check this.
+	// We do not use a leeway. This is so the expiry is exact. This might cause issues if there is time skew between
+	// cluster members.
+	parser := jwt.NewParser(
+		jwt.WithIssuedAt(),           // Verify time now is not before the token was issued. The not before is automatically verified.
+		jwt.WithExpirationRequired(), // Verify token has not expired.
+		jwt.WithTimeFunc(timeFunc),   // Ensure the UTC time is used for comparison.
+	)
+
+	// Use the identity secret as the signing key.
+	jwtKeyFunc := func(_ *jwt.Token) (any, error) {
+		return keyFunc()
+	}
+
+	// Verify the token.
+	var claims jwt.RegisteredClaims
+	_, err = parser.ParseWithClaims(token, &claims, jwtKeyFunc)
+	if err != nil {
+		return nil, api.StatusErrorf(http.StatusForbidden, "Token is not valid: %w", err)
+	}
+
+	expiry, err := claims.GetExpirationTime()
+	if err != nil {
+		return nil, api.StatusErrorf(http.StatusForbidden, "Token does not have an expiration time: %w", err)
+	}
+
+	tokenExpiresAt := expiry.UTC()
+
+	return &tokenExpiresAt, nil
+}

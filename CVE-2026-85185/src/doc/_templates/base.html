@@ -1,0 +1,21 @@
+{% extends "!base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  {% if seo_noindex %}
+  {# Prevent indexing for older RTD versions defined in conf.py (noindex_versions). #}
+  <meta name="robots" content="noindex">
+  {% endif %}
+  {% if pagename == "search" %}
+  {# Load the search scorer before searchtools.js to affect search results ranking. #}
+  <script src="{{ pathto('_static/js/search_scorer.js', 1) }}"></script>
+  {% endif %}
+{% endblock %}
+
+{% block theme_scripts %}
+{{ super() }}
+<script>
+  window.flyoutDefaultVersionLabel = "{{ flyout_default_version_label }}";
+  const github_url = "{{ github_url }}";
+</script>
+{% endblock theme_scripts %}

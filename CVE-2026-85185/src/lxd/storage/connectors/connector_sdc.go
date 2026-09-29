@@ -1,0 +1,111 @@
+package connectors
+
+import (
+	"context"
+	"errors"
+	"os"
+
+	"github.com/canonical/lxd/lxd/storage/block"
+	"github.com/canonical/lxd/shared/revert"
+)
+
+const (
+	// SDCDevicePath represents the SDC device once the respective kernel module is loaded.
+	SDCDevicePath = "/dev/scini"
+
+	// sdcDiskDevicePrefix is the prefix of the SDC disk device name in /dev/disk/by-id/.
+	sdcDiskDevicePrefix = "emc-vol-"
+)
+
+var _ Connector = &connectorSDC{}
+
+type connectorSDC struct {
+	common
+}
+
+// Type returns the type of the connector.
+func (c *connectorSDC) Type() string {
+	return TypeSDC
+}
+
+// Transport returns the transport type of the connector.
+func (c *connectorSDC) Transport() TransportType {
+	return TransportTCP
+}
+
+// Version returns a non-empty string if the SDC kernel module is loaded.
+func (c *connectorSDC) Version() (string, error) {
+	ok := c.drvCfgIsSDCInstalled()
+	if !ok {
+		return "", errors.New("SDC kernel module is not loaded")
+	}
+
+	return "detected (" + TypeSDC + ")", nil
+}
+
+// drvCfgIsSDCInstalled checks if the SDC kernel module is loaded.
+func (c *connectorSDC) drvCfgIsSDCInstalled() bool {
+	// Check to see if the SDC device is available.
+	info, err := os.Stat(SDCDevicePath)
+	if err != nil {
+		return false
+	}
+
+	return !info.IsDir()
+}
+
+// LoadModules checks if the respective SDC kernel module got already loaded outside of LXD.
+// It doesn't try to load the module as LXD doesn't have any control over it.
+func (c *connectorSDC) LoadModules() error {
+	ok := c.drvCfgIsSDCInstalled()
+	if !ok {
+		return errors.New("SDC kernel module is not loaded")
+	}
+
+	return nil
+}
+
+// QualifiedName returns an empty string and no error. SDC has no qualified name.
+func (c *connectorSDC) QualifiedName() (string, error) {
+	return "", nil
+}
+
+// Connect does nothing. Connections are fully handled by SDC.
+func (c *connectorSDC) Connect(ctx context.Context, targetQN string, targetAddresses ...string) (revert.Hook, error) {
+	// Nothing to do. Connection is handled by Dell SDC.
+	return revert.New().Fail, nil
+}
+
+// Disconnect does nothing. Connections are fully handled by SDC.
+func (c *connectorSDC) Disconnect(targetQN string) error {
+	return nil
+}
+
+func (c *connectorSDC) findSession(targetQN string) (*session, error) {
+	return nil, nil
+}
+
+// Discover returns the targets found on the first reachable targetAddr.
+func (c *connectorSDC) Discover(ctx context.Context, targetAddresses ...string) ([]any, error) {
+	return nil, ErrNotSupported
+}
+
+// WaitDiskDevicePath waits for the mapped device to appear and returns its path.
+func (c *connectorSDC) WaitDiskDevicePath(ctx context.Context, diskPathFilter block.DevicePathFilterFunc) (string, error) {
+	return block.WaitDiskDevicePath(ctx, sdcDiskDevicePrefix, diskPathFilter)
+}
+
+// GetDiskDevicePath returns the path of the mapped SDC device.
+func (c *connectorSDC) GetDiskDevicePath(diskPathFilter block.DevicePathFilterFunc) (string, error) {
+	return block.GetDiskDevicePath(sdcDiskDevicePrefix, diskPathFilter)
+}
+
+// RemoveDiskDevice does nothing. Device is removed when volume is unmapped on the storage array.
+func (c *connectorSDC) RemoveDiskDevice(ctx context.Context, devicePath string) error {
+	return nil
+}
+
+// WaitDiskDeviceResize waits until the disk device reflects the new size.
+func (c *connectorSDC) WaitDiskDeviceResize(ctx context.Context, diskPath string, newSizeBytes int64) error {
+	return block.WaitDiskDeviceResize(ctx, diskPath, newSizeBytes)
+}
