@@ -2,7 +2,7 @@
 __pycache__/
 *.pyc
 disclosures/
-scripts/
+/scripts/
 
 # Vendor source checkouts (can be huge)
 **/source/
