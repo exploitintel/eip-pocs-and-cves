@@ -1,0 +1,391 @@
+package entity
+
+import (
+	"net/url"
+	"slices"
+	"strings"
+	"testing"
+
+	"github.com/stretchr/testify/require"
+)
+
+// This test parses the given URL, and construct a new one from the result, where the final/resulting
+// URL must match the original one.
+//
+// The test will fail if any entity type present in [entityTypes] is not covered by the test cases.
+func TestEntityPermissionURL_RoundTrip(t *testing.T) {
+	tests := []struct {
+		Name         string
+		URL          string
+		WantType     Type
+		WantArgs     map[string]string
+		WantProject  string
+		WantLocation string
+	}{
+		{
+			Name:     "Auth group",
+			URL:      "/1.0/auth/groups/test",
+			WantType: TypeAuthGroup,
+			WantArgs: map[string]string{
+				"name": "test",
+			},
+		},
+		{
+			Name:     "Certificate",
+			URL:      "/1.0/certificates/e974199c-fcb1-4e0d-9db7-92169e8e3f3d",
+			WantType: TypeCertificate,
+			WantArgs: map[string]string{
+				"fingerprint": "e974199c-fcb1-4e0d-9db7-92169e8e3f3d",
+			},
+		},
+		{
+			Name:     "Cluster group",
+			URL:      "/1.0/cluster/groups/foo",
+			WantType: TypeClusterGroup,
+			WantArgs: map[string]string{
+				"name": "foo",
+			},
+		},
+		{
+			Name:     "Cluster member",
+			URL:      "/1.0/cluster/members/foo",
+			WantType: TypeClusterMember,
+			WantArgs: map[string]string{
+				"name": "foo",
+			},
+		},
+		{
+			Name:     "Cluster link",
+			URL:      "/1.0/cluster/links/foo",
+			WantType: TypeClusterLink,
+			WantArgs: map[string]string{
+				"name": "foo",
+			},
+		},
+		{
+			// TypeContainer is retained for internal database compatibility. The /1.0/containers route
+			// was removed in LXD 6.7; instances are now accessed via /1.0/instances.
+			Name:        "Container",
+			URL:         "/1.0/containers/c1",
+			WantType:    TypeContainer,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"name": "c1",
+			},
+		},
+		{
+			Name:        "Instance",
+			URL:         "/1.0/instances/foo",
+			WantType:    TypeInstance,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"name": "foo",
+			},
+		},
+		{
+			Name:     "Identity",
+			URL:      "/1.0/auth/identities/oidc/foo",
+			WantType: TypeIdentity,
+			WantArgs: map[string]string{
+				"method":     "oidc",
+				"identifier": "foo",
+			},
+		},
+		{
+			Name:     "Identity provider group",
+			URL:      "/1.0/auth/identity-provider-groups/test",
+			WantType: TypeIdentityProviderGroup,
+			WantArgs: map[string]string{
+				"name": "test",
+			},
+		},
+		{
+			Name:        "Image",
+			URL:         "/1.0/images/000000000000",
+			WantType:    TypeImage,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"fingerprint": "000000000000",
+			},
+		},
+		{
+			Name:        "Image alias",
+			URL:         "/1.0/images/aliases/ubuntu",
+			WantType:    TypeImageAlias,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"name": "ubuntu",
+			},
+		},
+		{
+			Name:     "Instance with project",
+			URL:      "/1.0/instances/c1?project=foo",
+			WantType: TypeInstance,
+			WantArgs: map[string]string{
+				"name": "c1",
+			},
+			WantProject: "foo",
+		},
+		{
+			Name:        "Instance backup",
+			URL:         "/1.0/instances/myvm/backups/mybackup",
+			WantType:    TypeInstanceBackup,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"instance": "myvm",
+				"name":     "mybackup",
+			},
+		},
+		{
+			Name:        "Instance snapshot",
+			URL:         "/1.0/instances/my-vm/snapshots/snap-0",
+			WantType:    TypeInstanceSnapshot,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"instance": "my-vm",
+				"name":     "snap-0",
+			},
+		},
+		{
+			Name:        "Network",
+			URL:         "/1.0/networks/lxdbr0",
+			WantType:    TypeNetwork,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"name": "lxdbr0",
+			},
+		},
+		{
+			Name:        "Network ACL",
+			URL:         "/1.0/network-acls/1.2.3.4",
+			WantType:    TypeNetworkACL,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"name": "1.2.3.4",
+			},
+		},
+		{
+			Name:        "Network zone",
+			URL:         "/1.0/network-zones/1.2.3.4",
+			WantType:    TypeNetworkZone,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"name": "1.2.3.4",
+			},
+		},
+		{
+			Name:        "Placement group",
+			URL:         "/1.0/placement-groups/default",
+			WantType:    TypePlacementGroup,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"name": "default",
+			},
+		},
+		{
+			Name:        "Profile",
+			URL:         "/1.0/profiles/default",
+			WantType:    TypeProfile,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"name": "default",
+			},
+		},
+		{
+			Name:        "Project",
+			URL:         "/1.0/projects/foo",
+			WantType:    TypeProject,
+			WantProject: "foo",
+			WantArgs: map[string]string{
+				"name": "foo",
+			},
+		},
+		{
+			Name:        "Replicator",
+			URL:         "/1.0/replicators/my-replicator?project=foo",
+			WantType:    TypeReplicator,
+			WantProject: "foo",
+			WantArgs: map[string]string{
+				"name": "my-replicator",
+			},
+		},
+		{
+			Name:     "Server",
+			URL:      "/1.0",
+			WantType: TypeServer,
+			WantArgs: map[string]string{},
+		},
+		{
+			Name:     "Storage pool",
+			URL:      "/1.0/storage-pools/p1",
+			WantType: TypeStoragePool,
+			WantArgs: map[string]string{
+				"name": "p1",
+			},
+		},
+		{
+			Name:        "Storage volume",
+			URL:         "/1.0/storage-pools/p1/volumes/custom/v1",
+			WantType:    TypeStorageVolume,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"pool": "p1",
+				"type": "custom",
+				"name": "v1",
+			},
+		},
+		{
+			Name:        "Storage volume backup",
+			URL:         "/1.0/storage-pools/p1/volumes/custom/v1/backups/b1",
+			WantType:    TypeStorageVolumeBackup,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"pool":   "p1",
+				"type":   "custom",
+				"volume": "v1",
+				"name":   "b1",
+			},
+		},
+		{
+			Name:        "Storage volume snapshot",
+			URL:         "/1.0/storage-pools/p1/volumes/custom/v1/snapshots/s1",
+			WantType:    TypeStorageVolumeSnapshot,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"pool":   "p1",
+				"type":   "custom",
+				"volume": "v1",
+				"name":   "s1",
+			},
+		},
+		{
+			Name:        "Storage bucket",
+			URL:         "/1.0/storage-pools/test/buckets/pail",
+			WantType:    TypeStorageBucket,
+			WantProject: "default",
+			WantArgs: map[string]string{
+				"pool": "test",
+				"name": "pail",
+			},
+		},
+		{
+			Name:     "Storage volume with project and location",
+			URL:      "/1.0/storage-pools/p1/volumes/custom/v1?project=foo&target=bar",
+			WantType: TypeStorageVolume,
+			WantArgs: map[string]string{
+				"pool": "p1",
+				"type": "custom",
+				"name": "v1",
+			},
+			WantProject:  "foo",
+			WantLocation: "bar",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.Name, func(t *testing.T) {
+			u, err := url.Parse(test.URL)
+			require.NoError(t, err)
+
+			entityType, project, location, args, err := ParseURLWithNamedArgs(*u)
+			require.NoError(t, err)
+			require.Equal(t, test.WantType, entityType)
+
+			// Check that the parsed project, location, type and arguments match the expected values.
+			require.Equal(t, test.WantProject, project)
+			require.Equal(t, test.WantLocation, location)
+			require.Equal(t, test.WantArgs, args)
+
+			// Construct a new URL from the parsed type and arguments.
+			url, err := entityType.URLFromNamedArgs(project, location, args)
+			require.NoError(t, err)
+
+			// If project is default, check if resulting URL has a query parameter project set.
+			// In such case, validate the value of query parameter is default and then remove it
+			// to simplify the comparison with the original URL.
+			if project == "default" {
+				q := url.Query()
+				if q.Has("project") {
+					require.Equal(t, "default", q.Get("project"))
+					q.Del("project")
+					url.RawQuery = q.Encode()
+				}
+			}
+
+			require.Equal(t, test.URL, url.String())
+		})
+	}
+
+	// Make sure that ALL entity types are covered by the test cases.
+	// Run after tests to allow seeing the result of existing test cases.
+	missingEntityTypes := []string{}
+	for entityType := range entityTypes {
+		found := false
+		for _, test := range tests {
+			if test.WantType == entityType {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			entityTypeStr := string(entityType)
+			missingEntityTypes = append(missingEntityTypes, entityTypeStr)
+		}
+	}
+
+	if len(missingEntityTypes) > 0 {
+		slices.Sort(missingEntityTypes)
+		t.Fatalf("Missing test cases for entity types:\n - %v", strings.Join(missingEntityTypes, "\n - "))
+	}
+}
+
+func TestEntityPermissionURL_InvalidArguments(t *testing.T) {
+	tests := []struct {
+		Name      string
+		Type      Type
+		Args      map[string]string
+		WantError bool
+	}{
+		{
+			Name: "Volume - OK",
+			Type: TypeStorageVolume,
+			Args: map[string]string{
+				"name": "my-vol",
+				"type": "custom",
+				"pool": "my-pool",
+			},
+		},
+		{
+			Name: "Volume - Missing type",
+			Type: TypeStorageVolume,
+			Args: map[string]string{
+				"name": "my-vol",
+				"pool": "my-pool",
+			},
+			WantError: true,
+		},
+		{
+			Name: "Volume - Extra argument",
+			Type: TypeStorageVolume,
+			Args: map[string]string{
+				"name":  "my-vol",
+				"type":  "custom",
+				"pool":  "my-pool",
+				"extra": "something",
+			},
+			WantError: true,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.Name, func(t *testing.T) {
+			_, err := test.Type.URLFromNamedArgs("", "", test.Args)
+			if test.WantError {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}

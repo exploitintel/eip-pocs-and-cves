@@ -1,0 +1,10 @@
+{
+  "enabled": false,
+  "dependencyDashboard": false,
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":disableDependencyDashboard",
+    "schedule:earlyMondays"
+  ]
+}
