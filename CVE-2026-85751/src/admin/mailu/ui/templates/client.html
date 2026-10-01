@@ -1,0 +1,65 @@
+{%- extends "base.html" %}
+
+{%- block title %}
+{% trans %}Client setup{% endtrans %}
+{%- endblock %}
+
+{%- block subtitle %}
+{% trans %}configure your email client{% endtrans %}
+{%- endblock %}
+
+{%- block content %}
+{%- call macros.table(title=_("Incoming mail"), datatable=False) %}
+  <tbody>
+    <tr>
+      <th>{% trans %}Mail protocol{% endtrans %}</th>
+      <td>IMAP</td>
+    </tr>
+    <tr>
+      <th>{% trans %}TCP port{% endtrans %}</th>
+      <td>{{ "143" if config["TLS_FLAVOR"] == "notls" else "993 (TLS)" }}</td>
+    </tr>
+    <tr>
+      <th>{% trans %}Server name{% endtrans %}</th>
+      <td><pre class="pre-config border bg-light">{{ config["HOSTNAME"] }}</pre></td>
+    </tr>
+    <tr>
+      <th>{% trans %}Username{% endtrans %}</th>
+      <td><pre class="pre-config border bg-light">{{ current_user if current_user.is_authenticated else "******" }}</pre></td>
+    </tr>
+    <tr>
+      <th>{% trans %}Password{% endtrans %}</th>
+      <td><pre class="pre-config border bg-light">*******</pre></td>
+    </tr>
+  </tbody>
+{%- endcall %}
+
+{%- call macros.table(title=_("Outgoing mail"), datatable=False) %}
+  <tbody>
+    <tr>
+      <th>{% trans %}Mail protocol{% endtrans %}</th>
+      <td>SMTP</td>
+    </tr>
+    <tr>
+      <th>{% trans %}TCP port{% endtrans %}</th>
+      <td>{{ "25" if config["TLS_FLAVOR"] == "notls" else "465 (TLS)" }}</td>
+    </tr>
+    <tr>
+      <th>{% trans %}Server name{% endtrans %}</th>
+      <td><pre class="pre-config border bg-light">{{ config["HOSTNAME"] }}</pre></td>
+    </tr>
+    <tr>
+      <th>{% trans %}Username{% endtrans %}</th>
+      <td><pre class="pre-config border bg-light">{{ current_user if current_user.is_authenticated else "******" }}</pre></td>
+    </tr>
+    <tr>
+      <th>{% trans %}Password{% endtrans %}</th>
+      <td><pre class="pre-config border bg-light">*******</pre></td>
+    </tr>
+  </tbody>
+{%- endcall %}
+<blockquote>
+  {% trans %}If you use an Apple device,{% endtrans %}
+  <a href="/apple.mobileconfig">{% trans %}click here to auto-configure it.{% endtrans %}</a>
+</blockquote>
+{%- endblock %}

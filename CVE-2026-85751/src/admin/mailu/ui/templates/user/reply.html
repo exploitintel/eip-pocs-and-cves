@@ -1,0 +1,23 @@
+{%- extends "base.html" %}
+
+{%- block title %}
+{% trans %}Automatic reply{% endtrans %}
+{%- endblock %}
+
+{%- block subtitle %}
+{{ user }}
+{%- endblock %}
+
+{%- block content %}
+{%- call macros.card() %}
+<form class="form" method="post" role="form">
+  {{ form.hidden_tag() }}
+  {%- call macros.fieldset(
+      field=form.reply_enabled,
+      enabled=user.reply_enabled,
+      fields=[form.reply_subject, form.reply_body, form.reply_enddate, form.reply_startdate]) %}
+  {%- endcall %}
+  {{ macros.form_field(form.submit) }}
+</form>
+{%- endcall %}
+{%- endblock %}
