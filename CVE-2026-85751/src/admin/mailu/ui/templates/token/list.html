@@ -1,0 +1,42 @@
+{%- extends "base.html" %}
+
+{%- block title %}
+{% trans %}Authentication tokens{% endtrans %}
+{%- endblock %}
+
+{%- block subtitle %}
+{{ user }}
+{%- endblock %}
+
+{%- block main_action %}
+<a class="btn btn-primary float-right" href="{{ url_for('.token_create', user_email=user.email) }}">{% trans %}New token{% endtrans %}</a>
+{%- endblock %}
+
+{%- block content %}
+{%- call macros.table(order='[[2,"asc"]]') %}
+<thead>
+  <tr>
+    <th data-orderable="false">{% trans %}Actions{% endtrans %}</th>
+    <th>{% trans %}ID{% endtrans %}</th>
+    <th>{% trans %}Comment{% endtrans %}</th>
+    <th>{% trans %}Authorized IP{% endtrans %}</th>
+    <th>{% trans %}Created{% endtrans %}</th>
+    <th>{% trans %}Last edit{% endtrans %}</th>
+  </tr>
+</thead>
+<tbody>
+  {%- for token in user.tokens %}
+  <tr>
+    <td>
+      <a href="{{ url_for('.token_delete', token_id=token.id) }}" title="{% trans %}Delete{% endtrans %}"><i class="fa fa-trash"></i></a>
+    </td>
+    <td>{{ token.id }}</td>
+    <td>{{ token.comment }}</td>
+    <td>{{ token.ip | join(', ') or "any" }}</td>
+    <td data-sort="{{ token.created_at or '0000-00-00' }}">{{ token.created_at | format_date }}</td>
+    <td data-sort="{{ token.updated_at or '0000-00-00' }}">{{ token.updated_at | format_date }}</td>
+  </tr>
+  {%- endfor %}
+</tbody>
+{%- endcall %}
+{%- endblock %}

@@ -1,0 +1,15 @@
+{%- extends "base.html" %}
+
+{%- block title %}
+{% trans %}Add a global administrator{% endtrans %}
+{%- endblock %}
+
+{%- block content %}
+{%- call macros.card() %}
+<form class="form" method="post" role="form">
+  {{ form.hidden_tag() }}
+  {{ macros.form_field(form.admin, class_='mailselect') }}
+  {{ macros.form_field(form.submit) }}
+</form>
+{%- endcall %}
+{%- endblock %}
