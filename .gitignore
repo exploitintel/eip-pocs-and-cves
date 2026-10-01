@@ -1,30 +1,32 @@
+# These repo-housekeeping rules are anchored: an unanchored name matches at any
+# depth, so it would also swallow a vendored file of the same name shipped
+# inside a CVE package (which then fails the "package destination not
+# gitignored" publication gate).
 .DS_Store
-__pycache__/
-*.pyc
-disclosures/
+/py.typed
+/*.pyc
+/disclosures/
 /scripts/
 
 # Vendor source checkouts (can be huge)
 **/source/
 
 # Metasploit dev environment
-msf-modules/
-msf-init.rc
-msf-lab.sh
-docker-compose.msf.yml
-metasploit/
+/msf-modules/
+/msf-init.rc
+/msf-lab.sh
+/docker-compose.msf.yml
+/metasploit/
 
-# Internal docs/reports (local only). Anchored to the repository root so the
-# rule does not also swallow every vendored `docs/` directory inside a CVE
-# package (e.g. boringssl's third_party/googletest/docs/).
+# Internal docs/reports (local only)
 /docs/
-.claude/
-BYPASS_FINDINGS_LOG.md
-INDEX.md
+/.claude/
+/BYPASS_FINDINGS_LOG.md
+/INDEX.md
 
 # Local docker helper scripts
-WORKING-DOCKER.md
-check-all-docker.sh
+/WORKING-DOCKER.md
+/check-all-docker.sh
 
 # Docker/lab runtime artifacts
 **/.env
@@ -35,19 +37,16 @@ check-all-docker.sh
 *.log
 *.pid
 **/data/
-# Anchored to the repository root, like docs/ above: an unanchored **/logs/
-# also matched vendored logs/ directories inside a CVE package (openlitespeed's
-# dist/lsns/logs and test/serverroot/logs), which then could not be published.
 /logs/
 poc-run-logs/
-poc-run-results.md
-runtime-ports.env
-runtime-ports.md
-.docker-compose.verify.yml
-.runtime-port-map.csv
-pipeline-run-report.md
+/poc-run-results.md
+/runtime-ports.env
+/runtime-ports.md
+/.docker-compose.verify.yml
+/.runtime-port-map.csv
+/pipeline-run-report.md
 /templates/
-RUN-DOCKER-SINGLE.md
+/RUN-DOCKER-SINGLE.md
 
 # Internal tooling — not part of the CVE collection itself
 /.skills/
