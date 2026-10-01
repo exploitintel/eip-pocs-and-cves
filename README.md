@@ -127,6 +127,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;50561](CVE-2026-50561/) | **xerrors Yuxi**<br>Yuxi JWT Authentication Bypass<br><br>**Bypass / fix review:** v0.6.2 fix sufficient; no bypass or sibling variant found | **9.4** |
 | [CVE&#8209;2026&#8209;19478](CVE-2026-19478/) | **GitLab CE/EE GraphQL API**<br>GitLab GraphQL Multiplex Query Swap (Unauthenticated Code Injection)<br><br>**Bypass / fix review:** Disclosure basis: this analysis covers ONLY the already-patched, already-disclosed | **9.4** |
 | [CVE&#8209;2026&#8209;94084](CVE-2026-94084/) | **Suricata — HTTP/2 detection engine (`rust/src/http2/detect.rs`, `SCHttp2TxGetHeader`)**<br>— Suricata HTTP/2 response-header multi-buffer use-after-free | **9.4** |
+| [CVE&#8209;2026&#8209;93903](CVE-2026-93903/) | **OpenLiteSpeed / LSWS server core, `HttpReq::locationToUrl()` (`src/http/httpreq.cpp`)**<br>— LiteSpeed Web Server / OpenLiteSpeed internal-redirect path traversal | **9.4** |
 | [CVE&#8209;2026&#8209;55971](CVE-2026-55971/) | **Apache Thrift**<br>Pre-Auth ZLIB Heap Buffer Overflow Write | **9.3** |
 | [CVE&#8209;2026&#8209;65520](CVE-2026-65520/) | **miniOrange WP OAuth Server**<br><= 6.2.0 SQL Injection | **9.3** |
 | [CVE&#8209;2026&#8209;66659](CVE-2026-66659/) | **Tablesome Table**<br>Authenticated Blind SQL Injection | **9.3** |
@@ -209,7 +210,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 
-26 of the 173 indexed packages record a bypass or incomplete-fix finding.
+26 of the 174 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
