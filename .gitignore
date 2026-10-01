@@ -14,8 +14,10 @@ msf-lab.sh
 docker-compose.msf.yml
 metasploit/
 
-# Internal docs/reports (local only)
-docs/
+# Internal docs/reports (local only). Anchored to the repository root so the
+# rule does not also swallow every vendored `docs/` directory inside a CVE
+# package (e.g. boringssl's third_party/googletest/docs/).
+/docs/
 .claude/
 BYPASS_FINDINGS_LOG.md
 INDEX.md
