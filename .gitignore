@@ -35,7 +35,10 @@ check-all-docker.sh
 *.log
 *.pid
 **/data/
-**/logs/
+# Anchored to the repository root, like docs/ above: an unanchored **/logs/
+# also matched vendored logs/ directories inside a CVE package (openlitespeed's
+# dist/lsns/logs and test/serverroot/logs), which then could not be published.
+/logs/
 poc-run-logs/
 poc-run-results.md
 runtime-ports.env
