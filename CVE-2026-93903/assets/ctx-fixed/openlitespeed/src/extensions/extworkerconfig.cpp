@@ -1,0 +1,287 @@
+/*****************************************************************************
+*    Open LiteSpeed is an open source HTTP server.                           *
+*    Copyright (C) 2013 - 2022  LiteSpeed Technologies, Inc.                 *
+*                                                                            *
+*    This program is free software: you can redistribute it and/or modify    *
+*    it under the terms of the GNU General Public License as published by    *
+*    the Free Software Foundation, either version 3 of the License, or       *
+*    (at your option) any later version.                                     *
+*                                                                            *
+*    This program is distributed in the hope that it will be useful,         *
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of          *
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the            *
+*    GNU General Public License for more details.                            *
+*                                                                            *
+*    You should have received a copy of the GNU General Public License       *
+*    along with this program. If not, see http://www.gnu.org/licenses/.      *
+*****************************************************************************/
+#include "extworkerconfig.h"
+
+#include <http/httpdefs.h>
+#include <lsr/ls_strtool.h>
+#include <main/configctx.h>
+#include <socket/gsockaddr.h>
+#include <util/xmlnode.h>
+#include <log4cxx/logger.h>
+#include <assert.h>
+#include <limits.h>
+#include <stdio.h>
+#include <unistd.h>
+
+#define sEnvPadding "LSAPI_PADDING=leave_some_room_to_avoid_overwrite_important_env"
+
+ExtWorkerConfig::ExtWorkerConfig(const char *pName)
+    : m_sURL(NULL)
+    , m_sName(pName)
+    , m_pVHost(NULL)
+    , m_iMaxConns(1)
+    , m_iTimeout(10)
+    , m_iRetryTimeout(3)
+    , m_iBuffering(0)
+    , m_iKeepAlive(1)
+    , m_iDetached(0)
+    , m_iMaxIdleTime(INT_MAX)
+    , m_iKeepAliveTimeout(INT_MAX)
+    , m_iSelfManaged(1)
+    , m_iStartByServer(EXTAPP_AUTOSTART_OFF)
+    , m_iRefAddr(0)
+    , m_iAltAddr(0)
+    , m_iDaemonSuEXEC(0)
+    , m_iDropCaps(0)
+    , m_uid(-1)
+    , m_gid(-1)
+    , m_pServerAddr(new GSockAddr())
+    , m_pOrgEnv(NULL)
+{
+}
+
+
+ExtWorkerConfig::ExtWorkerConfig()
+    : m_pVHost(NULL)
+    , m_iMaxConns(1)
+    , m_iTimeout(10)
+    , m_iRetryTimeout(3)
+    , m_iBuffering(0)
+    , m_iKeepAlive(1)
+    , m_iDetached(0)
+    , m_iMaxIdleTime(INT_MAX)
+    , m_iKeepAliveTimeout(INT_MAX)
+    , m_iSelfManaged(1)
+    , m_iStartByServer(EXTAPP_AUTOSTART_OFF)
+    , m_iRefAddr(0)
+    , m_iAltAddr(0)
+    , m_iDaemonSuEXEC(0)
+    , m_iDropCaps(0)
+    , m_uid(-1)
+    , m_gid(-1)
+    , m_pServerAddr(new GSockAddr())
+    , m_pOrgEnv(NULL)
+{}
+
+
+ExtWorkerConfig::~ExtWorkerConfig()
+{
+    if (!m_iRefAddr && m_pServerAddr)
+        delete m_pServerAddr;
+}
+
+
+ExtWorkerConfig::ExtWorkerConfig(const ExtWorkerConfig &rhs)
+    : m_iTimeout(rhs.m_iTimeout)
+    , m_iRetryTimeout(rhs.m_iRetryTimeout)
+    , m_iKeepAlive(rhs.m_iKeepAlive)
+    , m_iDetached(rhs.m_iDetached)
+    , m_iMaxIdleTime(rhs.m_iMaxIdleTime)
+    , m_iKeepAliveTimeout(rhs.m_iKeepAliveTimeout)
+    , m_iSelfManaged(rhs.m_iSelfManaged)
+    , m_iStartByServer(rhs.m_iStartByServer)
+    , m_pOrgEnv(rhs.m_pOrgEnv)
+{
+    m_sURL = rhs.m_sURL;
+    m_sName = rhs.m_sName;
+    m_pVHost = rhs.m_pVHost;
+    m_iMaxConns = rhs.m_iMaxConns;
+    m_iBuffering = rhs.m_iBuffering;
+    m_iRefAddr = rhs.m_iRefAddr;
+    m_iAltAddr = rhs.m_iAltAddr;
+    m_iDaemonSuEXEC = rhs.m_iDaemonSuEXEC;
+    m_uid = rhs.m_uid;
+    m_gid = rhs.m_gid;
+    m_iDropCaps = rhs.m_iDropCaps;
+    if (m_iRefAddr)
+        m_pServerAddr = rhs.m_pServerAddr;
+    else
+        m_pServerAddr = new GSockAddr(*rhs.m_pServerAddr);
+}
+
+
+int ExtWorkerConfig::setURL(const char *pURL)
+{
+    if (pURL != NULL)
+    {
+        if ((m_sURL.c_str() == NULL) || (strcmp(m_sURL.c_str(), pURL) != 0))
+        {
+            m_sURL = pURL;
+            return 0;
+        }
+    }
+    return LS_FAIL;
+}
+
+
+void ExtWorkerConfig::setServerAddr(const GSockAddr *pAddr)
+{
+    if ((m_iRefAddr == 0) && (m_pServerAddr))
+        delete m_pServerAddr;
+    m_iRefAddr = 1;
+    m_pServerAddr = (GSockAddr *)pAddr;
+}
+
+
+int ExtWorkerConfig::updateServerAddr(const char *pURL)
+{
+    if (m_iRefAddr)
+        return LS_FAIL;
+    int ret = m_pServerAddr->set(pURL, NO_ANY | DO_NSLOOKUP);
+    if (ret == 0)
+        m_iAltAddr = 0;
+    return ret;
+}
+
+
+void ExtWorkerConfig::setName(const char *pName)
+{
+    if (pName != NULL)
+        m_sName = pName;
+}
+
+
+const char *ExtWorkerConfig::getServerAddrUnixSock() const
+{
+    if (m_pServerAddr && (m_pServerAddr->family() == AF_UNIX))
+        return (const char *)m_pServerAddr->getUnix();
+    return NULL;
+}
+
+
+void ExtWorkerConfig::altServerAddr()
+{
+    if (!m_pServerAddr || m_iRefAddr)
+        return;
+    switch (m_pServerAddr->family())
+    {
+    case AF_UNIX:
+        {
+            char *p1 = (char *)m_pServerAddr->getUnix();
+            size_t pathLen = strlen(p1);
+            char oldSuffix[4];
+            int replaceSuffix = m_iAltAddr && pathLen >= sizeof(oldSuffix);
+            if (replaceSuffix)
+            {
+                memcpy(oldSuffix, p1 + pathLen - 4, sizeof(oldSuffix));
+                pathLen -= 4;
+            }
+            if (pathLen > sizeof(((struct sockaddr_un *)0)->sun_path) - 5)
+            {
+                LS_WARN("Unix socket path is too long to generate an alternate address: %s",
+                        p1);
+                return;
+            }
+            char *p = p1 + pathLen;
+            int seq = rand() % 1000;
+            ls_snprintf(p, sizeof(((struct sockaddr_un *)0)->sun_path) - pathLen,
+                        ".%03d", seq);
+            size_t urlLen = strlen(m_sURL.c_str());
+            if (replaceSuffix && urlLen >= sizeof(oldSuffix) &&
+                memcmp(m_sURL.c_str() + urlLen - sizeof(oldSuffix), oldSuffix,
+                       sizeof(oldSuffix)) == 0)
+                urlLen -= sizeof(oldSuffix);
+            AutoStr2 s(m_sURL.c_str(), urlLen);
+            s.append(p, 4);
+            m_sURL.setStr(s.c_str());
+            m_iAltAddr = 1;
+        }
+        break;
+    case AF_INET:
+    case AF_INET6:
+        {
+            short port = m_pServerAddr->getPort();
+            m_pServerAddr->setPort(port + 1);
+        }
+        break;
+    }
+}
+
+
+extern int removeSimiliarFiles(const char *pPath, long tm);
+
+
+void ExtWorkerConfig::removeUnusedSocket()
+{
+    removeSimiliarFiles(m_sURL.c_str() + 5, 0);
+    unlink(m_sURL.c_str() + 5);
+}
+
+
+void ExtWorkerConfig::config(const XmlNode *pNode)
+{
+    int iMaxConns = ConfigCtx::getCurConfigCtx()->getLongValue(pNode,
+                    "maxConns", 1, 10000, 5);
+    int iRetryTimeout = ConfigCtx::getCurConfigCtx()->getLongValue(pNode,
+                        "retryTimeout", 0, LONG_MAX, 10);
+    int iInitTimeout = ConfigCtx::getCurConfigCtx()->getLongValue(pNode,
+                       "initTimeout", 1, LONG_MAX, 3);
+    int iBuffer = ConfigCtx::getCurConfigCtx()->getLongValue(pNode,
+                  "respBuffer", 0, 2, 1);
+    int iKeepAlive = ConfigCtx::getCurConfigCtx()->getLongValue(pNode,
+                     "persistConn", 0, 1, 1);
+    int iKeepAliveTimeout = ConfigCtx::getCurConfigCtx()->getLongValue(pNode,
+                            "pcKeepAliveTimeout", -1, INT_MAX, INT_MAX);
+
+    if (iKeepAliveTimeout == -1)
+        iKeepAliveTimeout = INT_MAX;
+
+    if (iBuffer == 1)
+        iBuffer = 0;
+    else if (iBuffer == 0)
+        iBuffer = HEC_RESP_NOBUFFER;
+    else if (iBuffer == 2)
+        iBuffer = HEC_RESP_NPH;
+
+    setPersistConn(iKeepAlive);
+    setKeepAliveTimeout(iKeepAliveTimeout);
+    setMaxConns(iMaxConns);
+    setTimeout(iInitTimeout);
+    setRetryTimeout(iRetryTimeout);
+    setBuffering(iBuffer);
+    clearEnv();
+    const XmlNodeList *pList = NULL;
+    if (pNode)
+        pList  = pNode->getChildren("env");
+
+    addEnv(sEnvPadding);
+    if (pList)
+    {
+        char pBuf[MAX_PATH_LEN] = {0};
+        XmlNodeList::const_iterator iter;
+
+        for (iter = pList->begin(); iter != pList->end(); ++iter)
+        {
+            const char *pValue;
+            if ((pValue = (*iter)->getValue()) != NULL)
+            {
+                if (ConfigCtx::getCurConfigCtx()->expandVariable(pValue,
+                    pBuf, MAX_PATH_LEN, 1) < 0)
+                {
+                    LS_ERROR(ConfigCtx::getCurConfigCtx(),
+                             "expand env: %s error", pValue);
+                    continue;
+                }
+
+                pValue = pBuf;
+                addEnv(pValue);
+            }
+        }
+    }
+
+}

@@ -1,0 +1,50 @@
+version: 2.{branch}.{build}
+
+skip_branch_with_pr: true
+
+image:
+- Ubuntu2004
+- MacOS
+
+build: off
+
+init:
+
+cache:
+# - boringssl -> appveyor-linux.yml # we define the commit in here
+
+install:
+
+- sh: >-
+
+    if [[ -e boringssl/CMakeLists.txt ]] ; then
+
+        echo cached
+
+    else
+
+        git clone https://boringssl.googlesource.com/boringssl
+
+        cd boringssl
+
+        git checkout 0.20250807.0
+
+        cmake .
+
+        make -j4
+
+        cd ..
+
+    fi
+
+    git submodule init
+
+    git submodule update --checkout --force --recursive
+
+    cmake -DLIBSSL_DIR=$PWD/boringssl .
+
+    make
+
+test_script:
+
+- sh: make test

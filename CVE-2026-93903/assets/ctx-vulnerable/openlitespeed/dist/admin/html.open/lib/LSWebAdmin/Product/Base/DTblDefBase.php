@@ -1,0 +1,930 @@
+<?php
+
+namespace LSWebAdmin\Product\Base;
+
+use LSWebAdmin\Config\CNode;
+use LSWebAdmin\I18n\DMsg;
+use LSWebAdmin\Product\Current\DAttr;
+use LSWebAdmin\UI\DTbl;
+use LSWebAdmin\Product\Current\Service;
+
+class DTblDefBase
+{
+
+	protected $_tblDef = [];
+	protected $_options = [];
+	protected $_attrs;
+	protected $_specials = [];
+
+	public function GetTblDef($tblId)
+	{
+		if (!isset($this->_tblDef[$tblId])) {
+			$funcname = 'add_' . $tblId;
+			if (!method_exists($this, $funcname)) {
+				trigger_error("invalid tid $tblId", E_USER_ERROR);
+			}
+			$this->$funcname($tblId);
+		}
+		return $this->_tblDef[$tblId];
+	}
+
+	protected function DupTblDef($tblId, $newId, $newTitle = null)
+	{
+		$tbl = $this->GetTblDef($tblId);
+		$newtbl = $tbl->Dup($newId, $newTitle);
+		return $newtbl;
+	}
+
+	protected static function getDAttrClass()
+	{
+		return 'LSWebAdmin\\Product\\Current\\DAttr';
+	}
+
+	protected static function createDAttr($key, $type, $label, $inputType = null, $allowNull = true, $min = null, $max = null, $inputAttr = null, $multiInd = 0, $helpKey = null)
+	{
+		$class = static::getDAttrClass();
+		return new $class($key, $type, $label, $inputType, $allowNull, $min, $max, $inputAttr, $multiInd, $helpKey);
+	}
+
+	protected static function NewIntAttr($key, $label, $allowNull = true, $min = null, $max = null, $helpKey = null)
+	{
+		return static::createDAttr($key, 'uint', $label, 'text', $allowNull, $min, $max, null, 0, $helpKey);
+	}
+
+	protected static function NewBoolAttr($key, $label, $allowNull = true, $helpKey = null)
+	{
+		return static::createDAttr($key, 'bool', $label, 'radio', $allowNull, null, null, null, 0, $helpKey);
+	}
+
+	protected static function NewSelAttr($key, $label, $options, $allowNull = true, $helpKey = null, $inputAttr = null, $multiInd = 0)
+	{
+		if (is_array($options)) { // fixed options
+			return static::createDAttr($key, 'sel', $label, 'select', $allowNull, null, $options, $inputAttr, 0, $helpKey);
+        }
+
+		// derived options
+		if ($multiInd == 0) {
+			return static::createDAttr($key, 'sel1', $label, 'select', $allowNull, $options, null, $inputAttr, 0, $helpKey);
+        }
+
+        //sel2 is derived and multi and using text
+		return static::createDAttr($key, 'sel2', $label, 'text', $allowNull, $options, null, $inputAttr, 1, $helpKey);
+	}
+
+	protected static function NewCheckBoxAttr($key, $label, $options, $allowNull = true, $helpKey = null, $default = null)
+	{
+		return static::createDAttr($key, 'checkboxOr', $label, 'checkboxgroup', $allowNull, $default, $options, null, 0, $helpKey);
+	}
+
+	protected static function NewTextAttr($key, $label, $type, $allowNull = true, $helpKey = null, $multiInd = 0, $inputAttr = null)
+	{
+		return static::createDAttr($key, $type, $label, 'text', $allowNull, null, null, $inputAttr, $multiInd, $helpKey);
+	}
+
+	protected static function NewParseTextAttr($key, $label, $parseformat, $parsehelp, $allowNull = true, $helpKey = null, $multiInd = 0)
+	{
+		return static::createDAttr($key, 'parse', $label, 'text', $allowNull, $parseformat, $parsehelp, null, $multiInd, $helpKey);
+	}
+
+	protected static function NewParseTextAreaAttr($key, $label, $parseformat, $parsehelp, $allowNull = true, $row = 5, $helpKey = null, $viewtextarea = 1, $wrapoff = 0, $multiInd = 0)
+	{
+		$inputAttr = 'rows="' . $row . '"';
+		if ($wrapoff == 1)
+			$inputAttr .= ' wrap=off';
+
+		$type = ($viewtextarea == 1) ? 'textarea1' : 'textarea';
+		return static::createDAttr($key, 'parse', $label, $type, $allowNull, $parseformat, $parsehelp, $inputAttr, $multiInd, $helpKey);
+	}
+
+	protected static function NewTextAreaAttr($key, $label, $type, $allowNull = true, $row = 5, $helpKey = null, $viewtextarea = 1, $wrapoff = 0, $multiInd = 0)
+	{
+		$inputAttr = 'rows="' . $row . '"';
+		if ($wrapoff == 1)
+			$inputAttr .= ' wrap="off"';
+
+		$inputtype = ($viewtextarea == 1) ? 'textarea1' : 'textarea';
+		return static::createDAttr($key, $type, $label, $inputtype, $allowNull, null, null, $inputAttr, $multiInd, $helpKey);
+	}
+
+	protected static function NewCipherListAttr($key, $label, $allowNull = true, $helpKey = null)
+	{
+		$inputAttr = 'rows="4" wrap="soft" spellcheck="false" autocapitalize="off"';
+		return static::createDAttr($key, 'cipherlist', $label, 'textarea1', $allowNull, null, null, $inputAttr, 0, $helpKey);
+	}
+
+	protected static function NewPathAttr($key, $label, $type, $reflevel, $rwc = '', $allowNull = true, $helpKey = null, $multiInd = 0)
+	{
+		return static::createDAttr($key, $type, $label, 'text', $allowNull, $reflevel, $rwc, null, $multiInd, $helpKey);
+	}
+
+	protected static function NewCustFlagAttr($key, $label, $flag = 0, $allowNull = true, $type = 'cust', $inputtype = 'text', $helpKey = null, $multiInd = 0)
+	{
+		$attr = static::createDAttr($key, $type, $label, $inputtype, $allowNull, null, null, null, $multiInd, $helpKey);
+		if ($flag != 0)
+			$attr->SetFlag($flag);
+		return $attr;
+	}
+
+	protected static function applyLegacyFde($attr, $fde)
+	{
+		if ($fde[0] == 'N') {
+			$attr->SetFlag(DAttr::BM_NOFILE);
+		}
+
+		if ($fde[1] == 'N') {
+			$attr->SetFlag(DAttr::BM_HIDE);
+		}
+
+		if ($fde[2] == 'N') {
+			$attr->SetFlag(DAttr::BM_NOEDIT);
+		}
+
+		return $attr;
+	}
+
+	protected static function NewPassAttr($key, $label, $allowNull = true, $helpKey = null)
+	{
+		return static::createDAttr($key, 'cust', $label, 'password', $allowNull, null, null, null, 0, $helpKey);
+	}
+
+	protected static function NewViewAttr($key, $label, $helpKey = null) // for view only
+	{
+		return static::createDAttr($key, 'cust', $label, null, null, null, null, null, 0, $helpKey);
+	}
+
+	protected static function NewActionAttr($linkTbl, $act, $allowNull = true)
+	{
+		return static::createDAttr('action', 'action', DMsg::ALbl('l_action'), null, $allowNull, $linkTbl, $act);
+	}
+
+	protected function getSharedRealmTypeOptions($extra = [])
+	{
+		$options = ['file' => 'Password File'];
+		return $options + $extra;
+	}
+
+	protected function loadCommonOptions()
+	{
+		$this->_options['tp_vname'] = ['/\$VH_NAME/', DMsg::ALbl('parse_tpname')];
+		$this->_options['symbolLink'] = ['1' => DMsg::ALbl('o_yes'), '2' => DMsg::ALbl('o_ifownermatch'), '0' => DMsg::ALbl('o_no')];
+
+		$this->_options['disable_off_on'] = ['0' => DMsg::ALbl('o_disabled'), '1' => DMsg::ALbl('o_off'), '2' => DMsg::ALbl('o_on')];
+		$this->_options['notset_off_on'] = ['' => DMsg::ALbl('o_notset'), '1' => DMsg::ALbl('o_off'), '2' => DMsg::ALbl('o_on')];
+		$this->_options['logLevel'] = ['ERROR' => 'ERROR', 'WARN' => 'WARNING',
+			'NOTICE' => 'NOTICE', 'INFO' => 'INFO', 'DEBUG' => 'DEBUG'];
+
+		$this->_options['aclogctrl'] = [
+			0 => DMsg::ALbl('o_ownlogfile'),
+			1 => DMsg::ALbl('o_serverslogfile'),
+			2 => DMsg::ALbl('o_disabled')];
+
+		// for shared parse format
+		$this->_options['parseFormat'] = [
+			'filePermission4' => '/^0?[0-7]{3,4}$/',
+			'filePermission3' => '/^0?[0-7]{3}$/'
+		];
+
+	}
+
+	protected function loadCommonAttrs()
+	{
+		$ctxOrder = self::NewViewAttr('order', DMsg::ALbl('l_order'));
+		$ctxOrder->SetFlag(DAttr::BM_NOFILE | DAttr::BM_HIDE | DAttr::BM_NOEDIT);
+
+		$attrs = [
+			'priority' => self::NewIntAttr('priority', DMsg::ALbl('l_priority'), true, -20, 20),
+			'indexFiles' => self::NewTextAreaAttr('indexFiles', DMsg::ALbl('l_indexfiles'), 'fname', true, 2, null, 0, 0, 1),
+			'autoIndex' => self::NewBoolAttr('autoIndex', DMsg::ALbl('l_autoindex')),
+			'adminEmails' => self::NewTextAreaAttr('adminEmails', DMsg::ALbl('l_adminemails'), 'email', true, 3, null, 0, 0, 1),
+			'suffix' => self::NewParseTextAttr('suffix', DMsg::ALbl('l_suffix'), '/^[A-z0-9_\-]+$/', DMsg::ALbl('parse_suffix'), false, null, 1),
+			'fileName2' => self::NewPathAttr('fileName', DMsg::ALbl('l_filename'), 'file0', 2, 'r', false),
+			'fileName3' => self::NewPathAttr('fileName', DMsg::ALbl('l_filename'), 'file0', 3, 'r', true),
+			'rollingSize' => self::NewIntAttr('rollingSize', DMsg::ALbl('l_rollingsize'), true, null, null, 'log_rollingSize'),
+			'keepDays' => self::NewIntAttr('keepDays', DMsg::ALbl('l_keepdays'), true, 0, null, 'log_keepDays'),
+			'logFormat' => self::NewTextAttr('logFormat', DMsg::ALbl('l_logformat'), 'cust', true, 'accessLog_logFormat'),
+			'logHeaders' => self::NewCheckBoxAttr('logHeaders', DMsg::ALbl('l_logheaders'), ['1' => 'Referrer', '2' => 'UserAgent', '4' => 'Host', '0' => DMsg::ALbl('o_none')], true, 'accessLog_logHeader'),
+			'compressArchive' => self::NewBoolAttr('compressArchive', DMsg::ALbl('l_compressarchive'), true, 'log_compressArchive'),
+			'extraHeaders' => self::NewTextAreaAttr('extraHeaders', DMsg::ALbl('l_extraHeaders'), 'cust', true, 5, null, 1, 1),
+			'name' => self::NewTextAttr('name', DMsg::ALbl('l_name'), 'name', false),
+			'pcKeepAliveTimeout' => self::NewIntAttr('pcKeepAliveTimeout', DMsg::ALbl('l_pckeepalivetimeout'), true, -1, 10000),
+			'cgiUmask' => self::NewParseTextAttr('umask', DMsg::ALbl('l_umask'), $this->_options['parseFormat']['filePermission3'], DMsg::ALbl('parse_umask')),
+			'memSoftLimit' => self::NewIntAttr('memSoftLimit', DMsg::ALbl('l_memsoftlimit'), true, 0),
+			'memHardLimit' => self::NewIntAttr('memHardLimit', DMsg::ALbl('l_memhardlimit'), true, 0),
+			'procSoftLimit' => self::NewIntAttr('procSoftLimit', DMsg::ALbl('l_procsoftlimit'), true, 0),
+			'procHardLimit' => self::NewIntAttr('procHardLimit', DMsg::ALbl('l_prochardlimit'), true, 0),
+			'ssl_renegProtection' => self::NewBoolAttr('renegProtection', DMsg::ALbl('l_renegprotection')),
+			'sslSessionCache' => self::NewBoolAttr('sslSessionCache', DMsg::ALbl('l_sslSessionCache')),
+			'sslSessionTickets' => self::NewBoolAttr('sslSessionTickets', DMsg::ALbl('l_sslSessionTickets')),
+			'l_vhost' => self::NewSelAttr('vhost', DMsg::ALbl('l_vhost'), 'virtualhost', false, 'virtualHostName'),
+			'l_domain' => self::NewTextAttr('domain', DMsg::ALbl('l_domains'), 'domain', false, 'domainName', 1),
+			'tp_templateFile' => self::NewPathAttr('templateFile', DMsg::ALbl('l_templatefile'), 'filetp', 2, 'rwc', false),
+			'tp_listeners' => self::NewSelAttr('listeners', DMsg::ALbl('l_mappedlisteners'), 'listener', false, 'mappedListeners', null, 1),
+			'tp_vhName' => self::NewTextAttr('vhName', DMsg::ALbl('l_vhname'), 'vhname', false, 'templateVHName'),
+			'tp_vhDomain' => self::NewTextAttr('vhDomain', DMsg::ALbl('l_domain'), 'domain', true, 'templateVHDomain'),
+			'tp_vhAliases' => self::NewTextAttr('vhAliases', DMsg::ALbl('l_vhaliases'), 'domain', true, 'templateVHAliases', 1),
+			'tp_vhRoot' => self::NewParseTextAttr('vhRoot', DMsg::ALbl('l_defaultvhroot'), $this->_options['tp_vname'][0], $this->_options['tp_vname'][1], false, 'templateVHRoot'),
+			'tp_vrFile' => self::NewParseTextAttr('fileName', DMsg::ALbl('l_filename'), '/(\$VH_NAME)|(\$VH_ROOT)/', DMsg::ALbl('parse_tpfile'), false, 'tp_vhFileName'),
+			'tp_name' => self::NewParseTextAttr('name', DMsg::ALbl('l_name'), $this->_options['tp_vname'][0], $this->_options['tp_vname'][1], false, 'extAppName'),
+			'vh_maxKeepAliveReq' => self::NewIntAttr('maxKeepAliveReq', DMsg::ALbl('l_maxkeepalivereq'), true, 0, 32767, 'vhMaxKeepAliveReq'),
+			'vh_cgroups' => self::NewSelAttr('cgroups', DMsg::ALbl('l_cgroups'), $this->_options['notset_off_on']),
+			'vh_allowSymbolLink' => self::NewSelAttr('allowSymbolLink', DMsg::ALbl('l_allowsymbollink'), $this->_options['symbolLink']),
+			'vh_enableScript' => self::NewBoolAttr('enableScript', DMsg::ALbl('l_enablescript'), false),
+			'vh_restrained' => self::NewBoolAttr('restrained', DMsg::ALbl('l_restrained'), false),
+			'vh_setUIDMode' => self::NewSelAttr('setUIDMode', DMsg::ALbl('l_setuidmode'), ['' => '', 0 => 'Server UID', 1 => 'CGI File UID', 2 => 'DocRoot UID'], true, 'setUidMode'),
+			'vh_suexec_user' => self::NewTextAttr('user', DMsg::ALbl('l_suexecuser1'), 'cust', true, 'suexecUser'),
+			'vh_suexec_group' => self::NewTextAttr('group', DMsg::ALbl('l_suexecgrp1'), 'cust', true, 'suexecGroup'),
+			'staticReqPerSec' => self::NewIntAttr('staticReqPerSec', DMsg::ALbl('l_staticreqpersec'), true, 0),
+			'dynReqPerSec' => self::NewIntAttr('dynReqPerSec', DMsg::ALbl('l_dynreqpersec'), true, 0),
+			'outBandwidth' => self::NewIntAttr('outBandwidth', DMsg::ALbl('l_outbandwidth'), true, 0),
+			'inBandwidth' => self::NewIntAttr('inBandwidth', DMsg::ALbl('l_inbandwidth'), true, 0),
+			'ctx_order' => $ctxOrder,
+			'ctx_type' => self::NewSelAttr('type', DMsg::ALbl('l_contexttype'), $this->_options['ctxType'], false, 'ctxType'),
+			'ctx_uri' => self::NewTextAttr('uri', DMsg::ALbl('l_uri'), 'expuri', false, 'expuri'),
+			'ctx_location' => self::NewTextAttr('location', DMsg::ALbl('l_location'), 'cust'),
+			'ctx_shandler' => self::NewSelAttr('handler', DMsg::ALbl('l_servletengine'), 'extprocessor:servlet', false, 'servletEngine'),
+			'geoipDBFile' => self::NewPathAttr('geoipDBFile', DMsg::ALbl('l_geoipdbfile'), 'filep', 2, 'r', false),
+			'enableIpGeo' => self::NewBoolAttr('enableIpGeo', DMsg::ALbl('l_enableipgeo')),
+			'enable_pagespeed' => self::NewBoolAttr('enabled', DMsg::ALbl('l_enablepagespeed'), true, 'pagespeedEnabled'),
+			'pagespeed_setting' => self::NewTextAreaAttr('param', DMsg::ALbl('l_pagespeedsettings'), 'cust', true, 25, 'pagespeedParams', 1, 1),
+			'note' => self::NewTextAreaAttr('note', DMsg::ALbl('l_notes'), 'note', true, 4, null, 0),
+		];
+		self::applyLegacyFde($attrs['enable_pagespeed'], 'YNN');
+		self::applyLegacyFde($attrs['pagespeed_setting'], 'YNN');
+		$this->_attrs = $attrs;
+		$this->applyCommonAttrConfig();
+	}
+
+	protected function applyCommonAttrConfig()
+	{
+	}
+
+	//	DAttr($key, $type, $label,  $inputType, $allowNull,$min, $max, $inputAttr, $multiInd)
+	protected function getThrottleAttrs()
+	{
+		return [
+			$this->_attrs['staticReqPerSec'],
+			$this->_attrs['dynReqPerSec'],
+			$this->_attrs['outBandwidth'],
+			$this->_attrs['inBandwidth'],
+		];
+	}
+
+	protected function getCachePolicyAttrs($serverLevel)
+	{
+		$attrs = [
+			self::NewBoolAttr('cachePolicy:checkPublicCache', DMsg::ALbl('l_checkpubliccache'), true, 'checkPublicCache'),
+			self::NewBoolAttr('cachePolicy:checkPrivateCache', DMsg::ALbl('l_checkprivatecache'), true, 'checkPrivateCache'),
+			self::NewBoolAttr('cachePolicy:respectCacheable', DMsg::ALbl('l_respectcachecontrol'), true, 'respectCacheable'),
+			self::NewIntAttr('cachePolicy:maxCacheObjSize', DMsg::ALbl('l_maxobjectsize'), true, '1K', '100M'),
+			self::NewIntAttr('cachePolicy:maxStaleAge', DMsg::ALbl('l_cachestaleage'), true, 0),
+			self::NewTextAreaAttr('cachePolicy:cacheKeyMod', DMsg::ALbl('l_cachekeymod'), 'cust', true, 3, null, 0),
+		];
+
+		if (!$serverLevel) {
+			$attrs[] = self::NewBoolAttr('cachePolicy:enableCache', DMsg::ALbl('l_publiclycacheall'));
+			$attrs[] = self::NewBoolAttr('cachePolicy:enablePrivateCache', DMsg::ALbl('l_privatelycacheall'));
+		}
+
+		$attrs[] = self::NewIntAttr('cachePolicy:expireInSeconds', DMsg::ALbl('l_cacheexpiretime'), true, 0);
+		$attrs[] = self::NewIntAttr('cachePolicy:privateExpireInSeconds', DMsg::ALbl('l_privatecacheexpiretime'), true, 0);
+		$attrs[] = self::NewBoolAttr('cachePolicy:microCache5xx', DMsg::ALbl('l_microcache5xx'));
+		$attrs[] = self::NewBoolAttr('cachePolicy:enablePostCache', DMsg::ALbl('l_enablepostcache'));
+
+		foreach ($attrs as $attr) {
+			$attr->_feature = 1;
+		}
+
+		return $attrs;
+	}
+
+	protected static function getSslProtocolAttrs($includeProtocol)
+	{
+		$attrs = [];
+
+		if ($includeProtocol) {
+			$attrs[] = self::NewCheckBoxAttr('sslProtocol', DMsg::ALbl('l_protocolver'), ['2' => 'TLS v1.0', '4' => 'TLS v1.1', '8' => 'TLS v1.2', '16' => 'TLS v1.3']);
+		}
+
+		$attrs[] = self::NewCipherListAttr('ciphers', DMsg::ALbl('l_ciphers'));
+		$attrs[] = self::NewBoolAttr('enableECDHE', DMsg::ALbl('l_enableecdhe'));
+		$attrs[] = self::NewBoolAttr('enableDHE', DMsg::ALbl('l_enabledhe'));
+		$attrs[] = self::NewTextAttr('DHParam', DMsg::ALbl('l_dhparam'), 'cust');
+
+		return $attrs;
+	}
+
+	protected function getSslFeatureAttrs($enableQuicLabel, $enableQuicHelpKey)
+	{
+		return [
+			$this->_attrs['ssl_renegProtection'],
+			$this->_attrs['sslSessionCache'],
+			$this->_attrs['sslSessionTickets'],
+			self::NewCheckBoxAttr('enableSpdy', DMsg::ALbl('l_alpn'), ['4' => 'HTTP/2', '8' => 'HTTP/3', '0' => DMsg::ALbl('o_none')]),
+			self::NewBoolAttr('enableQuic', $enableQuicLabel, true, $enableQuicHelpKey),
+		];
+	}
+
+	protected function setTemplateFileNameTblDef($sourceTblId, $id)
+	{
+		$this->_tblDef[$id] = $this->DupTblDef($sourceTblId, $id);
+		$this->_tblDef[$id]->ResetAttrEntry(1, $this->_attrs['tp_vrFile']);
+	}
+
+	protected function newAccessLogControlAttr()
+	{
+		return self::NewSelAttr('useServer', DMsg::ALbl('l_logcontrol'), $this->_options['aclogctrl'], false, 'aclogUseServer');
+	}
+
+	protected function getAccessLogAttrs($fileAttr)
+	{
+		return [
+			$this->newAccessLogControlAttr(),
+			$fileAttr,
+			self::NewSelAttr('pipedLogger', DMsg::ALbl('l_pipedlogger'), 'extprocessor:logger', true, 'accessLog_pipedLogger'),
+			$this->_attrs['logFormat'],
+			$this->_attrs['logHeaders'],
+			$this->_attrs['rollingSize'],
+			$this->_attrs['keepDays'],
+			$this->_attrs['compressArchive'],
+			self::NewPathAttr('bytesLog', DMsg::ALbl('l_byteslog'), 'file0', 3, 'r', true, 'accessLog_bytesLog'),
+		];
+	}
+
+	protected function getSharedServerLogAttrs()
+	{
+		return [
+			$this->_attrs['fileName2']->dup(null, null, 'log_fileName'),
+			self::NewSelAttr('logLevel', DMsg::ALbl('l_loglevel'), $this->_options['logLevel'], false, 'log_logLevel'),
+			self::NewSelAttr('debugLevel', DMsg::ALbl('l_debuglevel'), [
+				'10' => DMsg::ALbl('o_high'),
+				'5' => DMsg::ALbl('o_medium'),
+				'2' => DMsg::ALbl('o_low'),
+				'0' => DMsg::ALbl('o_none')
+			], false, 'log_debugLevel'),
+			$this->_attrs['rollingSize'],
+			$this->_attrs['keepDays'],
+			$this->_attrs['compressArchive'],
+			self::NewBoolAttr('enableStderrLog', DMsg::ALbl('l_enablestderrlog'), true, 'log_enableStderrLog'),
+		];
+	}
+
+	protected function getSharedAdminPhpAttrs()
+	{
+		return [
+			self::NewBoolAttr('enableCoreDump', DMsg::ALbl('l_enablecoredump'), false),
+			self::NewIntAttr('sessionTimeout', DMsg::ALbl('l_sessiontimeout'), true, 60, null, 'consoleSessionTimeout'),
+			self::NewIntAttr('configAutoBackupRetention', DMsg::ALbl('l_configbackupretention'), true, 3, 3650)
+		];
+	}
+
+	protected function add_S_ACLOG($id)
+	{
+		$attrs = [
+			$this->_attrs['fileName2']->dup(null, null, 'accessLog_fileName'),
+			self::NewSelAttr('pipedLogger', DMsg::ALbl('l_pipedlogger'), 'extprocessor:logger', true, 'accessLog_pipedLogger'),
+			$this->_attrs['logFormat'],
+			$this->_attrs['logHeaders'],
+			$this->_attrs['rollingSize'],
+			$this->_attrs['keepDays'],
+			$this->_attrs['compressArchive']
+		];
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_accesslog'), $attrs, 'fileName');
+	}
+
+	protected function add_S_GEOIP_TOP($id)
+	{
+		$align = ['center', 'center', 'center'];
+
+		$attrs = [
+			$this->_attrs['geoipDBFile'],
+			self::NewViewAttr('geoipDBName', DMsg::ALbl('l_dbname')),
+			self::NewActionAttr('S_GEOIP', 'Ed')
+		];
+		$this->_tblDef[$id] = DTbl::NewTop($id, DMsg::ALbl('l_geoipdb'), $attrs, 'geoipDBFile', 'S_GEOIP', $align, 'geolocationDB', 'database', true);
+	}
+
+	protected function add_S_GEOIP($id)
+	{
+		$attrs = [
+			$this->_attrs['geoipDBFile'],
+			self::NewTextAttr('geoipDBName', DMsg::ALbl('l_dbname'), 'dbname', false),
+			self::NewParseTextAreaAttr('maxMindDBEnv', DMsg::ALbl('l_envvariable'), '/^\S+[ \t]+\S+$/', DMsg::ALbl('parse_geodbenv'), true, 5, null, 0, 1, 2),
+			$this->_attrs['note'],
+		];
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_geoipdb'), $attrs, 'geoipDBFile', 'geolocationDB');
+	}
+
+	protected function add_S_IP2LOCATION($id)
+	{
+		$attrs = [
+			self::NewPathAttr('ip2locDBFile', DMsg::ALbl('l_ip2locDBFile'), 'filep', 2, 'r'),
+			self::NewSelAttr('ip2locDBCache', DMsg::ALbl('l_ip2locDBCache'),
+					[
+						'' => '',
+						'FileIo' => 'File System',
+						'MemoryCache' => 'Memory',
+						'SharedMemoryCache' => 'Shared Memory'
+			]),
+		];
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_ip2locDB'), $attrs);
+	}
+
+	protected function add_S_TUNING_CONN($id)
+	{
+		$attrs = [
+			self::NewIntAttr('maxConnections', DMsg::ALbl('l_maxconns'), false, 1),
+			self::NewIntAttr('maxSSLConnections', DMsg::ALbl('l_maxsslconns'), false, 0),
+			self::NewIntAttr('connTimeout', DMsg::ALbl('l_conntimeout'), false, 10, 1000000),
+			self::NewIntAttr('maxKeepAliveReq', DMsg::ALbl('l_maxkeepalivereq'), false, 0, 32767),
+			self::NewIntAttr('keepAliveTimeout', DMsg::ALbl('l_keepalivetimeout'), false, 0, 60),
+			self::NewIntAttr('sndBufSize', DMsg::ALbl('l_sndbufsize'), true, 0, '512K'),
+			self::NewIntAttr('rcvBufSize', DMsg::ALbl('l_rcvbufsize'), true, 0, '512K'),
+		];
+
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_connection'), $attrs);
+	}
+
+	protected function add_S_TUNING_REQ($id)
+	{
+		$attrs = [
+			self::NewIntAttr('maxReqURLLen', DMsg::ALbl('l_maxrequrllen'), false, 200, 65530),
+			self::NewIntAttr('maxReqHeaderSize', DMsg::ALbl('l_maxreqheadersize'), false, 1024, 65530),
+			self::NewIntAttr('maxReqBodySize', DMsg::ALbl('l_maxreqbodysize'), false, '1M', null),
+			self::NewIntAttr('maxDynRespHeaderSize', DMsg::ALbl('l_maxdynrespheadersize'), false, 200, '64K'),
+			self::NewIntAttr('maxDynRespSize', DMsg::ALbl('l_maxdynrespsize'), false, '1M', null)
+		];
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_reqresp'), $attrs);
+	}
+
+	protected function add_S_TUNING_QUIC($id)
+	{
+		$congest_options = ['' => 'Default', '1' => 'Cubic', '2' => 'BBR'];
+		$attrs = [
+			self::NewBoolAttr('quicEnable', DMsg::ALbl('l_enablequic')),
+			self::NewTextAttr('quicShmDir', DMsg::ALbl('l_quicshmdir'), 'cust'),
+			self::NewTextAttr('quicVersions', DMsg::ALbl('l_quicversions'), 'cust'),
+			self::NewSelAttr('quicCongestionCtrl', DMsg::ALbl('l_congestionctrl'), $congest_options),
+			self::NewIntAttr('quicCfcw', DMsg::ALbl('l_quiccfcw'), true, '64K', '512M'),
+			self::NewIntAttr('quicMaxCfcw', DMsg::ALbl('l_quicmaxcfcw'), true, '64K', '512M'),
+			self::NewIntAttr('quicSfcw', DMsg::ALbl('l_quicsfcw'), true, '64K', '128M'),
+			self::NewIntAttr('quicMaxSfcw', DMsg::ALbl('l_quicmaxsfcw'), true, '64K', '128M'),
+			self::NewIntAttr('quicMaxStreams', DMsg::ALbl('l_quicmaxstreams'), true, 10, 1000),
+			self::NewIntAttr('quicHandshakeTimeout', DMsg::ALbl('l_quichandshaketimeout'), true, 1, 15),
+			self::NewIntAttr('quicIdleTimeout', DMsg::ALbl('l_quicidletimeout'), true, 10, 30),
+			self::NewBoolAttr('quicEnableDPLPMTUD', DMsg::ALbl('l_quicenabledplpmtud')),
+			self::NewIntAttr('quicBasePLPMTU', DMsg::ALbl('l_quicbaseplpmtu'), true, 0, 65527),
+			self::NewIntAttr('quicMaxPLPMTU', DMsg::ALbl('l_quicmaxplpmtu'), true, 0, 65527),
+		];
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_quic'), $attrs);
+	}
+
+	protected function add_SVT_SEC_AC($id)
+	{
+		$attrs = [
+			self::NewTextAreaAttr('allow', DMsg::ALbl('l_accessallow'), 'subnet', true, 5, 'accessControl_allow', 0, 0, 1),
+			self::NewTextAreaAttr('deny', DMsg::ALbl('l_accessdeny'), 'subnet', true, 5, 'accessControl_deny', 0, 0, 1)
+		];
+
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_accesscontrol'), $attrs, 'accessControl', 1);
+	}
+
+	protected function add_ADM_SEC_AC($id)
+	{
+		$this->add_SVT_SEC_AC($id);
+	}
+
+	protected function add_SVT_CACHE_NCURL($id)
+	{
+		$noCacheUrl = self::NewTextAreaAttr('noCacheUrl', null, 'cust', true, 10, 'noCacheUrl', 1, 1);
+		$noCacheUrl->_feature = 1;
+
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_donotcacheurl'), [$noCacheUrl], 'cache', 1);
+	}
+
+	protected function add_S_CACHE_NCDOMAIN($id)
+	{
+		$noCacheDomain = self::NewTextAreaAttr('noCacheDomain', null, 'cust', true, 10, 'noCacheDomain', 1, 1);
+		$noCacheDomain->_feature = 1;
+
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_donotcachedomains'), [$noCacheDomain], 'cache', 1);
+	}
+
+	protected function add_S_PAGESPEED($id)
+	{
+		$activate = self::applyLegacyFde(
+			self::NewBoolAttr('activate', DMsg::ALbl('l_activatepagespeed'), true, 'pagespeedActivate'),
+			'YNN'
+		);
+		$attrs = [
+			$activate,
+			$this->_attrs['enable_pagespeed'],
+			$this->_attrs['pagespeed_setting']
+		];
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_pagespeedsettings'), $attrs, 'modpagespeed');
+	}
+
+	protected function add_VT_PAGESPEED($id)
+	{
+		$attrs = [
+			$this->_attrs['enable_pagespeed'],
+			$this->_attrs['pagespeed_setting']
+		];
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_pagespeedsettings'), $attrs, 'modpagespeed');
+	}
+
+	protected function add_L_VHMAP($id)
+	{
+		$attrs = [
+			$this->_attrs['l_vhost'],
+			$this->_attrs['l_domain']
+		];
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_vhmappings'), $attrs, 'vhost', 'virtualHostMapping');
+	}
+
+	protected function add_L_VHMAP_TOP($id)
+	{
+		$align = ['left', 'left', 'center'];
+
+		$attrs = [
+			$this->_attrs['l_vhost'],
+			$this->_attrs['l_domain'],
+			self::NewActionAttr('L_VHMAP', 'Ed')
+		];
+		$this->_tblDef[$id] = DTbl::NewTop($id, DMsg::ALbl('l_vhmappings'), $attrs, 'vhost', 'L_VHMAP', $align, 'virtualHostMapping', 'plug-zap', false)
+			->enableTableControls(20);
+	}
+
+	protected function add_ALVT_SSL_CERT($id)
+	{
+		$attrs = [
+			self::NewTextAttr('keyFile', DMsg::ALbl('l_keyfile'), 'cust'),
+			self::NewTextAttr('certFile', DMsg::ALbl('l_certfile'), 'cust'),
+			self::NewBoolAttr('certChain', DMsg::ALbl('l_certchain')),
+			self::NewTextAttr('CACertPath', DMsg::ALbl('l_cacertpath'), 'cust'),
+			self::NewTextAttr('CACertFile', DMsg::ALbl('l_cacertfile'), 'cust'),
+		];
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_ssl'), $attrs, 'sslCert');
+	}
+
+	protected function add_AL_SSL($id)
+	{
+		$attrs = self::getSslProtocolAttrs(true);
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_sslprotocol'), $attrs, 'sslProtocolSetting');
+	}
+
+	protected function add_VT_SSL($id)
+	{
+		$attrs = self::getSslProtocolAttrs(false);
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_sslprotocol'), $attrs, 'vhSslProtocolSetting');
+	}
+
+	protected function add_AL_SSL_FEATURE($id)
+	{
+		$attrs = $this->getSslFeatureAttrs(DMsg::ALbl('l_openudpport'), 'allowQuic');
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_securityandfeatures'), $attrs);
+	}
+
+	protected function add_VT_SSL_FEATURE($id)
+	{
+		$attrs = $this->getSslFeatureAttrs(DMsg::ALbl('l_enablequic'), 'vhEnableQuic');
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_securityandfeatures'), $attrs);
+	}
+
+	protected function add_LVT_SSL_OCSP($id)
+	{
+		$attrs = [
+			self::NewBoolAttr('enableStapling', DMsg::ALbl('l_enablestapling')),
+			self::NewIntAttr('ocspRespMaxAge', DMsg::ALbl('l_ocsprespmaxage'), true, -1),
+			self::NewTextAttr('ocspResponder', DMsg::ALbl('l_ocspresponder'), 'httpurl'),
+			self::NewTextAttr('ocspCACerts', DMsg::ALbl('l_ocspcacerts'), 'cust'),
+		];
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_ocspstapling'), $attrs, 'sslOCSP');
+	}
+
+	protected function add_ALVT_SSL_CLVERIFY($id)
+	{
+		$attrs = [
+			self::NewSelAttr('clientVerify', DMsg::ALbl('l_clientverify'), [
+				'0' => 'none',
+				'1' => 'optional',
+				'2' => 'require',
+				'3' => 'optional_no_ca'
+			]),
+			self::NewIntAttr('verifyDepth', DMsg::ALbl('l_verifydepth'), true, 0, 100),
+			self::NewTextAttr('crlPath', DMsg::ALbl('l_crlpath'), 'cust'),
+			self::NewTextAttr('crlFile', DMsg::ALbl('l_crlfile'), 'cust'),
+		];
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_clientverify'), $attrs);
+	}
+
+	protected function add_T_TOP($id)
+	{
+		$align = ['left', 'left', 'center'];
+
+		$attrs = [
+			self::NewViewAttr('name', DMsg::ALbl('l_name')),
+			self::NewViewAttr('listeners', DMsg::ALbl('l_mappedlisteners')),
+			self::NewActionAttr('T_TOPD', 'Xd')
+		];
+		$this->_tblDef[$id] = DTbl::NewTop($id, DMsg::ALbl('l_tplist'), $attrs, 'name', 'T_TOPD', $align, null, 'form', true);
+	}
+
+	protected function add_T_MEMBER_TOP($id)
+	{
+		$align = ['left', 'left', 'center'];
+
+		$attrs = [
+			$this->_attrs['tp_vhName'],
+			$this->_attrs['tp_vhDomain'],
+			self::NewActionAttr('T_MEMBER', 'vEdi')
+		];
+
+		$this->_tblDef[$id] = DTbl::NewTop($id, DMsg::ALbl('l_membervhosts'), $attrs, 'vhName', 'T_MEMBER', $align, null, 'server', false);
+	}
+
+	protected function add_T_MEMBER($id)
+	{
+		$vhroot = self::NewTextAttr('vhRoot', DMsg::ALbl('l_membervhroot'), 'cust', true, 'memberVHRoot');
+		$vhroot->_note = DMsg::ALbl('l_membervhroot_note');
+
+		$attrs = [
+			$this->_attrs['tp_vhName'],
+			$this->_attrs['tp_vhDomain'],
+			$this->_attrs['tp_vhAliases'],
+			$vhroot
+		];
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_membervhosts'), $attrs, 'vhName');
+	}
+
+	protected function add_V_LOG($id)
+	{
+		$attrs = [
+			self::NewBoolAttr('useServer', DMsg::ALbl('l_useServer'), false, 'logUseServer'),
+			$this->_attrs['fileName3']->dup(null, null, 'vhlog_fileName'),
+			self::NewSelAttr('logLevel', DMsg::ALbl('l_loglevel'), $this->_options['logLevel'], true, 'vhlog_logLevel'),
+			$this->_attrs['rollingSize'],
+			$this->_attrs['keepDays'],
+			$this->_attrs['compressArchive'],
+		];
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_vhlog'), $attrs, 'fileName');
+	}
+
+	protected function add_V_ACLOG($id)
+	{
+		$attrs = $this->getAccessLogAttrs($this->_attrs['fileName3']->dup(null, null, 'vhaccessLog_fileName'));
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_accesslog'), $attrs, 'fileName');
+	}
+
+	protected function get_cust_status_code()
+	{
+		$status = [
+			300 => 'Multiple Choices',
+			301 => 'Moved Permanently',
+			302 => 'Found',
+			303 => 'See Other',
+			305 => 'Use Proxy',
+			307 => 'Temporary Redirect',
+			400 => 'Bad Request',
+			401 => 'Unauthorized',
+			402 => 'Payment Required',
+			403 => 'Forbidden',
+			404 => 'Not Found',
+			405 => 'Method Not Allowed',
+			406 => 'Not Acceptable',
+			407 => 'Proxy Authentication Required',
+			408 => 'Request Time-out',
+			409 => 'Conflict',
+			410 => 'Gone',
+			411 => 'Length Required',
+			412 => 'Precondition Failed',
+			413 => 'Request Entity Too Large',
+			414 => 'Request-URI Too Large',
+			415 => 'Unsupported Media Type',
+			416 => 'Requested range not satisfiable',
+			417 => 'Expectation Failed',
+			500 => 'Internal Server Error',
+			501 => 'Not Implemented',
+			502 => 'Bad Gateway',
+			503 => 'Service Unavailable',
+			504 => 'Gateway Time-out',
+			505 => 'HTTP Version not supported'
+		];
+		$options = [];
+		foreach ($status as $key => $value) {
+			$options[$key] = "$key  $value";
+		}
+
+		return $options;
+	}
+
+	protected function get_realm_attrs()
+	{
+		return [
+			'realm_type' => self::NewSelAttr('type', DMsg::ALbl('l_realmtype'), $this->_options['realmType'], false, 'realmType'),
+			'realm_name' => self::NewTextAttr('name', DMsg::ALbl('l_realmname'), 'vhname', false, 'realmName'),
+			'realm_udb_maxCacheSize' => self::NewIntAttr('userDB:maxCacheSize', DMsg::ALbl('l_userdbmaxcachesize'), true, 0, '100K', 'userDBMaxCacheSize'),
+			'realm_udb_cacheTimeout' => self::NewIntAttr('userDB:cacheTimeout', DMsg::ALbl('l_userdbcachetimeout'), true, 0, 3600, 'userDBCacheTimeout'),
+			'realm_gdb_maxCacheSize' => self::NewIntAttr('groupDB:maxCacheSize', DMsg::ALbl('l_groupdbmaxcachesize'), true, 0, '100K', 'groupDBMaxCacheSize'),
+			'realm_gdb_cacheTimeout' => self::NewIntAttr('groupDB:cacheTimeout', DMsg::ALbl('l_groupdbcachetimeout'), true, 0, 3600, 'groupDBCacheTimeout')
+		];
+	}
+
+	protected function add_V_REALM_FILE($id)
+	{
+		$udbLoc = self::NewPathAttr('userDB:location', DMsg::ALbl('l_userdblocation'), 'file', 3, 'rwc', false, 'userDBLocation');
+		$udbLoc->_href = '&t1=V_UDB_TOP&r1=$R';
+		$gdbLoc = self::NewPathAttr('groupDB:location', DMsg::ALbl('l_groupdblocation'), 'file', 3, 'rwc', true, 'GroupDBLocation');
+		$gdbLoc->_href = '&t1=V_GDB_TOP&r1=$R';
+
+		$realm_attr = $this->get_realm_attrs();
+		$type = self::NewCustFlagAttr('type', null, DAttr::BM_HIDE | DAttr::BM_NOEDIT);
+		$attrs = [
+			$realm_attr['realm_name'],
+			$type,
+			$this->_attrs['note'],
+			$udbLoc,
+			$realm_attr['realm_udb_maxCacheSize'],
+			$realm_attr['realm_udb_cacheTimeout'],
+			$gdbLoc,
+			$realm_attr['realm_gdb_maxCacheSize'],
+			$realm_attr['realm_gdb_cacheTimeout']
+		];
+		$defaultExtract = ['type' => 'file'];
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_passfilerealmdef'), $attrs, 'name', null, $defaultExtract);
+	}
+
+	protected function add_T_REALM_FILE($id)
+	{
+		$realm_attr = $this->get_realm_attrs();
+		$type = self::NewCustFlagAttr('type', null, DAttr::BM_HIDE | DAttr::BM_NOEDIT);
+		$attrs = [
+			$realm_attr['realm_name'],
+			$type,
+			$this->_attrs['note'],
+			self::NewTextAttr('userDB:location', DMsg::ALbl('l_userdblocation'), 'cust', false, 'userDBLocation'),
+			$realm_attr['realm_udb_maxCacheSize'],
+			$realm_attr['realm_udb_cacheTimeout'],
+			self::NewTextAttr('groupDB:location', DMsg::ALbl('l_groupdblocation'), 'cust', true, 'GroupDBLocation'),
+			$realm_attr['realm_gdb_maxCacheSize'],
+			$realm_attr['realm_gdb_cacheTimeout']
+		];
+		$defaultExtract = ['type' => 'file'];
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_passfilerealmdef'), $attrs, 'name', null, $defaultExtract);
+	}
+
+	protected function add_V_UDB_TOP($id)
+	{
+		$align = ['left', 'left', 'center'];
+
+		$attrs = [
+			self::NewViewAttr('name', DMsg::ALbl('l_username')),
+			self::NewViewAttr('group', DMsg::ALbl('l_groups')),
+			self::NewActionAttr('V_UDB', 'Ed')
+		];
+		$this->_tblDef[$id] = DTbl::NewTop($id, DMsg::ALbl('l_userdbentries'), $attrs, 'name', 'V_UDB', $align, null, 'user', false);
+		$this->_tblDef[$id]->Set(DTbl::FLD_SHOWPARENTREF, true);
+	}
+
+	protected function add_V_UDB($id)
+	{
+		$attrs = [
+			self::NewTextAttr('name', DMsg::ALbl('l_username'), 'name', false, 'UDBusername'),
+			self::NewTextAttr('group', DMsg::ALbl('l_groups'), 'name', true, 'UDBgroup', 1),
+			self::NewPassAttr('pass', DMsg::ALbl('l_newpass'), false, 'UDBpass'),
+			self::NewPassAttr('pass1', DMsg::ALbl('l_retypepass'), false, 'UDBpass1')
+		];
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_userdbentry'), $attrs, 'name');
+		$this->_tblDef[$id]->Set(DTbl::FLD_SHOWPARENTREF, true);
+	}
+
+	protected function add_V_GDB_TOP($id)
+	{
+		$align = ['left', 'left', 'center'];
+
+		$attrs = [
+			self::NewViewAttr('name', DMsg::ALbl('l_groupname')),
+			self::NewViewAttr('users', DMsg::ALbl('l_users')),
+			self::NewActionAttr('V_GDB', 'Ed')
+		];
+		$this->_tblDef[$id] = DTbl::NewTop($id, DMsg::ALbl('l_groupdbentries'), $attrs, 'name', 'V_GDB', $align);
+		$this->_tblDef[$id]->Set(DTbl::FLD_SHOWPARENTREF, true);
+	}
+
+	protected function add_V_GDB($id)
+	{
+		$users = self::NewTextAreaAttr('users', DMsg::ALbl('l_users'), 'name', true, 15, 'gdb_users', 0, 0, 1);
+		$users->SetGlue(' ');
+
+		$attrs = [
+			self::NewTextAttr('name', DMsg::ALbl('l_groupname'), 'vhname', false, 'gdb_groupname'),
+			$users,
+		];
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_groupdbentry'), $attrs, 'name');
+		$this->_tblDef[$id]->Set(DTbl::FLD_SHOWPARENTREF, true);
+	}
+
+	protected function add_VT_CTX_SEL($id)
+	{
+		$attrs = [$this->_attrs['ctx_type']];
+		$this->_tblDef[$id] = DTbl::NewSel($id, DMsg::ALbl('l_newcontext'), $attrs, $this->_options['ctxTbl']);
+	}
+
+	protected function get_ctx_attrs($type)
+	{
+		if ($type == 'auth') {
+			return [
+				self::NewSelAttr('realm', DMsg::ALbl('l_realm'), 'realm'),
+				self::NewTextAttr('authName', DMsg::ALbl('l_authname'), 'name'),
+				self::NewTextAttr('required', DMsg::ALbl('l_requiredauthuser'), 'cust'),
+				self::NewTextAreaAttr('accessControl:allow', DMsg::ALbl('l_accessallowed'), 'subnet', true, 3, 'accessAllowed', 0, 0, 1),
+				self::NewTextAreaAttr('accessControl:deny', DMsg::ALbl('l_accessdenied'), 'subnet', true, 3, 'accessDenied', 0, 0, 1),
+				self::NewSelAttr('authorizer', DMsg::ALbl('l_authorizer'), 'extprocessor:fcgiauth', true, 'extAuthorizer')
+			];
+		}
+		if ($type == 'rewrite') {
+			$rules = self::NewTextAreaAttr('rewrite:rules', DMsg::ALbl('l_rewriterules'), 'cust', true, 6, 'rewriteRules', 1, 1);
+			$rules->SetFlag(DAttr::BM_RAWDATA);
+			return [
+				self::NewBoolAttr('rewrite:enable', DMsg::ALbl('l_enablerewrite'), true, 'enableRewrite'),
+				self::NewBoolAttr('rewrite:inherit', DMsg::ALbl('l_rewriteinherit'), true, 'rewriteInherit'),
+				self::NewTextAttr('rewrite:base', DMsg::ALbl('l_rewritebase'), 'uri', true, 'rewriteBase'),
+				$rules,
+			];
+		}
+		if ($type == 'uri') {
+			return [
+				$this->_attrs['ctx_uri'],
+				$this->_attrs['ctx_order']
+			];
+		}
+	}
+
+	protected function add_T_LOG($id)
+	{
+		$this->setTemplateFileNameTblDef('V_LOG', $id);
+	}
+
+	protected function add_T_ACLOG($id)
+	{
+		$this->setTemplateFileNameTblDef('V_ACLOG', $id);
+	}
+
+	protected function add_ADM_THROTTLE($id)
+	{
+		$attrs = [
+			self::NewBoolAttr('throttleEnabled', DMsg::ALbl('l_throttleenabled'), false),
+			self::NewIntAttr('throttleMaxFailures', DMsg::ALbl('l_throttlemaxfailures'), true, 1, 10),
+			self::NewIntAttr('throttleBlockWindow', DMsg::ALbl('l_throttleblockwindow'), true, 60, 86400),
+			self::NewIntAttr('throttleMaxBackoff', DMsg::ALbl('l_throttlemaxbackoff'), true, 60, 86400),
+			self::NewIntAttr('loginHistoryRetention', DMsg::ALbl('l_loginhistoryretention'), true, 1, 365),
+			self::NewIntAttr('opsAuditRetainFiles', DMsg::ALbl('l_opsauditretainfiles'), true, 1, 100)
+		];
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_loginthrottle'), $attrs);
+	}
+
+	protected function add_ADM_USR_TOP($id)
+	{
+		$align = ['left', 'center'];
+		$attrs = [
+			self::NewViewAttr('name', DMsg::ALbl('l_username')),
+			self::NewActionAttr('ADM_USR', 'Ed', false) //not allow null - cannot delete all
+		];
+		$this->_tblDef[$id] = DTbl::NewTop($id, DMsg::ALbl('l_adminusers'), $attrs, 'name', 'ADM_USR_NEW', $align, null, 'user');
+	}
+
+	protected function add_ADM_USR($id)
+	{
+		$attrs = [
+			self::NewTextAttr('name', DMsg::ALbl('l_username'), 'admname', false, 'adminUserName'),
+			self::NewPassAttr('oldpass', DMsg::ALbl('l_oldpass'), false, 'adminOldPass'),
+			self::NewPassAttr('pass', DMsg::ALbl('l_newpass'), false, 'adminNewPass'),
+			self::NewPassAttr('pass1', DMsg::ALbl('l_retypepass'), false, 'adminRetypePass')
+		];
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_adminuser'), $attrs, 'name');
+	}
+
+	protected function add_ADM_USR_NEW($id)
+	{
+		$attrs = [
+			self::NewTextAttr('name', DMsg::ALbl('l_username'), 'admname', false, 'adminUserName'),
+			self::NewPassAttr('pass', DMsg::ALbl('l_newpass'), false, 'adminNewPass'),
+			self::NewPassAttr('pass1', DMsg::ALbl('l_retypepass'), false, 'adminRetypePass')
+		];
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_newadminuser'), $attrs, 'name');
+	}
+
+	protected function add_ADM_ACLOG($id)
+	{
+		$attrs = $this->getAccessLogAttrs($this->_attrs['fileName3']->dup(null, null, 'accessLog_fileName'));
+		$this->_tblDef[$id] = DTbl::NewIndexed($id, DMsg::ALbl('l_accesslog'), $attrs, 'fileName');
+	}
+
+	protected function add_SERVICE_SUSPENDVH($id)
+	{
+		$attrs = [
+			self::NewCustFlagAttr('suspendedVhosts', null, (DAttr::BM_HIDE | DAttr::BM_NOEDIT), true, 'vhname', null, null, 1)
+		];
+		$this->_tblDef[$id] = DTbl::NewRegular($id, DMsg::ALbl('l_suspendvh'), $attrs);
+	}
+
+}

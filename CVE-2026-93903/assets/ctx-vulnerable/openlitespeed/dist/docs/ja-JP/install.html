@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Open LiteSpeed Web Serverユーザーズマニュアル - インストール</title>
+  <meta name="description" content="Open LiteSpeed Web Serverユーザーズマニュアル - インストール." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex">
+  <script>
+    (function () {
+      var theme = 'light';
+      var resolved = false;
+      try {
+        if (window.localStorage) {
+          var storedTheme = window.localStorage.getItem('hdoc.theme');
+          if (storedTheme === 'light' || storedTheme === 'dark') {
+            theme = storedTheme;
+            resolved = true;
+          }
+        }
+      } catch (err) {
+      }
+
+      if (!resolved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        theme = 'dark';
+      }
+
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.colorScheme = theme;
+    }());
+  </script>
+  <link rel="shortcut icon" href="../img/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="../css/hdoc.css">
+  <link rel="stylesheet" type="text/css" href="../css/hdoc-product-accent.css">
+  <script src="hdoc-search-index.js" defer></script>
+  <script src="../js/hdoc-search.js" defer></script>
+</head>
+<body>
+<div class="doc-shell">
+<header class="doc-topbar">
+  <a class="doc-brand" href="index.html" aria-label="Open LiteSpeed Web Serverユーザーズマニュアル">
+    <img src="../img/ols_logo.svg" alt="OpenLiteSpeed logo" />
+    <strong>Open LiteSpeed Web Serverユーザーズマニュアル</strong>
+  </a>
+<div class="doc-actions">
+    <button class="doc-menu-toggle" type="button" aria-label="メニューを開く" data-menu-toggle aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <form class="doc-search" role="search" data-empty="ページや設定を検索" data-no-results="結果が見つかりません。">
+      <label class="sr-only" for="doc-search-input">マニュアルを検索</label>
+      <div class="doc-search__box">
+        <input id="doc-search-input" type="search" autocomplete="off" placeholder="ページや設定を検索" aria-controls="doc-search-results" />
+        <button type="submit">検索</button>
+      </div>
+      <div id="doc-search-results" class="doc-search__results" hidden></div>
+    </form>
+  </div>
+  <label class="doc-language"><select id="doc-language-switcher" name="doc_language" data-language-switcher aria-label="言語"><option value="../install.html" data-lang="en-US">English</option><option value="../es-ES/install.html" data-lang="es-ES">Español</option><option value="../de-DE/install.html" data-lang="de-DE">Deutsch</option><option value="../fr-FR/install.html" data-lang="fr-FR">Français</option><option value="../zh-CN/install.html" data-lang="zh-CN">简体中文</option><option value="../ja-JP/install.html" data-lang="ja-JP" selected>日本語</option></select></label>
+  <button class="doc-theme-toggle" type="button" aria-label="テーマを切り替え" data-theme-toggle data-theme-light-label="ライトモード" data-theme-dark-label="ダークモード" title="テーマを切り替え">
+    <span class="doc-theme-toggle__icon" aria-hidden="true"></span>
+  </button>
+</header>
+<div class="doc-menu-backdrop" data-menu-backdrop></div>
+<div class="pagewrapper" data-current-lang="ja-JP" data-supported-langs="[&quot;en-US&quot;,&quot;es-ES&quot;,&quot;de-DE&quot;,&quot;fr-FR&quot;,&quot;zh-CN&quot;,&quot;ja-JP&quot;]"><aside class="sidetree"><div class="sidetree__masthead"><figure class="sidetree__figure"><img src="../img/ols_logo.svg" alt="OpenLiteSpeed logo" /></figure><div class="sidetree__identity"><a class="sidetree__manual-link" href="index.html">ユーザーズマニュアル</a><div class="sidetree__version">Version 1.9 — Rev. 4</div></div></div><nav class="sidetree__nav" aria-label="目次"><ul class="sidetree__list">
+      <li><a href="license.html">ライセンス</a></li>
+      <li><a href="intro.html">はじめに</a></li>
+      <li><a class="current" href="install.html">インストール/アンインストール</a></li>
+      <li>
+        <a href="admin.html">管理</a>
+        <ul class="level2">
+          <li><a href="ServerStat_Help.html">サービスマネージャ</a></li>
+          <li><a href="Real_Time_Stats_Help.html">リアルタイム統計</a></li>
+        </ul>
+      </li>
+      <li><a href="security.html">セキュリティ</a></li>
+      <li>
+        <a href="config.html">設定</a>
+        <ul class="level2">
+          <li><a href="ServGeneral_Help.html">サーバー全般</a></li>
+          <li><a href="ServLog_Help.html">サーバーログ</a></li>
+          <li><a href="ServTuning_Help.html">サーバーチューニング</a></li>
+          <li><a href="ServSecurity_Help.html">サーバーセキュリティ</a></li>
+          <li>
+            <a href="ExtApp_Help.html">外部アプリ</a>
+            <ul class="level3">
+              <li><a href="External_LSAPI.html">LSAPIアプリ</a></li>
+              <li><a href="External_WS.html">Webサーバー（プロキシ）</a></li>
+              <li><a href="External_FCGI.html">Fast CGIアプリ</a></li>
+              <li><a href="External_FCGI_Auth.html">Fast CGIオーソライザー</a></li>
+              <li><a href="External_SCGI.html">Simple CGIアプリ</a></li>
+              <li><a href="External_Servlet.html">サーブレットエンジン</a></li>
+              <li><a href="External_PL.html">パイプロガー</a></li>
+              <li><a href="External_LB.html">ロードバランサ</a></li>
+              <li><a href="External_UWSGI.html">uWSGI</a></li>
+            </ul>
+          </li>
+          <li><a href="ScriptHandler_Help.html">スクリプトハンドラ</a></li>
+          <li><a href="App_Server_Help.html">アプリサーバー設定</a></li>
+          <li><a href="Module_Help.html">モジュール設定</a></li>
+          <li><a href="Listeners_General_Help.html">リスナー全般</a></li>
+          <li><a href="Listeners_SSL_Help.html">リスナーSSL</a></li>
+          <li><a href="Templates_Help.html">テンプレート</a></li>
+          <li><a href="VirtualHosts_Help.html">バーチャルホスト登録</a></li>
+          <li><a href="VHGeneral_Help.html">バーチャルホスト全般</a></li>
+          <li><a href="VHSecurity_Help.html">バーチャルホストセキュリティ</a></li>
+          <li><a href="VHSSL_Help.html">バーチャルホストSSL</a></li>
+          <li><a href="Rewrite_Help.html">Rewrite</a></li>
+          <li>
+            <a href="Context_Help.html">コンテキスト</a>
+            <ul class="level3">
+              <li><a href="Static_Context.html">静的コンテキスト</a></li>
+              <li><a href="Java_Web_App_Context.html">Java Webアプリコンテキスト</a></li>
+              <li><a href="Servlet_Context.html">サーブレットコンテキスト</a></li>
+              <li><a href="FCGI_Context.html">Fast CGIコンテキスト</a></li>
+              <li><a href="SCGI_Context.html">Simple CGIコンテキスト</a></li>
+              <li><a href="LSAPI_Context.html">LSAPIコンテキスト</a></li>
+              <li><a href="Proxy_Context.html">プロキシコンテキスト</a></li>
+              <li><a href="CGI_Context.html">CGIコンテキスト</a></li>
+              <li><a href="LB_Context.html">ロードバランサコンテキスト</a></li>
+              <li><a href="Redirect_Context.html">リダイレクトコンテキスト</a></li>
+              <li><a href="App_Server_Context.html">アプリサーバーコンテキスト</a></li>
+              <li><a href="UWSGI_Context.html">uWSGIコンテキスト</a></li>
+              <li><a href="Module_Context.html">モジュールハンドラコンテキスト</a></li>
+            </ul>
+          </li>
+          <li><a href="VHWebSocket_Help.html">WebSocketプロキシ</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="webconsole.html">Webコンソール</a>
+        <ul class="level2">
+          <li><a href="AdminGeneral_Help.html">管理コンソール全般</a></li>
+          <li><a href="AdminSecurity_Help.html">管理コンソールのセキュリティ</a></li>
+          <li><a href="AdminListeners_General_Help.html">管理リスナー全般</a></li>
+          <li><a href="AdminListeners_SSL_Help.html">管理リスナーSSL</a></li>
+        </ul>
+      </li>
+    </ul></nav></aside><article class="contentwrapper"><div class="nav-bar"><div class="prev">&#171 <a href="intro.html">はじめに</a></div><div class="center"><a href="index.html">ホーム</a></div><div class="next"><a href="admin.html">管理</a> &#187;</div></div>
+<h1>インストール/アンインストール</h1><br/> <h2>最小システム要件</h2><br/> <h3>サポート対象オペレーティングシステム</h3> <p>OpenLiteSpeedは、現在サポート中でEOLではない以下のLinuxディストリビューションをサポートします。</p> <ul>   <li>CentOS* 8, 9, 10</li>   <li>Debian 11, 12, 13</li>   <li>Ubuntu 20 (EOL 2025年5月31日), 22, 24</li> </ul> <p>* RedHat Enterprise Linuxおよび派生ディストリビューションであるAlmaLinux、CloudLinux、Oracle Linux、RockyLinux、VzLinuxなどを含みます。</p><br/> <h3>CPU</h3> <ul>   <li>Intel: x86-64</li>   <li>ARM: aarch64 (Linuxのみ)</li> </ul><br/> <h3>メモリ</h3> <p>512MB以上</p><br/> <h3>ディスク</h3> <ul>   <li>インストール: 200MB</li>   <li>実行時: 300MB以上。スワップ領域は使用状況によって異なります。</li> </ul><br/> <h2>インストール</h2> <p>   インストールはコマンドライン端末で実行する必要があります。テスト目的であれば、   OpenLiteSpeedは非特権ユーザーがホームディレクトリにインストールできます。   本番環境では、システムディレクトリにインストールする必要があります。 </p><br/> <h3>インストール手順</h3> <p>   利用可能なインストール方法については、   <a href="https://docs.openlitespeed.org/" target="_blank" rel="noopener">     OpenLiteSpeedドキュメント   </a>   を参照してください。 </p><br/> <h2>使い始める</h2> <ol>   <li>     <p>       サーバープロセスの制御に関する詳細は、       <a href="admin.html">管理ガイド</a>を参照してください。     </p>     <p>       サーバーを起動するには、<span class="cmd">[your_install_dir]/bin/lswsctrl start</span> を実行するだけです。       (停止するには、<span class="cmd">[your_install_dir]/bin/lswsctrl stop</span> を実行します。)     </p>   </li>   <li>     <p>サーバー上ではサンプルサイトが稼働しているはずです。</p>     <p>       サイトへアクセスするには、ブラウザで       <span class="cmd">http://[address]:8088/</span> を開いてください。       [address] はWebサーバーマシンのIPアドレスまたはドメイン名です。       サーバーが現在使用中のマシン上にある場合は、&quot;localhost&quot; を使用してください。       &quot;8088&quot; はデフォルトポートです。インストール時にOpenLiteSpeed用として別のポートを選択した場合は、       指定したポートを使用してください。     </p>     <p>       上記アドレスへアクセスすると、他のテストページへのリンクがあるお祝いページがブラウザに表示されるはずです。       表示されない場合は、WebAdminコンソールを確認してください。     </p>   </li>   <li>     <p>WebAdminコンソールのデフォルトポートは7080です。</p>     <p>       <span class="cmd">https://[address]:7080/</span> をブラウザに入力して       WebAdminコンソールへ移動してください。(インストール時にWebAdminのポートを変更した場合は、       そのポートを使用してください。)     </p>     <p>       サーバーと同じマシンを現在使用している場合、[address] には &quot;localhost&quot; を使用できます。     </p>     <p>       WebAdminコンソールのウェルカムページが表示されるはずです。&quot;Log on&quot; リンクをクリックし、       インストール時に指定した管理者ユーザー名とパスワードでログインしてください。     </p>     <p>       設定に関する詳細は、<a href="config.html">設定ガイド</a>を参照するか、       任意のページ上部にある &quot;Help&quot; リンクをクリックしてください。     </p>   </li>   <li>     <p>       サーバーでファイアウォールを使用している場合は、localhost が信頼済みであることを確認してください。     </p>     <p>       例えば Linux で IPTables を使用している場合は、       <span class="cmd">ALLOW INPUT from LO</span> ルールが必要です。     </p>   </li>   <li>     <p>       WebサイトとWebAdminコンソールにアクセスできない場合は、エラーログ       <span class="cmd">[your_install_dir]/logs/error.log</span> を確認してください。     </p>     <p>       他のサーバーアプリケーションとTCPポート競合がある場合は、利用可能なポートでWebサーバーを再インストールする必要があります。       利用可能なポートを調べるには次のコマンドを使用できます:       <span class="cmd">netstat -an | grep XXXX</span>       XXXX はポート番号です。ポートが利用可能であれば、このコマンドは何も出力しません。     </p>     <p>       スワップディレクトリに書き込み権限がない場合は、Webサーバーを実行しているユーザーに       スワップディレクトリへの書き込み権限を与えるか、手動でスワップディレクトリ設定を変更してください。       スワップディレクトリはサーバーのXML設定ファイル       <span class="cmd">[your_install_dir]/conf/httpd_config.xml</span> に設定されています。       XMLファイル内で <span class="cmd">swappingDir</span> を検索してください。       スワップディレクトリのデフォルト位置は <span class="cmd">/tmp/lshttpd/swap</span> です。     </p>     <p>       それでもインストールに問題がある場合は、       <a href="https://docs.openlitespeed.org/">ドキュメント</a>を参照するか、       <a href="https://forum.openlitespeed.org/">サポートフォーラム</a>へ投稿してください。     </p>   </li> </ol><br/> <h2>注意</h2> <ul>   <li>     OpenLiteSpeedは、LiteSpeedネイティブのXML設定ファイルと、プレーンテキスト設定ファイル     (Apacheのhttpd.conf編集に慣れている方向け) の両方をサポートします。     <span class="cmd">[your_install_dir]/conf/switch_config.sh</span> を実行すると、     これらの形式を切り替えられます。   </li> </ul><br/> <h2>アンインストール手順</h2> <ol>   <li>     OpenLiteSpeedが動作中の場合は停止します:     <span class="cmd">[your_install_dir]/bin/lswsctrl stop</span>   </li>   <li>     インストールディレクトリを削除します:     <span class="cmd">rm -rf [your_install_dir]</span>   </li> </ol> </article></div><button class="doc-back-to-top" type="button" aria-label="トップへ戻る" data-back-to-top><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5" /><path d="m6 11 6-6 6 6" /></svg><span class="sr-only">トップへ戻る</span></button><footer class="copyright">Copyright &copy; 2013-2026. <a href="https://www.litespeedtech.com">LiteSpeed Technologies Inc.</a> All rights reserved.</footer>
+</div>
+</body>
+</html>
