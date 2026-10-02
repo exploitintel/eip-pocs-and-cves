@@ -8,8 +8,11 @@
 /disclosures/
 /scripts/
 
-# Vendor source checkouts (can be huge)
-**/source/
+# Vendor source checkouts (can be huge). Anchored like the rules above: an
+# unanchored **/source/ also matched `source/` trees that a CVE package ships
+# legitimately (CVE-2026-76183 keeps the Tomcat source there), silently
+# dropping them from the published tree.
+/source/
 
 # Metasploit dev environment
 /msf-modules/
