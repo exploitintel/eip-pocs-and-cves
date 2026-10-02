@@ -94,6 +94,13 @@ CVEForge generates all files. To publish a forge run:
 3. Update the summary line at the bottom of the table if bypass count changed
 4. Add a blog post link to the Blog Posts section if applicable
 
+The root `.gitignore` applies only at the repository root so it cannot hide
+package files. Review the complete file inventory before staging a package.
+Distinguish reviewed `data/`, `.env`, and log fixtures from generated lab output.
+Inspect `git diff --cached --name-only` before committing. Remove generated lab output;
+the CI ignore-scope check rejects `poc-run-logs/`, PID files, page IDs, and
+Finder metadata inside packages.
+
 Keep entries sorted by CVSS score (descending). Format:
 ```markdown
 | [CVE-YYYY-XXXXX](CVE-YYYY-XXXXX/) | Target | Vuln Class | **X.X** | No / **Yes** — brief bypass note |
