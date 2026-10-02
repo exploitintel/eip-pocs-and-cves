@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document [
+  <!ENTITY project SYSTEM "project.xml">
+]>
+<document url="cluster.html">
+
+  &project;
+
+  <properties>
+    <title>The Cluster object</title>
+  </properties>
+
+<body>
+
+<section name="Table of Contents">
+<toc/>
+</section>
+
+<section name="Introduction">
+  <p>
+  The tomcat cluster implementation provides session replication, context attribute replication and
+  cluster wide WAR file deployment.
+  While the <code>Cluster</code> configuration is fairly complex, the default configuration will work
+  for most people out of the box. </p><p>
+  The Tomcat Cluster implementation is very extensible, and hence we have exposed a myriad of options,
+  making the configuration seem like a lot, but don't lose faith, instead you have a tremendous control
+  over what is going on.</p>
+</section>
+<section name="Security">
+
+<p>The cluster implementation is written on the basis that a secure, trusted
+network is used for all of the cluster related network traffic. It is not safe
+to run a cluster on a insecure, untrusted network.</p>
+
+<p>There are many options for providing a secure, trusted network for use by a
+Tomcat cluster. These include:</p>
+<ul>
+  <li>private LAN</li>
+  <li>a Virtual Private Network (VPN)</li>
+  <li>IPSEC</li>
+</ul>
+
+<p>When correctly configured, the <a
+href="cluster-interceptor.html#org.apache.catalina.tribes.group.interceptors.EncryptInterceptor_Attributes">EncryptInterceptor</a>
+provides confidentiality and integrity protection but it does not protect
+against all risks associated with running a Tomcat cluster on an untrusted
+network, particularly DoS attacks.</p>
+
+</section>
+<section name="Engine vs Host placement">
+  <p>
+   You can place the <code>&lt;Cluster&gt;</code> element inside either the <code>&lt;Engine&gt;</code>
+   container or the <code>&lt;Host&gt;</code> container.<br/>
+   Placing it in the engine, means that you will support clustering in all virtual hosts of Tomcat,
+   and share the messaging component. When you place the <code>&lt;Cluster&gt;</code> inside the <code>&lt;Engine&gt;</code>
+   element, the cluster will append the host name of each session manager to the managers name so that two contexts with
+   the same name but sitting inside two different hosts will be distinguishable.
+  </p>
+</section>
+<section name="Context Attribute Replication">
+  <p>To configure context attribute replication, simply do this by swapping out the context implementation
+  used for your application context.</p>
+  <source>&lt;Context className=&quot;org.apache.catalina.ha.context.ReplicatedContext&quot;/&gt;</source>
+  <p>
+    This context extends the Tomcat <code><a href="context.html">StandardContext</a></code>
+    so all the options from the <a href="context.html">base implementation</a> are valid.
+  </p>
+</section>
+<section name="Nested Components">
+  <p><b><a href="cluster-manager.html">Manager</a>:</b> <br/>
+    The session manager element identifies what kind of session manager is used in this cluster implementation.
+    This manager configuration is identical to the one you would use in a regular <code><a href="context.html#Nested_Components">&lt;Context&gt;</a></code> configuration.
+    <br/>The default value is the <code>org.apache.catalina.ha.session.DeltaManager</code> that is closely coupled with
+    the <code>SimpleTcpCluster</code> implementation. Other managers like the <code>org.apache.catalina.ha.session.BackupManager</code>
+    are/could be loosely coupled and don't rely on the <code>SimpleTcpCluster</code> for its data replication.
+  </p>
+  <p><b><a href="cluster-channel.html">Channel</a>:</b> <br/>
+    The Channel and its sub components are all part of the IO layer
+    for the cluster group, and is a module in it's own that we have nick named &quot;Tribes&quot;
+    <br/>
+    Any configuring and tuning of the network layer, the messaging and the membership logic
+    will be done in the channel and its nested components.
+    You can always find out more about <a href="../tribes/introduction.html">Apache Tribes</a>
+  </p>
+  <p><b><a href="cluster-valve.html">Valve</a>:</b> <br/>
+    The Tomcat Cluster implementation uses <code>Tomcat <a href="valve.html">Valves</a></code> to
+    track when requests enter and exit the servlet container. It uses these valves to be able to make
+    intelligent decisions on when to replicate data, which is always at the end of a request.
+  </p>
+  <p><b><a href="cluster-deployer.html">Deployer</a>:</b> <br/>
+    The Deployer component is the Tomcat Farm Deployer. It allows you to deploy and undeploy applications
+    cluster wide.
+  </p>
+  <p><b><a href="cluster-listener.html">ClusterListener</a>:</b> <br/>
+    ClusterListener's are used to track messages sent and received using the <code>SimpleTcpCluster</code>.
+    If you wish to track messages, you can add a listener here, or you can add a valve to the channel object.
+  </p>
+</section>
+
+<section name="Attributes">
+  <subsection name="SimpleTcpCluster Attributes">
+  <attributes>
+    <attribute name="className" required="true">
+      <p>The main cluster class, currently only one is available,
+         <code>org.apache.catalina.ha.tcp.SimpleTcpCluster</code>
+      </p>
+    </attribute>
+    <attribute name="channelSendOptions" required="true">
+        <p>The Tribes channel send options. This option is used for all messages
+        sent through the SimpleTcpCluster.</p>
+        <p>The value may be specified either as an integer (add values to use
+        multiple flags) or using a comma-separate list of the human-readable
+        option names. Human-readable names are translated to their integer
+        values on startup.</p>
+        <p>The different values offer a tradeoff between throughput on the
+        sending node and the reliability of replication should the sending or
+        receiving node(s) fail.</p>
+        <p>The supported values are:</p>
+        <dl>
+          <dt><code>byte_message</code>, <code>byte</code> or
+              <code>1</code></dt>
+          <dd>The message is a pure byte message and no marshaling or
+              unmarshalling will be performed</dd>
+          <dt><code>use_ack</code> or <code>2</code></dt>
+          <dd>The message is sent and an ACK is received when the message has
+              been received by the recipient. If no ack is received, the message
+              is not considered successful.</dd>
+          <dt><code>synchronized_ack</code>, <code>sync</code> or
+              <code>4</code></dt>
+          <dd>Has no effect unless <code>use_ack</code> is set. The message is
+              sent and an ACK is received when the message has been received and
+              processed by the recipient. If no ack is received, the message is
+              not considered successful.</dd>
+          <dt><code>asynchronous</code>, <code>async</code> or
+              <code>8</code></dt>
+          <dd>The message will be placed on a queue and sent by a separate
+              thread. It is possible for update messages for a session to be
+              processed by the receiving node in a different order to the order
+              in which they were sent.</dd>
+          <dt><code>secure</code> or <code>16</code></dt>
+          <dd>Not implemented. Has no effect if used.</dd>
+          <dt><code>udp</code> or <code>32</code></dt>
+          <dd>The message will be sent using UDP instead of TCP.</dd>
+          <dt><code>multicast</code> or <code>64</code></dt>
+          <dd>Not implemented. Messages will not be sent if used.</dd>
+        </dl>
+        <p>The default value is <code>8</code> (<code>async</code>).</p>
+    </attribute>
+    <attribute name="channelStartOptions" required="false">
+      <p>Sets the start and stop flags for the &lt;Channel&gt; object used by the cluster.
+         The default is <code>Channel.DEFAULT</code> which starts all the channel services, such as
+         sender, receiver, membership sender and membership receiver.
+         The following flags are available today:</p>
+         <source>Channel.DEFAULT = Channel.SND_RX_SEQ (1) |
+                  Channel.SND_TX_SEQ (2) |
+                  Channel.MBR_RX_SEQ (4) |
+                  Channel.MBR_TX_SEQ (8);</source>
+      <p>When using the static membership service
+      <code>org.apache.catalina.tribes.membership.StaticMembershipService</code>
+      you must ensure that this attribute is configured to use the default
+      value.</p>
+    </attribute>
+
+    <attribute name="heartbeatBackgroundEnabled" required="false">
+      <p>Flag whether invoke channel heartbeat at container background thread. Default value is false.
+         Enable this flag don't forget to disable the channel heartbeat thread.
+      </p>
+    </attribute>
+
+    <attribute name="notifyLifecycleListenerOnFailure" required="false">
+      <p>Flag whether notify LifecycleListeners if all ClusterListener couldn't accept channel message.
+         Default value is false.
+      </p>
+    </attribute>
+  </attributes>
+  </subsection>
+</section>
+</body>
+</document>

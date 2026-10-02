@@ -1,0 +1,283 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.tomcat.jdbc.pool;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+import org.apache.tomcat.jdbc.pool.interceptor.AbstractCreateStatementInterceptor;
+
+/**
+ * Facade that creates statement and result set proxies.
+ */
+public class StatementFacade extends AbstractCreateStatementInterceptor {
+
+    private static final Log logger = LogFactory.getLog(StatementFacade.class);
+
+    /**
+     * Constructs a StatementFacade.
+     * @param interceptor the next interceptor in the chain
+     */
+    protected StatementFacade(JdbcInterceptor interceptor) {
+        setUseEquals(interceptor.isUseEquals());
+        setNext(interceptor);
+    }
+
+    @Override
+    public void closeInvoked() {
+        // nothing to do
+    }
+
+    /**
+     * Creates a statement interceptor to monitor query response times
+     */
+    @Override
+    public Object createStatement(Object proxy, Method method, Object[] args, Object statement, long time) {
+        try {
+            String name = method.getName();
+            Constructor<?> constructor = null;
+            String sql = null;
+            if (compare(CREATE_STATEMENT, name)) {
+                // createStatement
+                constructor = getConstructor(CREATE_STATEMENT_IDX, Statement.class);
+            } else if (compare(PREPARE_STATEMENT, name)) {
+                // prepareStatement
+                constructor = getConstructor(PREPARE_STATEMENT_IDX, PreparedStatement.class);
+                sql = (String) args[0];
+            } else if (compare(PREPARE_CALL, name)) {
+                // prepareCall
+                constructor = getConstructor(PREPARE_CALL_IDX, CallableStatement.class);
+                sql = (String) args[0];
+            } else {
+                // do nothing
+                return statement;
+            }
+            return constructor.newInstance(new Object[] { new StatementProxy(statement, sql) });
+        } catch (Exception x) {
+            logger.warn("Unable to create statement proxy.", x);
+        }
+        return statement;
+    }
+
+    /**
+     * Proxy for a SQL statement used to measure query execute time.
+     */
+    protected class StatementProxy implements InvocationHandler {
+        /**
+         * Indicates whether this statement has been closed.
+         */
+        protected boolean closed = false;
+        /**
+         * The delegated statement.
+         */
+        protected Object delegate;
+        /**
+         * The SQL query text.
+         */
+        protected final String query;
+
+        /**
+         * Constructs a StatementProxy.
+         * @param parent the parent statement
+         * @param query the SQL query text
+         */
+        public StatementProxy(Object parent, String query) {
+            this.delegate = parent;
+            this.query = query;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            if (compare(TOSTRING_VAL, method)) {
+                return toString();
+            }
+            if (compare(EQUALS_VAL, method)) {
+                if (args[0] == null || !Proxy.isProxyClass(args[0].getClass())) {
+                    return Boolean.FALSE;
+                }
+                return Boolean.valueOf(this.equals(Proxy.getInvocationHandler(args[0])));
+            }
+            if (compare(HASHCODE_VAL, method)) {
+                return Integer.valueOf(this.hashCode());
+            }
+            if (compare(CLOSE_VAL, method)) {
+                if (delegate == null) {
+                    return null;
+                }
+            }
+            if (compare(ISCLOSED_VAL, method)) {
+                if (delegate == null) {
+                    return Boolean.TRUE;
+                }
+            }
+            if (delegate == null) {
+                throw new SQLException("Statement closed.");
+            }
+
+            Object result;
+            try {
+                // invoke next
+                result = method.invoke(delegate, args);
+
+                // Don't create a ResultSet proxy for null
+                if (result != null) {
+                    if (compare(GET_RESULTSET, method)) {
+                        return getConstructor(RESULTSET_IDX, ResultSet.class)
+                                .newInstance(new ResultSetProxy(result, proxy));
+                    }
+                    if (compare(GET_GENERATED_KEYS, method)) {
+                        return getConstructor(RESULTSET_IDX, ResultSet.class)
+                                .newInstance(new ResultSetProxy(result, proxy));
+                    }
+                    if (compare(EXECUTE_QUERY, method)) {
+                        return getConstructor(RESULTSET_IDX, ResultSet.class)
+                                .newInstance(new ResultSetProxy(result, proxy));
+                    }
+                }
+            } catch (Throwable t) {
+                if (t instanceof InvocationTargetException && t.getCause() != null) {
+                    throw t.getCause();
+                } else {
+                    throw t;
+                }
+            }
+            // perform close cleanup
+            if (compare(CLOSE_VAL, method)) {
+                delegate = null;
+            }
+            return result;
+        }
+
+        @Override
+        public int hashCode() {
+            return System.identityHashCode(this);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return this == obj;
+        }
+
+        @Override
+        public String toString() {
+            StringBuffer buf = new StringBuffer(StatementProxy.class.getName());
+            buf.append("[Proxy=");
+            buf.append(hashCode());
+            buf.append("; Query=");
+            buf.append(query);
+            buf.append("; Delegate=");
+            buf.append(delegate);
+            buf.append(']');
+            return buf.toString();
+        }
+    }
+
+    /**
+     * Proxy for a ResultSet.
+     */
+    protected class ResultSetProxy implements InvocationHandler {
+
+        private final Object parent;
+        private Object delegate;
+
+        /**
+         * Constructs a ResultSetProxy.
+         * @param delegate the ResultSet to delegate to
+         * @param parent the parent statement proxy
+         */
+        public ResultSetProxy(Object delegate, Object parent) {
+            this.delegate = delegate;
+            this.parent = parent;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            if (compare(TOSTRING_VAL, method)) {
+                return toString();
+            }
+            if (compare(EQUALS_VAL, method)) {
+                if (args[0] == null || !Proxy.isProxyClass(args[0].getClass())) {
+                    return Boolean.FALSE;
+                }
+                return Boolean.valueOf(this.equals(Proxy.getInvocationHandler(args[0])));
+            }
+            if (compare(HASHCODE_VAL, method)) {
+                return Integer.valueOf(this.hashCode());
+            }
+            if (compare(CLOSE_VAL, method)) {
+                if (delegate == null) {
+                    return null;
+                }
+            }
+            if (compare(ISCLOSED_VAL, method)) {
+                if (delegate == null) {
+                    return Boolean.TRUE;
+                }
+            }
+            if (delegate == null) {
+                throw new SQLException("ResultSet closed.");
+            }
+
+            if (compare(GET_STATEMENT, method)) {
+                return parent;
+            }
+
+            Object result;
+            try {
+                // invoke next
+                result = method.invoke(delegate, args);
+            } catch (Throwable t) {
+                if (t instanceof InvocationTargetException && t.getCause() != null) {
+                    throw t.getCause();
+                } else {
+                    throw t;
+                }
+            }
+            // perform close cleanup
+            if (compare(CLOSE_VAL, method)) {
+                delegate = null;
+            }
+            return result;
+        }
+
+        @Override
+        public int hashCode() {
+            return System.identityHashCode(this);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return this == obj;
+        }
+
+        @Override
+        public String toString() {
+            return ResultSetProxy.class.getName() + "[Proxy=" + hashCode() + "; Delegate=" + delegate + ']';
+        }
+    }
+
+}

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document [
+  <!ENTITY project SYSTEM "project.xml">
+]>
+<document url="startup.html">
+
+  &project;
+
+  <properties>
+    <title>Startup</title>
+  </properties>
+
+<body>
+
+
+<section name="Server Startup">
+
+<p>
+This page describes how the Tomcat server starts up.  There are several
+different ways to start tomcat, including:
+</p>
+<ul>
+  <li>From the command line.</li>
+  <li>From a Java program as an embedded server.</li>
+  <li>Automatically as a Windows service.</li>
+</ul>
+
+<p>
+A series of UML diagrams have been created to document the start-up process for
+Tomcat.
+</p>
+<p>
+<a href="startup/1_overview.png">Diagram 1</a> shows an overview of how Tomcat
+start, serves requests and then stops. Once the class loaders have been
+initialized, Tomcat parses server.xml using the Digester and the Digester
+creates the objects defined in server.xml, configures them using the property
+values defined in server.xml and the starts the Server. The main Java thread
+waits in the await() method for a shutdown signal. Once a shutdown signal is
+received, the Server object is stopped and then destroyed. The JVM then exits.
+</p>
+<p>
+<a href="startup/2_catalina_init.png">Diagram 2</a> shows how Tomcat initializes
+the objects created by the Digester in the previous step and when additional key
+objects are created. A Server may have several Services although it typically
+only has one. Each Service may have multiple Connectors. A Connector instance is
+associated with a single Protocol instance and a single CoyoteAdapter instance.
+</p>
+<p>
+<a href="startup/3_catalina_start_1.png">Diagram 3</a> shows how Tomcat starts
+the objects created by the Digester that were initialized in the previous step.
+This diagram also shows when lifecycle events are fired. There is more detail to
+the starting of the Engine (and other Containers) which is shown in the
+following diagram.
+</p>
+<p>
+<a href="startup/4_catalina_start_2.png">Diagram 4</a> shows how Containers
+(Engines, Hosts, Contexts and Wrappers) start along with any supporting
+Clusters, Realms and Valves.
+</p>
+<p>
+<a href="startup/5_catalina_start_3.png">Diagram 5</a> shows the start process
+for Context elements as it is rather more involved that the other Containers.
+</p>
+<p>
+<a href="startup/6_catalina_host_config.png">Diagram 6</a> shows how the
+HostConfig component responds to lifecycle events triggered by the Host to
+deploy web applications to the Host.</p>
+<p>
+<a href="startup/7_catalina_context_config.png">Diagram 7</a> shows how the
+ContextConfig component responds to lifecycle events triggered by the Context to
+parse the global and application provided configuration files to create a merged
+web.xml file that is then used, along with other settings, to configure the web
+application.
+</p>
+
+<p>
+The startup process can be customized in many ways by implementing your own
+LifecycleListeners which are then registered in the server.xml configuration
+file.
+</p>
+
+</section>
+
+</body>
+</document>

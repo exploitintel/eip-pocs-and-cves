@@ -1,0 +1,662 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.tomcat.jdbc.pool.interceptor;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.management.openmbean.CompositeDataSupport;
+import javax.management.openmbean.CompositeType;
+import javax.management.openmbean.OpenDataException;
+import javax.management.openmbean.OpenType;
+import javax.management.openmbean.SimpleType;
+
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+import org.apache.tomcat.jdbc.pool.ConnectionPool;
+import org.apache.tomcat.jdbc.pool.PoolProperties.InterceptorProperty;
+import org.apache.tomcat.jdbc.pool.PooledConnection;
+
+/**
+ * Slow query report interceptor. Tracks timing of query executions.
+ */
+public class SlowQueryReport extends AbstractQueryReport  {
+    //logger
+    private static final Log log = LogFactory.getLog(SlowQueryReport.class);
+
+    /**
+     * we will be keeping track of query stats on a per pool basis
+     */
+    protected static final ConcurrentHashMap<String,ConcurrentHashMap<String,QueryStats>> perPoolStats =
+        new ConcurrentHashMap<>();
+    /**
+     * the queries that are used for this interceptor.
+     */
+    protected volatile ConcurrentHashMap<String,QueryStats> queries = null;
+    /**
+     * Maximum number of queries we will be storing
+     */
+    protected int  maxQueries= 1000; //don't store more than this amount of queries
+
+    /**
+     * Flag to enable disable logging of slow queries
+     */
+    protected boolean logSlow = true;
+
+    /**
+     * Flag to enable disable logging of failed queries
+     */
+    protected boolean logFailed = false;
+
+    /**
+     * Sort QueryStats by last invocation time
+     */
+    protected final Comparator<QueryStats> queryStatsComparator = new QueryStatsComparator();
+
+    /**
+     * Returns the query stats for a given pool
+     * @param poolname - the name of the pool we want to retrieve stats for
+     * @return a hash map containing statistics for 0 to maxQueries
+     */
+    public static ConcurrentHashMap<String,QueryStats> getPoolStats(String poolname) {
+        return perPoolStats.get(poolname);
+    }
+
+    /**
+     * Creates a slow query report interceptor
+     */
+    public SlowQueryReport() {
+        super();
+    }
+
+    /**
+     * Sets the maximum number of queries to track statistics for.
+     *
+     * @param maxQueries the maximum number of queries
+     */
+    public void setMaxQueries(int maxQueries) {
+        this.maxQueries = maxQueries;
+    }
+
+
+    @Override
+    protected String reportFailedQuery(String query, Object[] args, String name, long start, Throwable t) {
+        String sql = super.reportFailedQuery(query, args, name, start, t);
+        if (this.maxQueries > 0 ) {
+            long now = System.currentTimeMillis();
+            long delta = now - start;
+            QueryStats qs = this.getQueryStats(sql);
+            if (qs != null) {
+                qs.failure(delta, now);
+            }
+            if (isLogFailed() && log.isWarnEnabled()) {
+                log.warn("Failed Query Report SQL="+sql+"; time="+delta+" ms;");
+            }
+        }
+        return sql;
+    }
+
+    @Override
+    protected String reportQuery(String query, Object[] args, final String name, long start, long delta) {
+        String sql = super.reportQuery(query, args, name, start, delta);
+        if (this.maxQueries > 0 ) {
+            QueryStats qs = this.getQueryStats(sql);
+            if (qs != null) {
+              qs.add(delta, start);
+            }
+        }
+        return sql;
+    }
+
+    @Override
+    protected String reportSlowQuery(String query, Object[] args, String name, long start, long delta) {
+        String sql = super.reportSlowQuery(query, args, name, start, delta);
+        if (this.maxQueries > 0 ) {
+            QueryStats qs = this.getQueryStats(sql);
+            if (qs != null) {
+                qs.add(delta, start);
+                if (isLogSlow() && log.isWarnEnabled()) {
+                    log.warn("Slow Query Report SQL="+sql+"; time="+delta+" ms;");
+                }
+            }
+        }
+        return sql;
+    }
+
+    /**
+     * invoked when the connection receives the close request
+     * Not used for now.
+     */
+    @Override
+    public void closeInvoked() {
+        // NOOP
+    }
+
+    /**
+     * Tracks the preparation time for a prepared statement.
+     *
+     * @param sql the SQL statement
+     * @param time the time taken to prepare the statement
+     */
+    @Override
+    public void prepareStatement(String sql, long time) {
+        if (this.maxQueries > 0 ) {
+            QueryStats qs = getQueryStats(sql);
+            if (qs != null) {
+              qs.prepare(time);
+            }
+        }
+    }
+
+    /**
+     * Tracks the preparation time for a callable statement.
+     *
+     * @param sql the SQL call
+     * @param time the time taken to prepare the call
+     */
+    @Override
+    public void prepareCall(String sql, long time) {
+        if (this.maxQueries > 0 ) {
+            QueryStats qs = getQueryStats(sql);
+            if (qs != null) {
+              qs.prepare(time);
+            }
+        }
+    }
+
+    /**
+     * Initializes the query statistics map for the given connection pool.
+     *
+     * @param pool the connection pool that has started
+     */
+    @Override
+    public void poolStarted(ConnectionPool pool) {
+        super.poolStarted(pool);
+        //see if we already created a map for this pool
+        queries = perPoolStats.get(pool.getName());
+        if (queries==null) {
+            //create the map to hold our stats
+            //however TODO we need to improve the eviction
+            //selection
+            queries = new ConcurrentHashMap<>();
+            if (perPoolStats.putIfAbsent(pool.getName(), queries)!=null) {
+                //there already was one
+                queries = perPoolStats.get(pool.getName());
+            }
+        }
+    }
+
+    /**
+     * Removes the query statistics map for the given connection pool.
+     *
+     * @param pool the connection pool that has been closed
+     */
+    @Override
+    public void poolClosed(ConnectionPool pool) {
+        perPoolStats.remove(pool.getName());
+        super.poolClosed(pool);
+    }
+
+    /**
+     * Retrieves or creates a QueryStats entry for the given SQL string.
+     *
+     * @param sql the SQL query string
+     * @return the query statistics, or {@code null} if the pool has been closed
+     */
+    protected QueryStats getQueryStats(String sql) {
+        if (sql==null) {
+          sql = "";
+        }
+        ConcurrentHashMap<String,QueryStats> queries = SlowQueryReport.this.queries;
+        if (queries==null) {
+            if (log.isWarnEnabled()) {
+              log.warn("Connection has already been closed or abandoned");
+            }
+            return null;
+        }
+        QueryStats qs = queries.get(sql);
+        if (qs == null) {
+            qs = new QueryStats(sql);
+            if (queries.putIfAbsent(sql,qs)!=null) {
+                qs = queries.get(sql);
+            } else {
+                //we added a new element, see if we need to remove the oldest
+                if (queries.size() > maxQueries) {
+                    removeOldest(queries);
+                }
+            }
+        }
+        return qs;
+    }
+
+    /**
+     * Sort QueryStats by last invocation time
+     * @param queries The queries map
+     */
+    protected void removeOldest(ConcurrentHashMap<String,QueryStats> queries) {
+        ArrayList<QueryStats> list = new ArrayList<>(queries.values());
+        Collections.sort(list, queryStatsComparator);
+        int removeIndex = 0;
+        while (queries.size() > maxQueries) {
+            String sql = list.get(removeIndex).getQuery();
+            queries.remove(sql);
+            if (log.isDebugEnabled()) {
+              log.debug("Removing slow query, capacity reached:"+sql);
+            }
+            removeIndex++;
+        }
+    }
+
+
+    /**
+     * Resets the query statistics reference when a connection is reset.
+     *
+     * @param parent the connection pool
+     * @param con the pooled connection being reset
+     */
+    @Override
+    public void reset(ConnectionPool parent, PooledConnection con) {
+        super.reset(parent, con);
+        if (parent!=null) {
+          queries = perPoolStats.get(parent.getName());
+        } else {
+          queries = null;
+        }
+    }
+
+
+    /**
+     * Returns whether slow query logging is enabled.
+     *
+     * @return {@code true} if slow query logging is enabled
+     */
+    public boolean isLogSlow() {
+        return logSlow;
+    }
+
+    /**
+     * Enables or disables slow query logging.
+     *
+     * @param logSlow {@code true} to enable slow query logging
+     */
+    public void setLogSlow(boolean logSlow) {
+        this.logSlow = logSlow;
+    }
+
+    /**
+     * Returns whether failed query logging is enabled.
+     *
+     * @return {@code true} if failed query logging is enabled
+     */
+    public boolean isLogFailed() {
+        return logFailed;
+    }
+
+    /**
+     * Enables or disables failed query logging.
+     *
+     * @param logFailed {@code true} to enable failed query logging
+     */
+    public void setLogFailed(boolean logFailed) {
+        this.logFailed = logFailed;
+    }
+
+    /**
+     * Configures this interceptor from the given properties map, supporting
+     * threshold, maxQueries, logSlow, and logFailed settings.
+     *
+     * @param properties the interceptor properties
+     */
+    @Override
+    public void setProperties(Map<String, InterceptorProperty> properties) {
+        super.setProperties(properties);
+        final String threshold = "threshold";
+        final String maxqueries= "maxQueries";
+        final String logslow = "logSlow";
+        final String logfailed = "logFailed";
+        InterceptorProperty p1 = properties.get(threshold);
+        InterceptorProperty p2 = properties.get(maxqueries);
+        InterceptorProperty p3 = properties.get(logslow);
+        InterceptorProperty p4 = properties.get(logfailed);
+        if (p1!=null) {
+            setThreshold(Long.parseLong(p1.getValue()));
+        }
+        if (p2!=null) {
+            setMaxQueries(Integer.parseInt(p2.getValue()));
+        }
+        if (p3!=null) {
+            setLogSlow(Boolean.parseBoolean(p3.getValue()));
+        }
+        if (p4!=null) {
+            setLogFailed(Boolean.parseBoolean(p4.getValue()));
+        }
+    }
+
+
+    /**
+     * Holds timing and invocation statistics for a single SQL query.
+     */
+    public static class QueryStats {
+        static final String[] FIELD_NAMES = new String[] {
+            "query",
+            "nrOfInvocations",
+            "maxInvocationTime",
+            "maxInvocationDate",
+            "minInvocationTime",
+            "minInvocationDate",
+            "totalInvocationTime",
+            "failures",
+            "prepareCount",
+            "prepareTime",
+            "lastInvocation"
+        };
+
+        static final  String[] FIELD_DESCRIPTIONS = new String[] {
+            "The SQL query",
+            "The number of query invocations, a call to executeXXX",
+            "The longest time for this query in milliseconds",
+            "The time and date for when the longest query took place",
+            "The shortest time for this query in milliseconds",
+            "The time and date for when the shortest query took place",
+            "The total amount of milliseconds spent executing this query",
+            "The number of failures for this query",
+            "The number of times this query was prepared (prepareStatement/prepareCall)",
+            "The total number of milliseconds spent preparing this query",
+            "The date and time of the last invocation"
+        };
+
+        static final OpenType<?>[] FIELD_TYPES = new OpenType[] {
+            SimpleType.STRING,
+            SimpleType.INTEGER,
+            SimpleType.LONG,
+            SimpleType.LONG,
+            SimpleType.LONG,
+            SimpleType.LONG,
+            SimpleType.LONG,
+            SimpleType.LONG,
+            SimpleType.INTEGER,
+            SimpleType.LONG,
+            SimpleType.LONG
+        };
+
+        private final String query;
+        private volatile int nrOfInvocations;
+        private volatile long maxInvocationTime = Long.MIN_VALUE;
+        private volatile long maxInvocationDate;
+        private volatile long minInvocationTime = Long.MAX_VALUE;
+        private volatile long minInvocationDate;
+        private volatile long totalInvocationTime;
+        private volatile long failures;
+        private volatile int prepareCount;
+        private volatile long prepareTime;
+        private volatile long lastInvocation = 0;
+
+        /**
+         * Returns the names of the fields in the composite data representation.
+         *
+         * @return the field names
+         */
+        public static String[] getFieldNames() {
+            return FIELD_NAMES;
+        }
+
+        /**
+         * Returns the descriptions of the fields in the composite data representation.
+         *
+         * @return the field descriptions
+         */
+        public static String[] getFieldDescriptions() {
+            return FIELD_DESCRIPTIONS;
+        }
+
+        /**
+         * Returns the JMX OpenType of each field in the composite data representation.
+         *
+         * @return the field types
+         */
+        public static OpenType<?>[] getFieldTypes() {
+            return FIELD_TYPES;
+        }
+
+        @Override
+        public String toString() {
+            SimpleDateFormat sdf =
+                    new SimpleDateFormat("d MMM yyyy HH:mm:ss z", Locale.US);
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+            StringBuilder buf = new StringBuilder("QueryStats[query:");
+            buf.append(query);
+            buf.append(", nrOfInvocations:");
+            buf.append(nrOfInvocations);
+            buf.append(", maxInvocationTime:");
+            buf.append(maxInvocationTime);
+            buf.append(", maxInvocationDate:");
+            buf.append(sdf.format(new java.util.Date(maxInvocationDate)));
+            buf.append(", minInvocationTime:");
+            buf.append(minInvocationTime);
+            buf.append(", minInvocationDate:");
+            buf.append(sdf.format(new java.util.Date(minInvocationDate)));
+            buf.append(", totalInvocationTime:");
+            buf.append(totalInvocationTime);
+            buf.append(", averageInvocationTime:");
+            buf.append((float)totalInvocationTime / (float)nrOfInvocations);
+            buf.append(", failures:");
+            buf.append(failures);
+            buf.append(", prepareCount:");
+            buf.append(prepareCount);
+            buf.append(", prepareTime:");
+            buf.append(prepareTime);
+            buf.append(']');
+            return buf.toString();
+        }
+
+        /**
+         * Returns the query statistics as JMX CompositeData.
+         *
+         * @param type the composite type definition
+         * @return the composite data representation of this query's statistics
+         * @throws OpenDataException if the data cannot be converted
+         */
+        public CompositeDataSupport getCompositeData(final CompositeType type) throws OpenDataException{
+            Object[] values = new Object[] {
+                    query,
+                    Integer.valueOf(nrOfInvocations),
+                    Long.valueOf(maxInvocationTime),
+                    Long.valueOf(maxInvocationDate),
+                    Long.valueOf(minInvocationTime),
+                    Long.valueOf(minInvocationDate),
+                    Long.valueOf(totalInvocationTime),
+                    Long.valueOf(failures),
+                    Integer.valueOf(prepareCount),
+                    Long.valueOf(prepareTime),
+                    Long.valueOf(lastInvocation)
+            };
+            return new CompositeDataSupport(type,FIELD_NAMES,values);
+        }
+
+        /**
+         * Creates a new QueryStats instance for the given SQL query.
+         *
+         * @param query the SQL query string
+         */
+        public QueryStats(String query) {
+            this.query = query;
+        }
+
+        /**
+         * Records the time taken to prepare this query.
+         *
+         * @param invocationTime the time in milliseconds to prepare the query
+         */
+        public synchronized void prepare(long invocationTime) {
+            prepareCount++;
+            prepareTime+=invocationTime;
+
+        }
+
+        /**
+         * Records a successful query invocation, updating min/max/total timing statistics.
+         *
+         * @param invocationTime the time in milliseconds the query took
+         * @param now the current timestamp in milliseconds
+         */
+        public synchronized void add(long invocationTime, long now) {
+            maxInvocationTime = Math.max(invocationTime, maxInvocationTime);
+            if (maxInvocationTime == invocationTime) {
+                maxInvocationDate = now;
+            }
+            minInvocationTime = Math.min(invocationTime, minInvocationTime);
+            if (minInvocationTime==invocationTime) {
+                minInvocationDate = now;
+            }
+            nrOfInvocations++;
+            totalInvocationTime+=invocationTime;
+            lastInvocation = now;
+        }
+
+        /**
+         * Records a failed query invocation, updating timing statistics and failure count.
+         *
+         * @param invocationTime the time in milliseconds the query took before failing
+         * @param now the current timestamp in milliseconds
+         */
+        public synchronized void failure(long invocationTime, long now) {
+            add(invocationTime,now);
+            failures++;
+
+        }
+
+        /**
+         * Returns the SQL query string for these statistics.
+         *
+         * @return the SQL query string
+         */
+        public String getQuery() {
+            return query;
+        }
+
+        /**
+         * Returns the total number of times this query has been invoked.
+         *
+         * @return the number of invocations
+         */
+        public int getNrOfInvocations() {
+            return nrOfInvocations;
+        }
+
+        /**
+         * Returns the longest time this query took to execute.
+         *
+         * @return the maximum invocation time in milliseconds
+         */
+        public long getMaxInvocationTime() {
+            return maxInvocationTime;
+        }
+
+        /**
+         * Returns the timestamp when the longest query execution occurred.
+         *
+         * @return the timestamp in milliseconds of the maximum invocation
+         */
+        public long getMaxInvocationDate() {
+            return maxInvocationDate;
+        }
+
+        /**
+         * Returns the shortest time this query took to execute.
+         *
+         * @return the minimum invocation time in milliseconds
+         */
+        public long getMinInvocationTime() {
+            return minInvocationTime;
+        }
+
+        /**
+         * Returns the timestamp when the shortest query execution occurred.
+         *
+         * @return the timestamp in milliseconds of the minimum invocation
+         */
+        public long getMinInvocationDate() {
+            return minInvocationDate;
+        }
+
+        /**
+         * Returns the total time spent executing this query across all invocations.
+         *
+         * @return the total invocation time in milliseconds
+         */
+        public long getTotalInvocationTime() {
+            return totalInvocationTime;
+        }
+
+        @Override
+        public int hashCode() {
+            return query.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other instanceof QueryStats) {
+                QueryStats qs = (QueryStats)other;
+                return qs.query.equals(this.query);
+            }
+            return false;
+        }
+
+        /**
+         * Returns whether this query was last invoked before the given query stats.
+         *
+         * @param other the other query statistics to compare against
+         * @return {@code true} if this query's last invocation is older
+         */
+        public boolean isOlderThan(QueryStats other) {
+            return this.lastInvocation < other.lastInvocation;
+        }
+    }
+
+    /**
+     * Compares QueryStats by their lastInvocation value. QueryStats that have
+     * never been updated have a lastInvocation value of {@code 0} which is
+     * treated as the newest possible invocation.
+     */
+    // Public for unit tests
+    public static class QueryStatsComparator implements Comparator<QueryStats> {
+
+        /**
+         * Creates a new QueryStatsComparator.
+         */
+        public QueryStatsComparator() {
+        }
+
+        @Override
+        public int compare(QueryStats stats1, QueryStats stats2) {
+            return Long.compare(handleZero(stats1.lastInvocation),
+                    handleZero(stats2.lastInvocation));
+        }
+
+        private static long handleZero(long value) {
+            return value == 0 ? Long.MAX_VALUE : value;
+        }
+
+    }
+
+}

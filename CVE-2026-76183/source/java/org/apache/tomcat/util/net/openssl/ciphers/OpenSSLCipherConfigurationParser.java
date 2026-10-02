@@ -1,0 +1,981 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the "License"); you may not use this file except in compliance with
+ *  the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+package org.apache.tomcat.util.net.openssl.ciphers;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+import org.apache.tomcat.util.ExceptionUtils;
+import org.apache.tomcat.util.compat.JreCompat;
+import org.apache.tomcat.util.net.Constants;
+import org.apache.tomcat.util.net.openssl.OpenSSLStatus;
+import org.apache.tomcat.util.res.StringManager;
+
+/**
+ * Class in charge with parsing openSSL expressions to define a list of ciphers.
+ */
+public class OpenSSLCipherConfigurationParser {
+
+    /**
+     * Constructs an OpenSSLCipherConfigurationParser.
+     */
+    public OpenSSLCipherConfigurationParser() {
+    }
+
+    private static final Log log = LogFactory.getLog(OpenSSLCipherConfigurationParser.class);
+    private static final StringManager sm = StringManager.getManager(OpenSSLCipherConfigurationParser.class);
+
+    private static volatile boolean initialized = false;
+
+    private static final String SEPARATOR = ":|,| ";
+    /**
+     * If ! is used then the ciphers are permanently deleted from the list. The ciphers deleted can never reappear in
+     * the list even if they are explicitly stated.
+     */
+    private static final String EXCLUDE = "!";
+    /**
+     * If - is used then the ciphers are deleted from the list, but some or all of the ciphers can be added again by
+     * later options.
+     */
+    private static final String DELETE = "-";
+    /**
+     * If + is used then the ciphers are moved to the end of the list. This option doesn't add any new ciphers it just
+     * moves matching existing ones.
+     */
+    private static final String TO_END = "+";
+    /**
+     * Lists of cipher suites can be combined in a single cipher string using the + character. This is used as a logical
+     * and operation. For example SHA1+DES represents all cipher suites containing the SHA1 and the DES algorithms.
+     */
+    private static final String AND = "+";
+    /**
+     * All ciphers by their openssl alias name.
+     */
+    private static final Map<String,List<Cipher>> aliases = new LinkedHashMap<>();
+
+    private static final Set<String> tls13CipherSuiteNames = new HashSet<>();
+
+    /**
+     * the 'NULL' ciphers that is those offering no encryption. Because these offer no encryption at all and are a
+     * security risk they are disabled unless explicitly included.
+     */
+    private static final String eNULL = "eNULL";
+    /**
+     * The cipher suites offering no authentication. This is currently the anonymous DH algorithms. T These cipher
+     * suites are vulnerable to a 'man in the middle' attack and so their use is normally discouraged.
+     */
+    private static final String aNULL = "aNULL";
+
+    /**
+     * 'high' encryption cipher suites. This currently means those with key lengths larger than 128 bits, and some
+     * cipher suites with 128-bit keys.
+     */
+    private static final String HIGH = "HIGH";
+    /**
+     * 'medium' encryption cipher suites, currently some of those using 128-bit encryption.
+     */
+    private static final String MEDIUM = "MEDIUM";
+    /**
+     * 'low' encryption cipher suites, currently those using 64 or 56 bit encryption algorithms but excluding export
+     * cipher suites.
+     */
+    private static final String LOW = "LOW";
+    /**
+     * Cipher suites using RSA key exchange.
+     */
+    private static final String kRSA = "kRSA";
+    /**
+     * Cipher suites using RSA authentication.
+     */
+    private static final String aRSA = "aRSA";
+    /**
+     * Cipher suites using RSA for key exchange Despite what the docs say, RSA is equivalent to kRSA.
+     */
+    private static final String RSA = "RSA";
+    /**
+     * Cipher suites using ephemeral DH key agreement.
+     */
+    private static final String kEDH = "kEDH";
+    /**
+     * Cipher suites using ephemeral DH key agreement.
+     */
+    private static final String kDHE = "kDHE";
+    /**
+     * Cipher suites using ephemeral DH key agreement. equivalent to kEDH:-ADH
+     */
+    private static final String EDH = "EDH";
+    /**
+     * Cipher suites using ephemeral DH key agreement. equivalent to kEDH:-ADH
+     */
+    private static final String DHE = "DHE";
+    /**
+     * Cipher suites using ephemeral ECDH key agreement, including anonymous cipher suites.
+     */
+    private static final String kEECDH = "kEECDH";
+    /**
+     * Cipher suites using ephemeral ECDH key agreement, excluding anonymous cipher suites. Same as "kEECDH:-AECDH"
+     */
+    private static final String EECDH = "EECDH";
+    /**
+     * Cipher suites using ECDH key exchange, including anonymous, ephemeral and fixed ECDH.
+     */
+    private static final String ECDH = "ECDH";
+    /**
+     * Cipher suites using ephemeral ECDH key agreement, including anonymous cipher suites.
+     */
+    private static final String kECDHE = "kECDHE";
+    /**
+     * Cipher suites using authenticated ephemeral ECDH key agreement
+     */
+    private static final String ECDHE = "ECDHE";
+    /**
+     * Anonymous Elliptic Curve Diffie Hellman cipher suites.
+     */
+    private static final String AECDH = "AECDH";
+    /**
+     * Cipher suites using DSS for key exchange
+     */
+    private static final String DSS = "DSS";
+    /**
+     * Cipher suites using DSS authentication, i.e. the certificates carry DSS keys.
+     */
+    private static final String aDSS = "aDSS";
+    /**
+     * Cipher suites effectively using ECDSA authentication, i.e. the certificates carry ECDSA keys.
+     */
+    private static final String aECDSA = "aECDSA";
+    /**
+     * Cipher suites effectively using ECDSA authentication, i.e. the certificates carry ECDSA keys.
+     */
+    private static final String ECDSA = "ECDSA";
+    /**
+     * Cipher suites using DH, including anonymous DH, ephemeral DH and fixed DH.
+     */
+    private static final String DH = "DH";
+    /**
+     * Anonymous DH cipher suites.
+     */
+    private static final String ADH = "ADH";
+    /**
+     * Cipher suites using 128-bit AES.
+     */
+    private static final String AES128 = "AES128";
+    /**
+     * Cipher suites using 256-bit AES.
+     */
+    private static final String AES256 = "AES256";
+    /**
+     * Cipher suites using either 128 or 256-bit AES.
+     */
+    private static final String AES = "AES";
+    /**
+     * AES in Galois Counter Mode (GCM): these cipher suites are only supported in TLS v1.2.
+     */
+    private static final String AESGCM = "AESGCM";
+    /**
+     * AES in Counter with CBC-MAC Mode (CCM).
+     */
+    private static final String AESCCM = "AESCCM";
+    /**
+     * AES in Counter with CBC-MAC Mode and 8-byte authentication (CCM8).
+     */
+    private static final String AESCCM8 = "AESCCM8";
+    /**
+     * Cipher suites using either 128 bit ARIA.
+     */
+    private static final String ARIA128 = "ARIA128";
+    /**
+     * Cipher suites using either 256 bit ARIA.
+     */
+    private static final String ARIA256 = "ARIA256";
+    /**
+     * Cipher suites using either 128 or 256 bit ARIA.
+     */
+    private static final String ARIA = "ARIA";
+    /**
+     * Cipher suites using 128 bit CAMELLIA.
+     */
+    private static final String CAMELLIA128 = "CAMELLIA128";
+    /**
+     * Cipher suites using 256 bit CAMELLIA.
+     */
+    private static final String CAMELLIA256 = "CAMELLIA256";
+    /**
+     * Cipher suites using either 128 or 256 bit CAMELLIA.
+     */
+    private static final String CAMELLIA = "CAMELLIA";
+    /**
+     * Cipher suites using Cipher Block Chaining.
+     */
+    private static final String CBC = "CBC";
+    /**
+     * Cipher suites using CHACHA20.
+     */
+    private static final String CHACHA20 = "CHACHA20";
+    /**
+     * Cipher suites using triple DES.
+     */
+    private static final String TRIPLE_DES = "3DES";
+    /**
+     * Cipher suites using DES (not triple DES).
+     */
+    private static final String DES = "DES";
+    /**
+     * Cipher suites using RC4.
+     */
+    private static final String RC4 = "RC4";
+    /**
+     * Cipher suites using RC2.
+     */
+    private static final String RC2 = "RC2";
+    /**
+     * Cipher suites using IDEA.
+     */
+    private static final String IDEA = "IDEA";
+    /**
+     * Cipher suites using SEED.
+     */
+    private static final String SEED = "SEED";
+    /**
+     * Cipher suites using MD5.
+     */
+    private static final String MD5 = "MD5";
+    /**
+     * Cipher suites using SHA1.
+     */
+    private static final String SHA1 = "SHA1";
+    /**
+     * Cipher suites using SHA1.
+     */
+    private static final String SHA = "SHA";
+    /**
+     * Cipher suites using SHA256.
+     */
+    private static final String SHA256 = "SHA256";
+    /**
+     * Cipher suites using SHA384.
+     */
+    private static final String SHA384 = "SHA384";
+    /**
+     * Cipher suites using GOST R 34.10 (either 2001 or 94) for authentication.
+     */
+    private static final String aGOST = "aGOST";
+    /**
+     * Cipher suites using GOST R 34.10-2001 for authentication.
+     */
+    private static final String aGOST01 = "aGOST01";
+    /**
+     * Cipher suites using GOST R 34.10-94 authentication (note that R 34.10-94 standard has been expired so use GOST R
+     * 34.10-2001)
+     */
+    private static final String aGOST94 = "aGOST94";
+    /**
+     * Cipher suites using VKO 34.10 key exchange, specified in the RFC 4357.
+     */
+    private static final String kGOST = "kGOST";
+    /**
+     * Cipher suites, using HMAC based on GOST R 34.11-94.
+     */
+    private static final String GOST94 = "GOST94";
+    /**
+     * Cipher suites using GOST 28147-89 MAC instead of HMAC.
+     */
+    private static final String GOST89MAC = "GOST89MAC";
+    /**
+     * Cipher suites using SRP authentication, specified in the RFC 5054.
+     */
+    private static final String aSRP = "aSRP";
+    /**
+     * Cipher suites using SRP key exchange, specified in the RFC 5054.
+     */
+    private static final String kSRP = "kSRP";
+    /**
+     * Same as kSRP
+     */
+    private static final String SRP = "SRP";
+    /**
+     * Cipher suites using pre-shared keys (PSK).
+     */
+    private static final String PSK = "PSK";
+    /**
+     * Cipher suites using PSK authentication.
+     */
+    private static final String aPSK = "aPSK";
+    /**
+     * Cipher suites using PSK key 'exchange'.
+     */
+    private static final String kPSK = "kPSK";
+    private static final String kRSAPSK = "kRSAPSK";
+    private static final String kECDHEPSK = "kECDHEPSK";
+    private static final String kDHEPSK = "kDHEPSK";
+
+    private static final String DEFAULT = "DEFAULT";
+    private static final String COMPLEMENTOFDEFAULT = "COMPLEMENTOFDEFAULT";
+
+    private static final String ALL = "ALL";
+    private static final String COMPLEMENTOFALL = "COMPLEMENTOFALL";
+
+    private static final Map<String,String> jsseToOpenSSL = new HashMap<>();
+
+    private static synchronized void init() {
+        if (initialized) {
+            return;
+        }
+
+        for (Cipher cipher : Cipher.values()) {
+            String alias = cipher.getOpenSSLAlias();
+            if (aliases.containsKey(alias)) {
+                aliases.get(alias).add(cipher);
+            } else {
+                List<Cipher> list = new ArrayList<>();
+                list.add(cipher);
+                aliases.put(alias, list);
+            }
+            aliases.put(cipher.name(), Collections.singletonList(cipher));
+
+            for (String openSSlAltName : cipher.getOpenSSLAltNames()) {
+                if (aliases.containsKey(openSSlAltName)) {
+                    aliases.get(openSSlAltName).add(cipher);
+                } else {
+                    List<Cipher> list = new ArrayList<>();
+                    list.add(cipher);
+                    aliases.put(openSSlAltName, list);
+                }
+
+            }
+
+            jsseToOpenSSL.put(cipher.name(), cipher.getOpenSSLAlias());
+            Set<String> jsseNames = cipher.getJsseNames();
+            for (String jsseName : jsseNames) {
+                jsseToOpenSSL.put(jsseName, cipher.getOpenSSLAlias());
+            }
+
+            if (cipher.getProtocol().equals(Protocol.TLSv1_3)) {
+                tls13CipherSuiteNames.add(cipher.getOpenSSLAlias());
+                /*
+                 * The TLS 1.3 cipher suites do not, currently (January 2026), have any alternative names defined so the
+                 * following two calls are NO-OPs but are implemented in case alternative names are used in the future.
+                 */
+                tls13CipherSuiteNames.addAll(cipher.getOpenSSLAltNames());
+                tls13CipherSuiteNames.addAll(cipher.getJsseNames());
+            }
+        }
+        List<Cipher> allCiphersList = Arrays.asList(Cipher.values());
+        Collections.reverse(allCiphersList);
+        LinkedHashSet<Cipher> allCiphers = defaultSort(new LinkedHashSet<>(allCiphersList));
+        addListAlias(eNULL, filterByEncryption(allCiphers, Collections.singleton(Encryption.eNULL)));
+        LinkedHashSet<Cipher> all = new LinkedHashSet<>(allCiphers);
+        remove(all, eNULL);
+        addListAlias(ALL, all);
+        addListAlias(HIGH, filterByEncryptionLevel(allCiphers, Collections.singleton(EncryptionLevel.HIGH)));
+        addListAlias(MEDIUM, filterByEncryptionLevel(allCiphers, Collections.singleton(EncryptionLevel.MEDIUM)));
+        addListAlias(LOW, filterByEncryptionLevel(allCiphers, Collections.singleton(EncryptionLevel.LOW)));
+        aliases.put("NULL", aliases.get(eNULL));
+        aliases.put(COMPLEMENTOFALL, aliases.get(eNULL));
+        addListAlias(aNULL, filterByAuthentication(allCiphers, Collections.singleton(Authentication.aNULL)));
+        addListAlias(kRSA, filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.RSA)));
+        addListAlias(aRSA, filterByAuthentication(allCiphers, Collections.singleton(Authentication.RSA)));
+        // Despite what the docs say, RSA is equivalent to kRSA
+        aliases.put(RSA, aliases.get(kRSA));
+        addListAlias(kEDH, filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.EDH)));
+        addListAlias(kDHE, filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.EDH)));
+        Set<Cipher> edh = filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.EDH));
+        edh.removeAll(filterByAuthentication(allCiphers, Collections.singleton(Authentication.aNULL)));
+        addListAlias(EDH, edh);
+        addListAlias(DHE, edh);
+
+        addListAlias(ECDH, filterByKeyExchange(allCiphers,
+                new HashSet<>(Arrays.asList(KeyExchange.ECDHe, KeyExchange.ECDHr, KeyExchange.EECDH))));
+        addListAlias(kECDHE, filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.EECDH)));
+
+        Set<Cipher> ecdhe = filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.EECDH));
+        remove(ecdhe, aNULL);
+        addListAlias(ECDHE, ecdhe);
+
+        addListAlias(kEECDH, filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.EECDH)));
+        Set<Cipher> eecdh = filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.EECDH));
+        eecdh.removeAll(filterByAuthentication(allCiphers, Collections.singleton(Authentication.aNULL)));
+        addListAlias(EECDH, eecdh);
+        addListAlias(aDSS, filterByAuthentication(allCiphers, Collections.singleton(Authentication.DSS)));
+        aliases.put(DSS, aliases.get(aDSS));
+        Set<Cipher> aecdh = filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.EECDH));
+        addListAlias(AECDH, filterByAuthentication(aecdh, Collections.singleton(Authentication.aNULL)));
+        addListAlias(ECDSA, filterByAuthentication(allCiphers, Collections.singleton(Authentication.ECDSA)));
+        aliases.put(aECDSA, aliases.get(ECDSA));
+        addListAlias(Constants.SSL_PROTO_TLSv1_2,
+                filterByProtocol(allCiphers, Collections.singleton(Protocol.TLSv1_2)));
+        addListAlias(Constants.SSL_PROTO_TLSv1_0, filterByProtocol(allCiphers, Collections.singleton(Protocol.TLSv1)));
+        aliases.put(Constants.SSL_PROTO_TLSv1, aliases.get(Constants.SSL_PROTO_TLSv1_0));
+        addListAlias(DH, filterByKeyExchange(allCiphers,
+                new HashSet<>(Arrays.asList(KeyExchange.DHr, KeyExchange.DHd, KeyExchange.EDH))));
+        Set<Cipher> adh = filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.EDH));
+        adh.retainAll(filterByAuthentication(allCiphers, Collections.singleton(Authentication.aNULL)));
+        addListAlias(ADH, adh);
+        addListAlias(AES128, filterByEncryption(allCiphers, new HashSet<>(
+                Arrays.asList(Encryption.AES128, Encryption.AES128CCM, Encryption.AES128CCM8, Encryption.AES128GCM))));
+        addListAlias(AES256, filterByEncryption(allCiphers, new HashSet<>(
+                Arrays.asList(Encryption.AES256, Encryption.AES256CCM, Encryption.AES256CCM8, Encryption.AES256GCM))));
+        addListAlias(AES,
+                filterByEncryption(allCiphers,
+                        new HashSet<>(Arrays.asList(Encryption.AES128, Encryption.AES128CCM, Encryption.AES128CCM8,
+                                Encryption.AES128GCM, Encryption.AES256, Encryption.AES256CCM, Encryption.AES256CCM8,
+                                Encryption.AES256GCM))));
+        addListAlias(ARIA128, filterByEncryption(allCiphers, Collections.singleton(Encryption.ARIA128GCM)));
+        addListAlias(ARIA256, filterByEncryption(allCiphers, Collections.singleton(Encryption.ARIA256GCM)));
+        addListAlias(ARIA, filterByEncryption(allCiphers,
+                new HashSet<>(Arrays.asList(Encryption.ARIA128GCM, Encryption.ARIA256GCM))));
+        aliases.put("ARIAGCM", aliases.get(ARIA));
+        addListAlias(AESGCM, filterByEncryption(allCiphers,
+                new HashSet<>(Arrays.asList(Encryption.AES128GCM, Encryption.AES256GCM))));
+        addListAlias(AESCCM, filterByEncryption(allCiphers, new HashSet<>(Arrays.asList(Encryption.AES128CCM,
+                Encryption.AES128CCM8, Encryption.AES256CCM, Encryption.AES256CCM8))));
+        addListAlias(AESCCM8, filterByEncryption(allCiphers,
+                new HashSet<>(Arrays.asList(Encryption.AES128CCM8, Encryption.AES256CCM8))));
+        addListAlias(CAMELLIA, filterByEncryption(allCiphers,
+                new HashSet<>(Arrays.asList(Encryption.CAMELLIA128, Encryption.CAMELLIA256))));
+        addListAlias(CAMELLIA128, filterByEncryption(allCiphers, Collections.singleton(Encryption.CAMELLIA128)));
+        addListAlias(CAMELLIA256, filterByEncryption(allCiphers, Collections.singleton(Encryption.CAMELLIA256)));
+        addListAlias(CBC, filterByEncryption(allCiphers, new HashSet<>(
+                Arrays.asList(Encryption.AES128, Encryption.AES256, Encryption.CAMELLIA128, Encryption.CAMELLIA256))));
+        addListAlias(CHACHA20, filterByEncryption(allCiphers, Collections.singleton(Encryption.CHACHA20POLY1305)));
+        addListAlias(TRIPLE_DES, filterByEncryption(allCiphers, Collections.singleton(Encryption.TRIPLE_DES)));
+        addListAlias(DES, filterByEncryption(allCiphers, Collections.singleton(Encryption.DES)));
+        addListAlias(RC4, filterByEncryption(allCiphers, Collections.singleton(Encryption.RC4)));
+        addListAlias(RC2, filterByEncryption(allCiphers, Collections.singleton(Encryption.RC2)));
+        addListAlias(IDEA, filterByEncryption(allCiphers, Collections.singleton(Encryption.IDEA)));
+        addListAlias(SEED, filterByEncryption(allCiphers, Collections.singleton(Encryption.SEED)));
+        addListAlias(MD5, filterByMessageDigest(allCiphers, Collections.singleton(MessageDigest.MD5)));
+        addListAlias(SHA1, filterByMessageDigest(allCiphers, Collections.singleton(MessageDigest.SHA1)));
+        aliases.put(SHA, aliases.get(SHA1));
+        addListAlias(SHA256, filterByMessageDigest(allCiphers, Collections.singleton(MessageDigest.SHA256)));
+        addListAlias(SHA384, filterByMessageDigest(allCiphers, Collections.singleton(MessageDigest.SHA384)));
+        addListAlias(aGOST, filterByAuthentication(allCiphers,
+                new HashSet<>(Arrays.asList(Authentication.GOST01, Authentication.GOST94))));
+        addListAlias(aGOST01, filterByAuthentication(allCiphers, Collections.singleton(Authentication.GOST01)));
+        addListAlias(aGOST94, filterByAuthentication(allCiphers, Collections.singleton(Authentication.GOST94)));
+        addListAlias(kGOST, filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.GOST)));
+        addListAlias(GOST94, filterByMessageDigest(allCiphers, Collections.singleton(MessageDigest.GOST94)));
+        addListAlias(GOST89MAC, filterByMessageDigest(allCiphers, Collections.singleton(MessageDigest.GOST89MAC)));
+        addListAlias(PSK,
+                filter(allCiphers, null, new HashSet<>(
+                        Arrays.asList(KeyExchange.PSK, KeyExchange.RSAPSK, KeyExchange.DHEPSK, KeyExchange.ECDHEPSK)),
+                        Collections.singleton(Authentication.PSK), null, null, null));
+        addListAlias(aPSK, filterByAuthentication(allCiphers, Collections.singleton(Authentication.PSK)));
+        addListAlias(kPSK, filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.PSK)));
+        addListAlias(kRSAPSK, filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.RSAPSK)));
+        addListAlias(kECDHEPSK, filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.ECDHEPSK)));
+        addListAlias(kDHEPSK, filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.DHEPSK)));
+        addListAlias(aSRP, filterByAuthentication(allCiphers, Collections.singleton(Authentication.SRP)));
+        addListAlias(kSRP, filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.SRP)));
+        addListAlias(SRP, filterByKeyExchange(allCiphers, Collections.singleton(KeyExchange.SRP)));
+
+        addListAlias(DEFAULT,
+                parseInternal("ALL:!eNULL:!aNULL:!DES:!RC2:!RC4:!DSS:!SEED:!IDEA:!CAMELLIA:!AESCCM:!3DES:!ARIA"));
+        // COMPLEMENTOFDEFAULT is also not exactly as defined by the docs
+        LinkedHashSet<Cipher> complementOfDefault =
+                filterByKeyExchange(all, new HashSet<>(Arrays.asList(KeyExchange.EDH, KeyExchange.EECDH)));
+        complementOfDefault = filterByAuthentication(complementOfDefault, Collections.singleton(Authentication.aNULL));
+        aliases.get(eNULL).forEach(complementOfDefault::remove);
+        complementOfDefault.addAll(aliases.get(DES));
+        complementOfDefault.addAll(aliases.get(TRIPLE_DES));
+        complementOfDefault.addAll(aliases.get(RC2));
+        complementOfDefault.addAll(aliases.get(RC4));
+        complementOfDefault.addAll(aliases.get(aDSS));
+        complementOfDefault.addAll(aliases.get(SEED));
+        complementOfDefault.addAll(aliases.get(IDEA));
+        complementOfDefault.addAll(aliases.get(CAMELLIA));
+        complementOfDefault.addAll(aliases.get(AESCCM));
+        complementOfDefault.addAll(aliases.get(ARIA));
+        complementOfDefault = defaultSort(complementOfDefault);
+        addListAlias(COMPLEMENTOFDEFAULT, complementOfDefault);
+
+        initialized = true;
+    }
+
+    static void addListAlias(String alias, Set<Cipher> ciphers) {
+        aliases.put(alias, new ArrayList<>(ciphers));
+    }
+
+    static void moveToEnd(final LinkedHashSet<Cipher> ciphers, final String alias) {
+        moveToEnd(ciphers, aliases.get(alias));
+    }
+
+    static void moveToEnd(final LinkedHashSet<Cipher> ciphers, final Collection<Cipher> toBeMovedCiphers) {
+        List<Cipher> movedCiphers = new ArrayList<>(ciphers);
+        movedCiphers.retainAll(toBeMovedCiphers);
+        movedCiphers.forEach(ciphers::remove);
+        ciphers.addAll(movedCiphers);
+    }
+
+    static void moveToStart(final LinkedHashSet<Cipher> ciphers, final Collection<Cipher> toBeMovedCiphers) {
+        List<Cipher> movedCiphers = new ArrayList<>(ciphers);
+        List<Cipher> originalCiphers = new ArrayList<>(ciphers);
+        movedCiphers.retainAll(toBeMovedCiphers);
+        ciphers.clear();
+        ciphers.addAll(movedCiphers);
+        ciphers.addAll(originalCiphers);
+    }
+
+    static void add(final LinkedHashSet<Cipher> ciphers, final String alias) {
+        ciphers.addAll(aliases.get(alias));
+    }
+
+    static void remove(final Set<Cipher> ciphers, final String alias) {
+        aliases.get(alias).forEach(ciphers::remove);
+    }
+
+    static LinkedHashSet<Cipher> strengthSort(final LinkedHashSet<Cipher> ciphers) {
+        /*
+         * This routine sorts the ciphers with descending strength. The sorting must keep the pre-sorted sequence, so we
+         * apply the normal sorting routine as '+' movement to the end of the list.
+         */
+        Set<Integer> keySizes = new HashSet<>();
+        for (Cipher cipher : ciphers) {
+            keySizes.add(Integer.valueOf(cipher.getStrength_bits()));
+        }
+        List<Integer> strength_bits = new ArrayList<>(keySizes);
+        Collections.sort(strength_bits);
+        Collections.reverse(strength_bits);
+        final LinkedHashSet<Cipher> result = new LinkedHashSet<>(ciphers);
+        for (int strength : strength_bits) {
+            moveToEnd(result, filterByStrengthBits(ciphers, strength));
+        }
+        return result;
+    }
+
+    /*
+     * See https://github.com/openssl/openssl/blob/master/ssl/ssl_ciph.c
+     *
+     * Most recently reviewed at afaa70c on 2026-06-12
+     */
+    static LinkedHashSet<Cipher> defaultSort(final LinkedHashSet<Cipher> ciphers) {
+        LinkedHashSet<Cipher> result = new LinkedHashSet<>(ciphers.size());
+
+        // Copy because we need to manipulate the order before adding
+        LinkedHashSet<Cipher> source = new LinkedHashSet<>(ciphers);
+
+        // Can't find this in the OpenSSL source but observed in test results
+        Set<Cipher> camelliaWithDSS = filterByAuthentication(source, Collections.singleton(Authentication.DSS));
+        camelliaWithDSS = filterByEncryption(
+                camelliaWithDSS, new LinkedHashSet<>(Arrays.asList(Encryption.CAMELLIA128, Encryption.CAMELLIA256)));
+        moveToEnd(source, camelliaWithDSS);
+
+        /*
+         * This change is made to source so it effectively applies to each group that is subsequently added to the
+         * result.
+         */
+        LinkedHashSet<Cipher> eecdh = filterByKeyExchange(source, Collections.singleton(KeyExchange.EECDH));
+        moveToStart(source, eecdh);
+        moveToStart(source, filterByAuthentication(eecdh, Collections.singleton(Authentication.ECDSA)));
+
+        // Now start adding ciphers to the result
+
+        // Prefer GCM over CHACHA
+        result.addAll(filterByEncryption(source, Collections.singleton(Encryption.AES256GCM)));
+        result.addAll(filterByEncryption(source, Collections.singleton(Encryption.AES128GCM)));
+        result.addAll(filterByEncryption(source, Collections.singleton(Encryption.CHACHA20POLY1305)));
+
+        // Generally prefer AES
+        result.addAll(filterByEncryption(source,
+                new HashSet<>(Arrays.asList(Encryption.AES256CCM, Encryption.AES256CCM8, Encryption.AES256,
+                        Encryption.AES128CCM, Encryption.AES128CCM8, Encryption.AES128))));
+
+        // Add everything else
+        result.addAll(source);
+
+        // Move MD5 to end
+        moveToEnd(result, filterByMessageDigest(result, Collections.singleton(MessageDigest.MD5)));
+
+        // Move anonymous ciphers to the end.
+        moveToEnd(result, filterByAuthentication(result, Collections.singleton(Authentication.aNULL)));
+        moveToEnd(result, filterByKeyExchange(result, Collections.singleton(KeyExchange.RSA)));
+        moveToEnd(result, filterByKeyExchange(result, Collections.singleton(KeyExchange.PSK)));
+
+        // RC4 is sort-of broken -- move to the end
+        moveToEnd(result, filterByEncryption(result, Collections.singleton(Encryption.RC4)));
+
+        // Sort by encryption strength
+        result = strengthSort(result);
+
+        // Partially override strength sort to prefer TLS 1.2
+        moveToStart(result, filterByProtocol(result, Collections.singleton(Protocol.TLSv1_2)));
+
+        /*
+         * Irrespective of strength, enforce the following order:
+         * (EC)DHE + AEAD > (EC)DHE > rest of AEAD > rest.
+         * Within each group, ciphers remain sorted by strength and previous
+         * preference, i.e.,
+         * 1) ECDHE > DHE
+         * 2) GCM > CHACHA
+         * 3) AES > rest
+         * 4) TLS 1.2 > legacy
+         *
+         * Moving to start so move in reverse order.
+         */
+        Set<Cipher> ecdheAndDhe = new LinkedHashSet<>(result.size());
+        Set<Cipher> ecdheAndDheWithAead = new LinkedHashSet<>(result.size());
+
+        ecdheAndDhe.addAll(filterByKeyExchange(result, new HashSet<>(Arrays.asList(KeyExchange.EDH, KeyExchange.EECDH))));
+        ecdheAndDheWithAead.addAll(ecdheAndDhe);
+        ecdheAndDheWithAead = filterByMessageDigest(ecdheAndDheWithAead, Collections.singleton(MessageDigest.AEAD));
+
+        moveToStart(result, filterByMessageDigest(result, Collections.singleton(MessageDigest.AEAD)));
+        moveToStart(result, ecdheAndDhe);
+        moveToStart(result, ecdheAndDheWithAead);
+
+        return result;
+    }
+
+    static Set<Cipher> filterByStrengthBits(Set<Cipher> ciphers, int strength_bits) {
+        Set<Cipher> result = new LinkedHashSet<>(ciphers.size());
+        for (Cipher cipher : ciphers) {
+            if (cipher.getStrength_bits() == strength_bits) {
+                result.add(cipher);
+            }
+        }
+        return result;
+    }
+
+    static Set<Cipher> filterByProtocol(Set<Cipher> ciphers, Set<Protocol> protocol) {
+        return filter(ciphers, protocol, null, null, null, null, null);
+    }
+
+    static LinkedHashSet<Cipher> filterByKeyExchange(Set<Cipher> ciphers, Set<KeyExchange> kx) {
+        return filter(ciphers, null, kx, null, null, null, null);
+    }
+
+    static LinkedHashSet<Cipher> filterByAuthentication(Set<Cipher> ciphers, Set<Authentication> au) {
+        return filter(ciphers, null, null, au, null, null, null);
+    }
+
+    static Set<Cipher> filterByEncryption(Set<Cipher> ciphers, Set<Encryption> enc) {
+        return filter(ciphers, null, null, null, enc, null, null);
+    }
+
+    static Set<Cipher> filterByEncryptionLevel(Set<Cipher> ciphers, Set<EncryptionLevel> level) {
+        return filter(ciphers, null, null, null, null, level, null);
+    }
+
+    static Set<Cipher> filterByMessageDigest(Set<Cipher> ciphers, Set<MessageDigest> mac) {
+        return filter(ciphers, null, null, null, null, null, mac);
+    }
+
+    static LinkedHashSet<Cipher> filter(Set<Cipher> ciphers, Set<Protocol> protocol, Set<KeyExchange> kx,
+            Set<Authentication> au, Set<Encryption> enc, Set<EncryptionLevel> level, Set<MessageDigest> mac) {
+        LinkedHashSet<Cipher> result = new LinkedHashSet<>(ciphers.size());
+        for (Cipher cipher : ciphers) {
+            if (protocol != null && protocol.contains(cipher.getProtocol())) {
+                result.add(cipher);
+            }
+            if (kx != null && kx.contains(cipher.getKx())) {
+                result.add(cipher);
+            }
+            if (au != null && au.contains(cipher.getAu())) {
+                result.add(cipher);
+            }
+            if (enc != null && enc.contains(cipher.getEnc())) {
+                result.add(cipher);
+            }
+            if (level != null && level.contains(cipher.getLevel())) {
+                result.add(cipher);
+            }
+            if (mac != null && mac.contains(cipher.getMac())) {
+                result.add(cipher);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Parses an OpenSSL cipher expression into a set of ciphers.
+     *
+     * @param expression The cipher expression to parse
+     * @return The set of matching ciphers
+     */
+    public static LinkedHashSet<Cipher> parse(String expression) {
+        if (!initialized) {
+            init();
+        }
+        return parseInternal(expression);
+    }
+
+
+    private static LinkedHashSet<Cipher> parseInternal(String expression) {
+        String[] elements = expression.split(SEPARATOR);
+        // Handle PROFILE= using OpenSSL (if present, otherwise warn), then replace elements with that
+        if (elements.length == 1 && elements[0].startsWith("PROFILE=")) {
+            // Only use with Java 22 and if OpenSSL has been successfully loaded before
+            if (JreCompat.isJre22Available()) {
+                if (OpenSSLStatus.isLibraryInitialized()) {
+                    try {
+                        Class<?> openSSLLibraryClass =
+                                Class.forName("org.apache.tomcat.util.net.openssl.panama.OpenSSLLibrary");
+                        @SuppressWarnings("unchecked")
+                        List<String> cipherList = (List<String>) openSSLLibraryClass
+                                .getMethod("findCiphers", String.class).invoke(null, elements[0]);
+                        // Replace the original list with the profile contents
+                        elements = cipherList.toArray(new String[0]);
+                    } catch (Throwable t) {
+                        Throwable throwable = ExceptionUtils.unwrapInvocationTargetException(t);
+                        ExceptionUtils.handleThrowable(throwable);
+                        log.error(sm.getString("opensslCipherConfigurationParser.unknownProfile", elements[0]),
+                                throwable);
+                    }
+                } else {
+                    // OpenSSL is not available
+                    log.error(sm.getString("opensslCipherConfigurationParser.unknownProfile", elements[0]));
+                }
+            } else {
+                // No way to resolve using OpenSSL, log an info about this,
+                // but it might still work if using tomcat-native
+                log.info(sm.getString("opensslCipherConfigurationParser.unknownProfile", elements[0]));
+            }
+        }
+        LinkedHashSet<Cipher> ciphers = new LinkedHashSet<>();
+        Set<Cipher> removedCiphers = new HashSet<>();
+        for (String element : elements) {
+            if (element.startsWith(DELETE)) {
+                String alias = element.substring(1);
+                if (aliases.containsKey(alias)) {
+                    remove(ciphers, alias);
+                }
+            } else if (element.startsWith(EXCLUDE)) {
+                String alias = element.substring(1);
+                if (aliases.containsKey(alias)) {
+                    removedCiphers.addAll(aliases.get(alias));
+                } else {
+                    log.warn(sm.getString("opensslCipherConfigurationParser.unknownElement", alias));
+                }
+            } else if (element.startsWith(TO_END)) {
+                String alias = element.substring(1);
+                if (aliases.containsKey(alias)) {
+                    moveToEnd(ciphers, alias);
+                }
+            } else if ("@STRENGTH".equals(element)) {
+                ciphers = strengthSort(ciphers);
+            } else if (aliases.containsKey(element)) {
+                add(ciphers, element);
+            } else if (element.contains(AND)) {
+                String[] intersections = element.split("\\" + AND);
+                if (intersections.length > 0 && aliases.containsKey(intersections[0])) {
+                    List<Cipher> result = new ArrayList<>(aliases.get(intersections[0]));
+                    for (int i = 1; i < intersections.length; i++) {
+                        if (aliases.containsKey(intersections[i])) {
+                            result.retainAll(aliases.get(intersections[i]));
+                        }
+                    }
+                    ciphers.addAll(result);
+                }
+            }
+        }
+        ciphers.removeAll(removedCiphers);
+        return ciphers;
+    }
+
+    /**
+     * Converts a collection of OpenSSL ciphers to their JSSE names.
+     *
+     * @param ciphers The OpenSSL ciphers to convert
+     * @return The list of JSSE cipher names
+     */
+    public static List<String> convertForJSSE(Collection<Cipher> ciphers) {
+        List<String> result = new ArrayList<>(ciphers.size());
+        for (Cipher cipher : ciphers) {
+            result.addAll(cipher.getJsseNames());
+        }
+        if (log.isDebugEnabled()) {
+            log.debug(sm.getString("opensslCipherConfigurationParser.effectiveCiphers",
+                    displayResult(ciphers, true, ",")));
+        }
+        return result;
+    }
+
+    /**
+     * Determines if the provided name is the name of a TLS 1.3 cipher suite.
+     *
+     * @param cipherSuiteName The name to test
+     *
+     * @return {@code true} if the provided String is recognised as the name of a TLS 1.3 cipherSuite.
+     */
+    public static boolean isTls13Cipher(String cipherSuiteName) {
+        if (!initialized) {
+            init();
+        }
+        return tls13CipherSuiteNames.contains(cipherSuiteName);
+    }
+
+    /**
+     * Parse the specified expression according to the OpenSSL syntax and returns a list of standard JSSE cipher names.
+     *
+     * @param expression the openssl expression to define a list of cipher.
+     *
+     * @return the corresponding list of ciphers.
+     */
+    public static List<String> parseExpression(String expression) {
+        return convertForJSSE(parse(expression));
+    }
+
+
+    /**
+     * Converts a JSSE cipher name to an OpenSSL cipher name.
+     *
+     * @param jsseCipherName The JSSE name for a cipher
+     *
+     * @return The OpenSSL name for the specified JSSE cipher
+     */
+    public static String jsseToOpenSSL(String jsseCipherName) {
+        if (!initialized) {
+            init();
+        }
+        return jsseToOpenSSL.get(jsseCipherName);
+    }
+
+
+    /**
+     * Converts an OpenSSL cipher name to a JSSE cipher name.
+     *
+     * @param opensslCipherName The OpenSSL name for a cipher
+     *
+     * @return The JSSE name for the specified OpenSSL cipher. If none is known, the IANA standard name will be returned
+     *             instead
+     */
+    public static String openSSLToJsse(String opensslCipherName) {
+        if (!initialized) {
+            init();
+        }
+        List<Cipher> ciphers = aliases.get(opensslCipherName);
+        if (ciphers == null || ciphers.size() != 1) {
+            // Not an OpenSSL cipher name
+            return null;
+        }
+        Cipher cipher = ciphers.get(0);
+        // Each Cipher always has at least one JSSE name
+        return cipher.getJsseNames().iterator().next();
+    }
+
+
+    static String displayResult(Collection<Cipher> ciphers, boolean useJSSEFormat, String separator) {
+        if (ciphers.isEmpty()) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder(ciphers.size() * 16);
+        for (Cipher cipher : ciphers) {
+            if (useJSSEFormat) {
+                for (String name : cipher.getJsseNames()) {
+                    builder.append(name);
+                    builder.append(separator);
+                }
+            } else {
+                builder.append(cipher.getOpenSSLAlias());
+                builder.append(separator);
+            }
+        }
+        return builder.substring(0, builder.length() - 1);
+    }
+
+    /**
+     * Prints usage information for the command-line tool.
+     */
+    public static void usage() {
+        System.out
+                .println("Usage: java " + OpenSSLCipherConfigurationParser.class.getName() + " [options] cipher spec");
+        System.out.println();
+        System.out.println("Displays the TLS cipher suites matching the cipher spec.");
+        System.out.println();
+        System.out.println(" --help,");
+        System.out.println(" -h          Print this help message");
+        System.out.println(" --openssl   Show OpenSSL cipher suite names instead of IANA cipher suite names.");
+        System.out.println(" --verbose,");
+        System.out.println(" -v          Provide detailed cipher listing");
+    }
+
+    /**
+     * Main entry point for the cipher configuration parser tool.
+     *
+     * @param args Command line arguments
+     * @throws Exception if an error occurs
+     */
+    public static void main(String[] args) throws Exception {
+        boolean verbose = false;
+        boolean useOpenSSLNames = false;
+        int argindex;
+        for (argindex = 0; argindex < args.length; ++argindex) {
+            String arg = args[argindex];
+            if ("--verbose".equals(arg) || "-v".equals(arg)) {
+                verbose = true;
+            } else if ("--openssl".equals(arg)) {
+                useOpenSSLNames = true;
+            } else if ("--help".equals(arg) || "-h".equals(arg)) {
+                usage();
+                System.exit(0);
+            } else if ("--".equals(arg)) {
+                ++argindex;
+                break;
+            } else if (arg.startsWith("-")) {
+                System.out.println("Unknown option: " + arg);
+                usage();
+                System.exit(1);
+            } else {
+                // Non-switch argument... probably the cipher spec
+                break;
+            }
+        }
+
+        String cipherSpec;
+        if (argindex < args.length) {
+            cipherSpec = args[argindex];
+        } else {
+            cipherSpec = "DEFAULT";
+        }
+        Set<Cipher> ciphers = parse(cipherSpec);
+        boolean first = true;
+        if (!ciphers.isEmpty()) {
+            for (Cipher cipher : ciphers) {
+                if (first) {
+                    first = false;
+                } else {
+                    if (!verbose) {
+                        System.out.print(',');
+                    }
+                }
+                if (useOpenSSLNames) {
+                    System.out.print(cipher.getOpenSSLAlias());
+                } else {
+                    System.out.print(cipher.name());
+                }
+                if (verbose) {
+                    System.out.println("\t" + cipher.getProtocol() + "\tKx=" + cipher.getKx() + "\tAu=" +
+                            cipher.getAu() + "\tEnc=" + cipher.getEnc() + "\tMac=" + cipher.getMac());
+                }
+            }
+            System.out.println();
+        } else {
+            System.out.println("No ciphers match '" + cipherSpec + "'");
+        }
+    }
+}
