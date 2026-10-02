@@ -1,0 +1,56 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.tomcat.util.net.ocsp;
+
+import java.io.IOException;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+/*
+ * Only looking to test the Tomcat (server) side configuration of soft fail.
+ */
+@RunWith(Parameterized.class)
+public class TestOcspSoftFail extends OcspBaseTest {
+
+    @Test
+    public void testNoResponderDefaultSoftFail() throws Exception {
+        // Default behaviour should be the same for all configurations and equivalent to enabled.
+        doTest(false, false, ClientCertificateVerification.ENABLED, false, null);
+    }
+
+
+    @Test
+    public void testNoResponderWithSoftFail() throws Exception {
+        doTest(false, false, ClientCertificateVerification.ENABLED, false, Boolean.TRUE);
+    }
+
+
+    /*
+     * Generally expect to see SSLHandshakeException here. APR or NIO2 may throw a SocketException or IOException rather
+     * than a SSLHandshakeException. This hasn't been observed with NIO.
+     *
+     * Different Java versions may throw an SSLException rather than a SSLHandshakeException.
+     *
+     * All over these are sub-classes of IOException so check for that.
+     */
+    @Test(expected = IOException.class)
+    public void testNoResponderWithoutSoftFail() throws Exception {
+        doTest(false, false, ClientCertificateVerification.ENABLED, false, Boolean.FALSE);
+    }
+}

@@ -1,0 +1,237 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.catalina.storeconfig;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.sql.Timestamp;
+
+import org.apache.catalina.Globals;
+import org.apache.tomcat.util.res.StringManager;
+
+/**
+ * Move server.xml or context.xml as backup
+ */
+public class StoreFileMover {
+
+    /**
+     * The string manager for this package.
+     */
+    protected static final StringManager sm = StringManager.getManager(Constants.Package);
+
+    private String filename = "conf/server.xml";
+
+    private String encoding = "UTF-8";
+
+    private String basename = System.getProperty(Globals.CATALINA_BASE_PROP);
+
+    private File configOld;
+
+    private File configNew;
+
+    private File configSave;
+
+    /**
+     * Returns the File object representing the new configuration file.
+     *
+     * @return the new configuration file
+     */
+    public File getConfigNew() {
+        return configNew;
+    }
+
+    /**
+     * Returns the File object representing the old configuration file.
+     *
+     * @return the old configuration file
+     */
+    public File getConfigOld() {
+        return configOld;
+    }
+
+    /**
+     * Returns the File object representing the saved backup configuration file.
+     *
+     * @return the backup configuration file
+     */
+    public File getConfigSave() {
+        return configSave;
+    }
+
+    /**
+     * Returns the base directory path for configuration files.
+     *
+     * @return the base directory path
+     */
+    public String getBasename() {
+        return basename;
+    }
+
+    /**
+     * Sets the base directory path for configuration files.
+     *
+     * @param basename the base directory path
+     */
+    public void setBasename(String basename) {
+        this.basename = basename;
+    }
+
+    /**
+     * Returns the configuration file name.
+     *
+     * @return the configuration file name
+     */
+    public String getFilename() {
+        return filename;
+    }
+
+    /**
+     * Sets the configuration file name.
+     *
+     * @param string the configuration file name
+     */
+    public void setFilename(String string) {
+        filename = string;
+    }
+
+    /**
+     * Returns the character encoding used for configuration files.
+     *
+     * @return the character encoding
+     */
+    public String getEncoding() {
+        return encoding;
+    }
+
+    /**
+     * Sets the character encoding used for configuration files.
+     *
+     * @param string the character encoding
+     */
+    public void setEncoding(String string) {
+        encoding = string;
+    }
+
+    /**
+     * Calculate file objects for the old and new configuration files.
+     *
+     * @param basename The base path
+     * @param encoding The encoding of the file
+     * @param filename The file name
+     */
+    public StoreFileMover(String basename, String filename, String encoding) {
+        setBasename(basename);
+        setEncoding(encoding);
+        setFilename(filename);
+        init();
+    }
+
+    /**
+     * Generate the Filename to new with TimeStamp.
+     */
+    public void init() {
+        if (getBasename() == null || getFilename() == null || getEncoding() == null) {
+            throw new IllegalArgumentException(sm.getString("storeFileMover.null"));
+        }
+        String configFile = getFilename();
+        configOld = new File(configFile);
+        if (!configOld.isAbsolute()) {
+            configOld = new File(getBasename(), configFile);
+        }
+        configNew = new File(configFile + ".new");
+        if (!configNew.isAbsolute()) {
+            configNew = new File(getBasename(), configFile + ".new");
+        }
+        if (!configNew.getParentFile().exists()) {
+            if (!configNew.getParentFile().mkdirs()) {
+                throw new IllegalStateException(sm.getString("storeFileMover.directoryCreationError", configNew));
+            }
+        }
+        String sb = getTimeTag();
+        int i = 0;
+        do {
+            configSave = new File(configFile + sb + "-" + String.valueOf(i));
+            if (!configSave.isAbsolute()) {
+                configSave = new File(getBasename(), configFile + sb + "-" + String.valueOf(i));
+            }
+            i++;
+        } while (configSave.exists());
+    }
+
+    /**
+     * Shuffle old-&gt;save and new-&gt;old.
+     *
+     * @throws IOException a file operation error occurred
+     */
+    public void move() throws IOException {
+        if (configOld.renameTo(configSave)) {
+            if (!configNew.renameTo(configOld)) {
+                if (!configSave.renameTo(configOld)) {
+                    throw new IOException(sm.getString("storeFileMover.restoreError", configNew.getAbsolutePath(),
+                            configOld.getAbsolutePath()));
+                }
+                throw new IOException(sm.getString("storeFileMover.renameError", configNew.getAbsolutePath(),
+                        configOld.getAbsolutePath()));
+            }
+        } else {
+            if (!configOld.exists()) {
+                if (!configNew.renameTo(configOld)) {
+                    throw new IOException(sm.getString("storeFileMover.renameError", configNew.getAbsolutePath(),
+                            configOld.getAbsolutePath()));
+                }
+            } else {
+                throw new IOException(sm.getString("storeFileMover.renameError", configOld.getAbsolutePath(),
+                        configSave.getAbsolutePath()));
+            }
+        }
+    }
+
+    /**
+     * Open an output writer for the new configuration file.
+     *
+     * @return The writer
+     *
+     * @throws IOException Failed opening a writer to the new file
+     */
+    public PrintWriter getWriter() throws IOException {
+        return new PrintWriter(new OutputStreamWriter(new FileOutputStream(configNew), getEncoding()));
+    }
+
+    /**
+     * Time value for backup yyyy-mm-dd.hh-mm-ss.
+     *
+     * @return The time
+     */
+    protected String getTimeTag() {
+        String ts = (new Timestamp(System.currentTimeMillis())).toString();
+        // yyyy-mm-dd hh:mm:ss
+        // 0123456789012345678
+        StringBuilder sb = new StringBuilder(".");
+        sb.append(ts, 0, 10);
+        sb.append('.');
+        sb.append(ts, 11, 13);
+        sb.append('-');
+        sb.append(ts, 14, 16);
+        sb.append('-');
+        sb.append(ts, 17, 19);
+        return sb.toString();
+    }
+
+}

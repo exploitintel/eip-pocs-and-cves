@@ -1,0 +1,126 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.catalina.ssi;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+
+import org.apache.catalina.util.IOTools;
+import org.apache.tomcat.util.res.StringManager;
+
+/**
+ * Implements the Server-side #exec command.
+ */
+public class SSIExec implements SSICommand {
+    private static final StringManager sm = StringManager.getManager(SSIExec.class);
+
+    /**
+     * Default constructor.
+     */
+    public SSIExec() {
+    }
+    /**
+     * Helper instance for processing CGI includes.
+     */
+    protected final SSIInclude ssiInclude = new SSIInclude();
+    /**
+     * Size of the buffer used for reading command output.
+     */
+    protected static final int BUFFER_SIZE = 1024;
+
+
+    /**
+     * Processes the exec directive to run CGI scripts or system commands.
+     */
+    @Override
+    public long process(SSIMediator ssiMediator, String commandName, String[] paramNames, String[] paramValues,
+            PrintWriter writer) {
+        long lastModified = 0;
+        if (paramNames.length == 0 || paramValues.length == 0) {
+            return 0;
+        }
+        String configErrMsg = ssiMediator.getConfigErrMsg();
+        String paramName = paramNames[0];
+        String paramValue = paramValues[0];
+        String substitutedValue = ssiMediator.substituteVariables(paramValue);
+        if (paramName.equalsIgnoreCase("cgi")) {
+            lastModified = ssiInclude.process(ssiMediator, "include", new String[] { "virtual" },
+                    new String[] { substitutedValue }, writer);
+        } else if (paramName.equalsIgnoreCase("cmd")) {
+            boolean foundProgram = false;
+            try {
+                Runtime rt = Runtime.getRuntime();
+                ArrayList<String> tokens = new ArrayList<>();
+                StringBuilder current = new StringBuilder();
+                boolean inDoubleQuote = false;
+                boolean inSingleQuote = false;
+                for (int j = 0; j < substitutedValue.length(); j++) {
+                    char c = substitutedValue.charAt(j);
+                    if (c == '"' && !inSingleQuote) {
+                        inDoubleQuote = !inDoubleQuote;
+                    } else if (c == '\'' && !inDoubleQuote) {
+                        inSingleQuote = !inSingleQuote;
+                    } else if (Character.isWhitespace(c) && !inDoubleQuote && !inSingleQuote) {
+                        if (current.length() > 0) {
+                            tokens.add(current.toString());
+                            current.setLength(0);
+                        }
+                    } else {
+                        current.append(c);
+                    }
+                }
+                if (current.length() > 0) {
+                    tokens.add(current.toString());
+                }
+                String[] cmdArray = tokens.toArray(new String[0]);
+                if (cmdArray.length == 0) {
+                    throw new IOException(sm.getString("ssiExec.noCommand"));
+                }
+                Process proc = rt.exec(cmdArray);
+                foundProgram = true;
+                char[] buf = new char[BUFFER_SIZE];
+                try {
+                    try (BufferedReader stdOutReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+                            BufferedReader stdErrReader = new BufferedReader(
+                                    new InputStreamReader(proc.getErrorStream()))) {
+                        // We don't spawn a thread here, since this is costly. stderr would be usually written
+                        // right away and the amount written would be small
+                        IOTools.flow(stdOutReader, writer, buf);
+                        IOTools.flow(stdErrReader, writer, buf);
+                    }
+                    proc.waitFor();
+                } finally {
+                    proc.destroy();
+                }
+                lastModified = System.currentTimeMillis();
+            } catch (InterruptedException e) {
+                ssiMediator.log(sm.getString("ssiExec.executeFailed", substitutedValue), e);
+                writer.write(configErrMsg);
+            } catch (IOException ioe) {
+                if (!foundProgram) {
+                    // Apache doesn't output an error message if it can't find
+                    // a program
+                }
+                ssiMediator.log(sm.getString("ssiExec.executeFailed", substitutedValue), ioe);
+            }
+        }
+        return lastModified;
+    }
+}

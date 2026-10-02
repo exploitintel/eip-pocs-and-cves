@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document [
+  <!ENTITY project SYSTEM "project.xml">
+]>
+<document url="requestProcess.html">
+
+  &project;
+
+  <properties>
+    <title>Request Process Flow</title>
+  </properties>
+
+<body>
+
+<section name="Introduction">
+<p>
+This page describes how requests flow through Tomcat during processing. Requests
+start processing in an endpoint, then get passed to the protocol and then the
+Coyote adapter which is the common entry point for all servlet request
+processing.
+</p>
+<p>
+The UML diagrams do not show every detail of Tomcat's internal processing. They
+are intended to show the key elements of the processing chain.
+</p>
+</section>
+
+<section name="Endpoint implementations">
+<p>
+UML diagrams have been created for each Endpoint implementation to show how
+requests flow from the endpoint to the protocol.
+</p>
+<p>
+<a href="requestProcess/11_nio.png">Diagram 1.1</a> shows how requests received via
+an NIO based endpoint are processed upto the point they reach the processor
+instance.
+</p>
+<p>
+NIO2 - TBD.
+</p>
+</section>
+
+<section name="Protocols">
+<p>
+UML diagrams have been created for each protocol to show how requests flow from
+the processor instance to the CoyoteAdapter.
+</p>
+<p>
+<a href="requestProcess/21_http11.png">Diagram 2.1</a> shows how HTTP/0.9, HTTP/1.0
+and HTTP/1.1 requests are processed.
+</p>
+<p>
+HTTP/2 - TBD.
+</p>
+<p>
+AJP - TBD.
+</p>
+</section>
+
+<section name="Servlet engine">
+<p>
+<a href="requestProcess/31_synchronous.png">Diagram 3.1</a> shows synchronous
+Servlet requests are processed.
+</p>
+<p>
+Asynchronous - TBD.
+</p>
+</section>
+
+<section name="Authentication">
+<p>
+<a href="requestProcess/41_basic.png">Diagram 4.1</a> shows how BASIC
+authentication is processed.
+</p>
+<p>
+DIGEST - TBD.
+</p>
+<p>
+FORM - TBD.
+</p>
+<p>
+Jakarta Authentication (JASPIC) - TBD.
+</p>
+</section>
+
+</body>
+</document>
