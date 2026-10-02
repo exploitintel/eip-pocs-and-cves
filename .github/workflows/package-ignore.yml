@@ -1,0 +1,21 @@
+name: Package ignore scope
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  package-ignore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .gitignore
+            .github/scripts
+          sparse-checkout-cone-mode: false
+      - name: Check negative controls
+        run: python3 .github/scripts/check_package_ignore.py --self-test
+      - name: Check ignore scope
+        run: python3 .github/scripts/check_package_ignore.py

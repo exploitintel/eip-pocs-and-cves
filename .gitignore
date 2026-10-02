@@ -1,17 +1,12 @@
-# These repo-housekeeping rules are anchored: an unanchored name matches at any
-# depth, so it would also swallow a vendored file of the same name shipped
-# inside a CVE package (which then fails the "package destination not
-# gitignored" publication gate).
-.DS_Store
+# Repository housekeeping stays at the root. CVE package files must remain
+# visible to Git and to Forge's complete-tree publication checks.
+/.DS_Store
 /py.typed
 /*.pyc
 /disclosures/
 /scripts/
 
-# Vendor source checkouts (can be huge). Anchored like the rules above: an
-# unanchored **/source/ also matched `source/` trees that a CVE package ships
-# legitimately (CVE-2026-76183 keeps the Tomcat source there), silently
-# dropping them from the published tree.
+# Vendor source checkouts (can be huge).
 /source/
 
 # Metasploit dev environment
@@ -32,16 +27,14 @@
 /check-all-docker.sh
 
 # Docker/lab runtime artifacts
-**/.env
-# v4 pipeline packages deliberately ship a reviewed lab-only .env
-!CVE-*/.env
-**/.env.control
-**/reg-page-id.txt
-*.log
-*.pid
-**/data/
+/.env
+/.env.control
+/reg-page-id.txt
+/*.log
+/*.pid
+/data/
 /logs/
-poc-run-logs/
+/poc-run-logs/
 /poc-run-results.md
 /runtime-ports.env
 /runtime-ports.md
