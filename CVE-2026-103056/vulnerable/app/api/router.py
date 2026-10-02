@@ -1,0 +1,429 @@
+"""
+Action Execution Service REST API.
+"""
+
+from __future__ import annotations
+
+from datetime import UTC, datetime
+from typing import Any
+from uuid import UUID
+
+import structlog
+from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import HTMLResponse
+
+from app.core.config import get_settings
+from app.models.action import (
+    ActionPrincipal,
+    ActionRequest,
+    ActionStatus,
+    ActionType,
+    ChatOpsApprover,
+)
+from app.security.authz import (
+    ActionAuthzError,
+    authorize_action,
+    authorize_approver,
+    require_service_auth,
+)
+from app.security.chatops_identity import resolve_approver
+from app.security.chatops_token import ChatOpsTokenError, verify_token
+from app.services import action_store
+from app.services.approval_gate import apply_matrix
+from app.services.blast_radius import BlastRadiusGate
+from app.services.executor_registry import EXECUTOR_REGISTRY
+from app.services.timeline_client import TimelineClientError, post_timeline_event
+
+logger = structlog.get_logger()
+router = APIRouter()
+gate = BlastRadiusGate()
+
+# The module-global `_actions` dict that used to live here is gone; storage is
+# `app.services.action_store`, which persists to Postgres when a DSN is
+# configured. A restart used to lose every action awaiting approval, so an
+# analyst tapping Approve on a Slack card got "Action not found" for an
+# incident that was still live. Tests reset state with `action_store.clear()`.
+
+# Replay-protection set: action IDs that have already received a response.
+# Single-use enforcement is layered on top of HMAC + expiry. Anything more
+# durable belongs in Redis once we move off the in-memory action store.
+_chatops_replied: set[str] = set()
+
+
+@router.post("/actions", response_model=dict)
+async def submit_action(request: ActionRequest, _auth: None = Depends(require_service_auth)):
+    """Submit an action for execution (may require approval)."""
+    # W4.2 — least-privilege: the invoking principal must hold the permission
+    # this action's blast radius demands before it is gated or executed.
+    try:
+        authorize_action(request)
+    except ActionAuthzError as exc:
+        logger.warning("Action authorization denied", action_type=request.action_type, reason=str(exc))
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
+
+    status, blast_radius, reason = gate.evaluate(request)
+    # Second axis: confidence against the action's declared impact, under the
+    # tenant's autonomy tier. The matrix that implements this was written,
+    # tested, and called by nothing — so the gate the docs described was not
+    # the gate that ran. It can only raise a requirement, never lower one.
+    status, reason = await apply_matrix(request, status, blast_radius, reason)
+
+    record = {
+        "id": str(request.id),
+        "action_type": request.action_type,
+        "target": request.target,
+        "status": status,
+        "blast_radius": blast_radius,
+        "gate_reason": reason,
+        "incident_id": str(request.incident_id),
+        "tenant_id": str(request.tenant_id),
+        "rationale": request.rationale,
+        # W4.4 — remember who requested it so an approver can't approve their
+        # own action (separation of duties).
+        "requested_by_user_id": request.principal.user_id if request.principal else None,
+        # Kept so approve can rebuild the request faithfully. Without this the
+        # approve path reconstructed an ActionRequest with an empty
+        # `parameters`, so an action that was gated *because* of what it
+        # targets executed against defaults — and reported COMPLETED. An
+        # approval that silently changes what it approved is not an approval.
+        "parameters": dict(request.parameters or {}),
+    }
+    await action_store.save(record)
+
+    # Auto-execute if approved
+    if status == ActionStatus.APPROVED:
+        executor = EXECUTOR_REGISTRY.get(request.action_type)
+        if executor:
+            try:
+                result = await executor.execute(request)
+                record["status"] = result.status
+                record["output"] = result.output
+                record["rollback_data"] = result.rollback_data
+                if result.error:
+                    record["error"] = result.error
+            except Exception as exc:
+                # Log the full detail server-side, but never echo the raw
+                # exception message (which can carry internal paths / stack
+                # detail) back to the API caller — return only the error type.
+                logger.error("Action execution failed", error=str(exc), exc_info=True)
+                record["status"] = ActionStatus.FAILED
+                record["error"] = f"execution failed ({type(exc).__name__})"
+        else:
+            record["status"] = ActionStatus.FAILED
+            record["error"] = f"No executor found for action type: {request.action_type}"
+
+    # Persist again so the executed status is durable, not just the pending one.
+    await action_store.save(record)
+
+    logger.info(
+        "Action submitted",
+        action_id=str(request.id),
+        action_type=request.action_type,
+        status=record["status"],
+        blast_radius=blast_radius,
+    )
+    return record
+
+
+def _bind_approver(
+    record: dict[str, Any],
+    action_id: str,
+    approver: ActionPrincipal | None,
+    assertion: ChatOpsApprover | None,
+    *,
+    require: bool,
+) -> ActionPrincipal | None:
+    """Resolve and authorize the identity behind an approve/reject call.
+
+    Returns the bound principal, or ``None`` when no identity was supplied and
+    ``require`` is false. Raises ``HTTPException`` on denial.
+
+    A ChatOps assertion carries identity only — never permissions — because a
+    bot that asserted its own permissions could grant itself anything. The
+    mapping from a verified platform user to a principal is operator
+    configuration; an unmapped user is refused rather than admitted with an
+    empty permission set.
+
+    ``require`` is true for approve and false for reject. The asymmetry is
+    deliberate: an approval with no identity cannot be evaluated against
+    separation of duties, while a rejection causes no vendor effect and has no
+    human at all when it comes from the approval-timeout scheduler — requiring
+    one would leave expired requests stuck in ``awaiting_approval`` forever.
+    """
+    if approver is None and assertion is not None:
+        approver = resolve_approver(assertion.platform, assertion.platform_user_id)
+        if approver is None:
+            logger.warning(
+                "approval_denied_unmapped_identity",
+                action_id=action_id,
+                platform=assertion.platform,
+            )
+            detail = f"{assertion.platform} user is not mapped to an AiSOC approver. Add them to AISOC_CHATOPS_APPROVERS."
+            raise HTTPException(status_code=403, detail=detail)
+
+    if approver is None:
+        settings = get_settings()
+        if require and (settings.AISOC_ACTIONS_REQUIRE_APPROVER or settings.AISOC_ACTIONS_REQUIRE_PRINCIPAL):
+            raise HTTPException(status_code=403, detail="an approver identity is required")
+        return None
+
+    try:
+        authorize_approver(record, approver)
+    except ActionAuthzError as exc:
+        logger.warning("Approval denied", action_id=action_id, reason=str(exc))
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
+    return approver
+
+
+@router.post("/actions/{action_id}/approve")
+async def approve_action(
+    action_id: str,
+    approver: ActionPrincipal | None = None,
+    chatops_approver: ChatOpsApprover | None = None,
+    _auth: None = Depends(require_service_auth),
+):
+    """Approve a pending action (human-in-the-loop gate).
+
+    W4.4 — the approver is bound to the decision: they must hold the action's
+    required permission and must not be the requester. T3.6 — an approval with
+    no resolvable identity is refused by default
+    (``AISOC_ACTIONS_REQUIRE_APPROVER``), because separation of duties cannot
+    be evaluated against nobody. ChatOps callers send ``chatops_approver``
+    (verified platform identity) and the mapping supplies the permissions."""
+    record = await action_store.get(action_id)
+    if not record:
+        raise HTTPException(status_code=404, detail="Action not found")
+    if record["status"] != ActionStatus.AWAITING_APPROVAL:
+        raise HTTPException(status_code=400, detail=f"Action is not awaiting approval (current: {record['status']})")
+
+    bound = _bind_approver(record, action_id, approver, chatops_approver, require=True)
+    if bound is not None:
+        record["approved_by_user_id"] = bound.user_id
+
+    # Reconstruct the request as submitted, parameters included. Dropping
+    # them turned an approved action into a different action that still
+    # reported success.
+    request = ActionRequest(
+        id=UUID(action_id),
+        incident_id=UUID(record["incident_id"]),
+        tenant_id=UUID(record["tenant_id"]),
+        action_type=ActionType(record["action_type"]),
+        target=record["target"],
+        rationale=record["rationale"],
+        parameters=dict(record.get("parameters") or {}),
+        # The bound approver, not the original requester: the executor's
+        # authorization has to evaluate the identity that authorised this run.
+        principal=bound,
+    )
+
+    executor = EXECUTOR_REGISTRY.get(request.action_type)
+    if executor:
+        result = await executor.execute(request)
+        record["status"] = result.status
+        record["output"] = result.output
+    else:
+        record["status"] = ActionStatus.FAILED
+        record["error"] = "No executor available"
+
+    await action_store.save(record)
+    logger.info("Action approved and executed", action_id=action_id, status=record["status"])
+    return record
+
+
+@router.post("/actions/{action_id}/reject")
+async def reject_action(
+    action_id: str,
+    approver: ActionPrincipal | None = None,
+    chatops_approver: ChatOpsApprover | None = None,
+    _auth: None = Depends(require_service_auth),
+):
+    """Reject a pending action.
+
+    Binds the deciding identity on the same terms as approve. A rejection used
+    to take no identity and record none, so "who declined to contain this
+    host, and were they entitled to" had no answer — which matters as much as
+    the approve side during an incident review.
+    """
+    record = await action_store.get(action_id)
+    if not record:
+        raise HTTPException(status_code=404, detail="Action not found")
+
+    bound = _bind_approver(record, action_id, approver, chatops_approver, require=False)
+    if bound is not None:
+        record["rejected_by_user_id"] = bound.user_id
+
+    record["status"] = ActionStatus.REJECTED
+    await action_store.save(record)
+    logger.info(
+        "Action rejected",
+        action_id=action_id,
+        rejected_by=bound.user_id if bound else None,
+    )
+    return record
+
+
+@router.get("/actions/{action_id}")
+async def get_action(action_id: str, _auth: None = Depends(require_service_auth)):
+    """Get action status and result.
+
+    Behind the service guard: an action record names the host or account an
+    action was aimed at and the parameters it ran with, and ``GET`` by id was
+    reachable with no credential at all. ``aisoc_action_records`` carries no
+    RLS policy, so the id was the only thing standing in front of it.
+    """
+    record = await action_store.get(action_id)
+    if not record:
+        raise HTTPException(status_code=404, detail="Action not found")
+    return record
+
+
+_CHOICE_COPY: dict[str, dict[str, str]] = {
+    "acknowledge": {
+        "headline": "Thanks — recorded as acknowledged.",
+        "body": "We've logged that you confirmed this activity. You can close this tab.",
+    },
+    "deny": {
+        "headline": "Thanks — recorded as denied.",
+        "body": (
+            "We've flagged this as suspicious. A security analyst will follow up shortly. "
+            "If you didn't expect this prompt, please contact your security team."
+        ),
+    },
+    "escalate": {
+        "headline": "Thanks — escalated to security.",
+        "body": "We've routed this to your security team for review.",
+    },
+}
+
+
+def _chatops_response_html(headline: str, body: str, *, ok: bool = True) -> str:
+    """Tiny self-contained response page rendered to the user's browser.
+
+    Slack/Teams open the callback URL in a normal browser tab, so we can't
+    redirect into the AiSOC console (the user may not have one). A static
+    HTML acknowledgement is the smallest UX that confirms the click landed
+    without leaking incident details into a URL the user might forward.
+    """
+    color = "#0a7" if ok else "#a33"
+    return (
+        '<!doctype html><html lang="en"><head>'
+        '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+        "<title>AiSOC verification</title>"
+        "<style>"
+        "body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;"
+        "background:#0b1220;color:#e6edf3;margin:0;padding:0;display:flex;min-height:100vh;"
+        "align-items:center;justify-content:center}"
+        ".card{max-width:480px;background:#111827;border:1px solid #1f2937;border-radius:12px;"
+        "padding:32px;box-shadow:0 8px 24px rgba(0,0,0,.4)}"
+        f".dot{{width:12px;height:12px;border-radius:50%;background:{color};display:inline-block;margin-right:8px}}"
+        "h1{margin:0 0 12px 0;font-size:18px;display:flex;align-items:center}"
+        "p{margin:0;color:#9ca3af;line-height:1.5}"
+        "</style></head><body>"
+        f'<div class="card"><h1><span class="dot"></span>{headline}</h1><p>{body}</p></div>'
+        "</body></html>"
+    )
+
+
+@router.get("/chatops/callback", response_class=HTMLResponse)
+async def chatops_callback(token: str = Query(..., min_length=8)):
+    """Receive a user's response to a ChatOps verification prompt.
+
+    The token is the HMAC-signed payload minted by
+    :class:`app.executors.chatops.ChatOpsVerifyExecutor`. We re-verify
+    the signature + expiry, dedupe against ``_chatops_replied``, write a
+    ``chatops.verify.responded`` event onto the case timeline, and update
+    the in-memory action record so ``GET /actions/{id}`` reflects the
+    final status.
+
+    Returns an HTML acknowledgement page so the click lands cleanly in
+    Slack/Teams' default browser tab.
+    """
+    settings = get_settings()
+    secret = settings.AISOC_CHATOPS_RESPONSE_SECRET
+
+    try:
+        claims = verify_token(token, secret)
+    except ChatOpsTokenError as exc:
+        reason = str(exc)
+        logger.info("ChatOps callback rejected", reason=reason)
+        message = {
+            "expired": ("This verification link has expired. If you still need to respond, contact your security team."),
+            "invalid_signature": "This verification link is invalid.",
+        }.get(reason, "This verification link is invalid.")
+        return HTMLResponse(
+            content=_chatops_response_html("Couldn't record your response", message, ok=False),
+            status_code=400,
+        )
+
+    action_id_str = str(claims.action_id)
+    if action_id_str in _chatops_replied:
+        return HTMLResponse(
+            content=_chatops_response_html(
+                "Response already recorded",
+                "We've already logged a response for this prompt. No further action is needed.",
+            ),
+            status_code=200,
+        )
+
+    record = await action_store.get(action_id_str)
+    # We still record on the timeline even if the record is gone entirely
+    # (no database configured, and this replica did not handle the submit).
+    # The case timeline is durable either way — losing the local record
+    # must not lose the user's reply.
+
+    timeline_warning: str | None = None
+    try:
+        await post_timeline_event(
+            case_id=claims.case_id,
+            event_type="chatops.verify.responded",
+            content=(f"User {claims.user_ref or 'unknown'} responded '{claims.choice}' to the ChatOps verification prompt."),
+            metadata={
+                "action_id": action_id_str,
+                "tenant_id": str(claims.tenant_id),
+                "choice": claims.choice,
+                "user_ref": claims.user_ref,
+                "issued_at": claims.issued_at,
+                "responded_at": int(datetime.now(UTC).timestamp()),
+            },
+        )
+    except TimelineClientError as exc:
+        timeline_warning = str(exc)
+        logger.warning(
+            "ChatOps response timeline write failed",
+            action_id=action_id_str,
+            case_id=str(claims.case_id),
+            error=timeline_warning,
+        )
+
+    _chatops_replied.add(action_id_str)
+
+    if record is not None:
+        record["status"] = ActionStatus.COMPLETED
+        record.setdefault("output", {})
+        record["output"].update(
+            {
+                "user_choice": claims.choice,
+                "user_ref": claims.user_ref,
+                "responded_at": datetime.now(UTC).isoformat(),
+            }
+        )
+        if timeline_warning:
+            record["output"]["timeline_warning"] = timeline_warning
+
+    logger.info(
+        "ChatOps response recorded",
+        action_id=action_id_str,
+        case_id=str(claims.case_id),
+        choice=claims.choice,
+    )
+
+    copy = _CHOICE_COPY.get(claims.choice, _CHOICE_COPY["acknowledge"])
+    return HTMLResponse(
+        content=_chatops_response_html(copy["headline"], copy["body"]),
+        status_code=200,
+    )
+
+
+@router.get("/health")
+async def health():
+    return {"status": "healthy", "service": "aisoc-actions"}
