@@ -1,0 +1,21 @@
+# Gemini Code Assist for GitHub Configuration File
+# This file enables automatic pull request summaries and code reviews
+# when a pull request is opened.
+
+# For documentation, see: https://developers.google.com/gemini-code-assist/docs/customize-gemini-behavior-github
+
+version: 1
+
+code_review:
+  # Disables Gemini from acting on pull requests, set to 'false' to enable.
+  disable: false
+
+  pull_request_opened:
+    # Posts a pull request summary when the PR is opened.
+    summary: true
+    # Posts a code review when the PR is opened.
+    code_review: true
+
+  # Other settings that control the content of the review
+  comment_severity_threshold: MEDIUM
+  max_review_comments: -1
