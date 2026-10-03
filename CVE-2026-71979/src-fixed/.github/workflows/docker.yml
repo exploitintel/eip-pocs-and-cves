@@ -1,0 +1,35 @@
+name: Docker
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - '.github/docker/*'
+      - '.github/workflows/docker.yml'
+  schedule:
+    - cron: '0 7 */7 * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        container: ["debian", "ubuntu", "fedora", "archlinux"]
+
+    steps:
+      - name: Login to Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          file: ./.github/docker/Dockerfile.${{ matrix.container }}
+          push: true
+          tags: ghcr.io/indilib/${{ matrix.container }}
