@@ -1,0 +1,15 @@
+[submodule "ZLToolKit"]
+	path = 3rdpart/ZLToolKit
+	url = https://github.com/ZLMediaKit/ZLToolKit
+[submodule "3rdpart/media-server"]
+	path = 3rdpart/media-server
+	url = https://github.com/ireader/media-server
+[submodule "3rdpart/jsoncpp"]
+    path = 3rdpart/jsoncpp
+    url = https://github.com/open-source-parsers/jsoncpp.git
+[submodule "www/webassist"]
+	path = www/webassist
+	url = https://github.com/1002victor/zlm_webassist
+[submodule "3rdpart/pybind11"]
+	path = 3rdpart/pybind11
+	url = https://github.com/pybind/pybind11.git

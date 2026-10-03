@@ -1,0 +1,157 @@
+﻿/*
+ * Copyright (c) 2016-present The ZLMediaKit project authors. All Rights Reserved.
+ *
+ * This file is part of ZLMediaKit(https://github.com/ZLMediaKit/ZLMediaKit).
+ *
+ * Use of this source code is governed by MIT-like license that can be found in the
+ * LICENSE file in the root of the source tree. All contributing project authors
+ * may be found in the AUTHORS file in the root of the source tree.
+ */
+
+#include "TSDecoder.h"
+namespace mediakit {
+
+bool TSSegment::isTSPacket(const char *data, size_t len){
+    return len == TS_PACKET_SIZE && ((uint8_t*)data)[0] == TS_SYNC_BYTE;
+}
+
+void TSSegment::setOnSegment(TSSegment::onSegment cb) {
+    _onSegment = std::move(cb);
+}
+
+void TSSegment::onReset() {
+    _is_synced = false;
+}
+
+ssize_t TSSegment::onRecvHeader(const char *data, size_t len) {
+    if (!isTSPacket(data, len)) {
+        WarnL << "不是ts包:" << (int) (data[0]) << " " << len;
+        return 0;
+    }
+    _onSegment(data, len);
+    return 0;
+}
+
+const char *TSSegment::onSearchPacketTail(const char *data, size_t len) {
+    auto bytes = (const uint8_t *) data;
+    if (_is_synced) {
+        if (len < _size) {
+            return nullptr;
+        }
+        // 锁定后只按当前同步字节分包，TS 语义和错误处理交给 libmpegts
+        // Once locked, split only by the current sync byte; leave TS semantics and error handling to libmpegts
+        if (bytes[0] == TS_SYNC_BYTE) {
+            return data + _size;
+        }
+        _is_synced = false;
+    }
+
+    // 单个完整包可以直接转交，但不足以确认后续数据的包边界
+    // A single complete packet can be forwarded, but is insufficient to confirm subsequent packet boundaries
+    if (len == _size && bytes[0] == TS_SYNC_BYTE) {
+        return data + _size;
+    }
+
+    return searchPacketTailUnSynced(data, len);
+}
+
+#if defined(_MSC_VER)
+__declspec(noinline)
+#elif defined(__GNUC__)
+__attribute__((noinline))
+#endif
+const char *TSSegment::searchPacketTailUnSynced(const char *data, size_t len) {
+    if (len > _size) {
+        const char *candidate = data;
+        const char *search_end = data + len - _size;
+        while (candidate < search_end) {
+            candidate = (const char *) memchr(candidate, TS_SYNC_BYTE, search_end - candidate);
+            if (!candidate) {
+                break;
+            }
+            if ((uint8_t) candidate[_size] == TS_SYNC_BYTE) {
+                _is_synced = true;
+                return candidate == data ? data + _size : candidate;
+            }
+            ++candidate;
+        }
+    }
+
+    // 等价于 len > 4 * _size，但不会发生无符号整数溢出
+    // Equivalent to len > 4 * _size without unsigned integer overflow
+    if (len && _size <= (len - 1) / 4) {
+        // 尾部同步字节可能在下一次输入后组成同步对，因此只丢弃它之前的数据
+        // A trailing sync byte may form a sync pair after the next input, so discard only the data before it
+        const char *tail = data + len - _size;
+        auto candidate = memchr(tail, TS_SYNC_BYTE, data + len - tail);
+        if (candidate) {
+            return (const char *) candidate;
+        }
+        // 数据这么多都没ts包，全部清空  [AUTO-TRANSLATED:95bece98]
+        // So much data but no ts packets, clear all
+        return data + len;
+    }
+    // 等待更多数据  [AUTO-TRANSLATED:b47fbc81]
+    // Wait for more data
+    return nullptr;
+}
+
+////////////////////////////////////////////////////////////////
+
+#if defined(ENABLE_HLS)
+#include "mpeg-ts.h"
+TSDecoder::TSDecoder() : _ts_segment() {
+    _ts_segment.setOnSegment([this](const char *data, size_t len){
+        ts_demuxer_input(_demuxer_ctx,(uint8_t*)data,len);
+    });
+    _demuxer_ctx = ts_demuxer_create([](void* param, int program, int stream, int codecid, int flags, int64_t pts, int64_t dts, const void* data, size_t bytes){
+        TSDecoder *thiz = (TSDecoder*)param;
+        if (thiz->_on_decode) {
+            if (flags & MPEG_FLAG_PACKET_CORRUPT) {
+                WarnL << "ts packet lost, dts:" << dts << " pts:" << pts << " bytes:" << bytes;
+            } else {
+                thiz->_on_decode(stream, codecid, flags, pts, dts, data, bytes);
+            }
+        }
+        return 0;
+    },this);
+
+    ts_demuxer_notify_t notify = {
+            [](void *param, int stream, int codecid, const void *extra, int bytes, int finish) {
+                TSDecoder *thiz = (TSDecoder *) param;
+                if (thiz->_on_stream) {
+                    thiz->_on_stream(stream, codecid, extra, bytes, finish);
+                }
+            }
+    };
+    ts_demuxer_set_notify((struct ts_demuxer_t *) _demuxer_ctx, &notify, this);
+}
+
+TSDecoder::~TSDecoder() {
+    ts_demuxer_destroy(_demuxer_ctx);
+}
+
+ssize_t TSDecoder::input(const uint8_t *data, size_t bytes) {
+    if (_ts_segment.remainDataSize() == 0 && TSSegment::isTSPacket((char *)data, bytes)) {
+        return ts_demuxer_input(_demuxer_ctx, (uint8_t *) data, bytes);
+    }
+    try {
+        _ts_segment.input((char *) data, bytes);
+    } catch (...) {
+        // ts解析失败，清空缓存数据  [AUTO-TRANSLATED:18b3de5b]
+        // ts parsing failed, clear cache data
+        _ts_segment.reset();
+        throw;
+    }
+    return bytes;
+}
+
+void TSDecoder::clearInputCache() {
+    // 只清理未完成的 TS 输入缓存，不重置 libmpegts 或 flush 残留帧。
+    // Clear only incomplete TS input; do not reset libmpegts or flush pending frames.
+    _ts_segment.reset();
+}
+
+#endif//defined(ENABLE_HLS)
+
+}//namespace mediakit

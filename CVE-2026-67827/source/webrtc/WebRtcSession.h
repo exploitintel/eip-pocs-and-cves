@@ -1,0 +1,56 @@
+﻿/*
+ * Copyright (c) 2016-present The ZLMediaKit project authors. All Rights Reserved.
+ *
+ * This file is part of ZLMediaKit(https://github.com/ZLMediaKit/ZLMediaKit).
+ *
+ * Use of this source code is governed by MIT-like license that can be found in the
+ * LICENSE file in the root of the source tree. All contributing project authors
+ * may be found in the AUTHORS file in the root of the source tree.
+ */
+
+
+#ifndef ZLMEDIAKIT_WEBRTCSESSION_H
+#define ZLMEDIAKIT_WEBRTCSESSION_H
+
+#include "WebRtcTransport.h"
+#include "Network/Session.h"
+#include "Http/HttpRequestSplitter.h"
+
+namespace toolkit {
+    class TcpServer;
+}
+
+namespace mediakit {
+
+class WebRtcTransportImp;
+
+class WebRtcSession : public toolkit::Session, public HttpRequestSplitter {
+public:
+    WebRtcSession(const toolkit::Socket::Ptr &sock);
+
+    void attachServer(const toolkit::Server &server) override;
+    void onRecv(const toolkit::Buffer::Ptr &) override;
+    void onError(const toolkit::SockException &err) override;
+    void onManager() override;
+    static toolkit::EventPoller::Ptr queryPoller(const toolkit::Buffer::Ptr &buffer);
+
+protected:
+    WebRtcTransportImp::Ptr _transport;
+
+private:
+    //// HttpRequestSplitter override ////
+    ssize_t onRecvHeader(const char *data, size_t len) override;
+    const char *onSearchPacketTail(const char *data, size_t len) override;
+
+    void onRecv_l(const char *data, size_t len);
+
+private:
+    bool _over_tcp = false;
+    bool _find_transport = true;
+    toolkit::Ticker _ticker;
+    std::weak_ptr<toolkit::TcpServer> _server;
+};
+
+}// namespace mediakit
+
+#endif //ZLMEDIAKIT_WEBRTCSESSION_H

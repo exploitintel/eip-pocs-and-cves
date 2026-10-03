@@ -1,0 +1,10 @@
+﻿file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/ssl.p12 DESTINATION ${PROJECT_BINARY_DIR}/bin)
+
+aux_source_directory(. TEST_SRC_LIST)
+foreach(TEST_SRC ${TEST_SRC_LIST})
+    STRING(REGEX REPLACE "^\\./|\\.c[a-zA-Z0-9_]*$" "" TESTER ${TEST_SRC})
+    message(STATUS "add tester :${TESTER}")
+    add_executable(${TESTER} ${TEST_SRC})
+    target_link_libraries(${TESTER} PRIVATE ${PROJECT_NAME})
+    set_target_properties(${TESTER} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+endforeach()
