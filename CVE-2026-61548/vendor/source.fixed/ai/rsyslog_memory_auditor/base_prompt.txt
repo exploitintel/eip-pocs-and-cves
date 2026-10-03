@@ -1,0 +1,32 @@
+You are a senior C security and performance auditor. Analyze the following rsyslog module code specifically for memory lifecycle and ownership issues.
+
+Check for the following common rsyslog patterns/antipatterns:
+
+1. **Error Path Leaks**: 
+   - Trace every `RS_RET` return path. 
+   - Ensure that any memory allocated via `malloc`, `calloc`, or `strdup` (common in `setInstParam`) is freed before an error return.
+   - Check if `pData` or `WID` sub-elements are leaked during partial initialization failure.
+
+2. **Ownership Ambiguity**:
+   - Determine if memory passed to a function is "owned" (caller must free) or "transferred" (callee must free).
+   - In rsyslog, `pData` is typically freed in `freeInstance`, and `WID` in `freeWrkrInstance`. Ensure no double-frees occur during HUP or teardown.
+
+3. **String Handling**:
+   - Look for `strdup()` calls. Are they matched by a `free()`?
+   - Check for buffer overflows in `snprintf` or `strcpy` (though `format-code.sh` helps, logic errors remain).
+
+4. **Module Lifecycle**:
+   - Verify `modInit` and `modExit` balance global resource allocations.
+   - Ensure `createInstance` results in a fully initialized `pData` that `freeInstance` can safely clean up (even if only partially initialized).
+
+5. **Memory Macros**:
+   - Prefer `CHKmalloc()` for allocations. It handles the `NULL` check and jumps to `finalize_it` (or the local error label) automatically.
+   - If `malloc` or `strdup` is used directly, verify there is an immediate `NULL` check.
+
+6. **Function-Specific Checks**:
+   - `es_str2cstr()` can fail and return `NULL`. Every call MUST be followed by a `NULL` check (or wrapped in `CHKmalloc` logic if applicable).
+
+**Output**:
+- List any identified risks (e.g., "Line 123: es_str2cstr return is not checked").
+- Provide a summary of "Clean" vs "At Risk" allocations.
+- Suggest specific `free()` placements or macro replacements (like `CHKmalloc`).

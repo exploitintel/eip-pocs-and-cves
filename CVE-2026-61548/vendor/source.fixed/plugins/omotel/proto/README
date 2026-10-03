@@ -1,0 +1,10 @@
+# OTLP Proto Definitions
+
+These `.proto` files are vendored from the OpenTelemetry Protocol specification.
+
+- **Source**: https://github.com/open-telemetry/opentelemetry-proto
+- **Version**: v1.3.2 (2024-06-20)
+- **License**: Apache License 2.0
+
+Only the logs-related subset is included (common, resource, logs).
+To regenerate C bindings, run `protoc-c` via the Makefile build rules.
