@@ -1,0 +1,199 @@
+/*
+    Giotto driver
+    Copyright (C) 2023 Jasem Mutlaq
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+*/
+
+#include "giotto.h"
+
+#include <memory>
+#include <unistd.h>
+#include <connectionplugins/connectionserial.h>
+
+static std::unique_ptr<GIOTTO> sesto(new GIOTTO());
+
+GIOTTO::GIOTTO() : LightBoxInterface(this)
+{
+    setVersion(1, 0);
+}
+
+GIOTTO::~GIOTTO()
+{
+    if (isConnected())
+        Disconnect();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool GIOTTO::initProperties()
+{
+
+    INDI::DefaultDevice::initProperties();
+
+    LI::initProperties(MAIN_CONTROL_TAB, CAN_DIM);
+
+    setDriverInterface(AUX_INTERFACE | LIGHTBOX_INTERFACE);
+
+    addAuxControls();
+
+    serialConnection = new Connection::Serial(this);
+    serialConnection->setDefaultBaudRate(Connection::Serial::B_115200);
+    serialConnection->registerHandshake([&]()
+    {
+        return Handshake();
+    });
+    registerConnection(serialConnection);
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool GIOTTO::updateProperties()
+{
+    INDI::DefaultDevice::updateProperties();
+    LI::updateProperties();
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+void GIOTTO::ISGetProperties(const char *dev)
+{
+    INDI::DefaultDevice::ISGetProperties(dev);
+
+    // Get Light box properties
+    LI::ISGetProperties(dev);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool GIOTTO::Disconnect()
+{
+    m_GIOTTO->setLightEnabled(false);
+    return INDI::DefaultDevice::Disconnect();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool GIOTTO::Handshake()
+{
+    PortFD = serialConnection->getPortFD();
+    m_GIOTTO.reset(new PrimalucaLabs::GIOTTO(getDeviceName(), PortFD));
+    uint16_t max = 0;
+    if (m_GIOTTO->getMaxBrightness(max))
+    {
+        LightIntensityNP[0].setMax(max);
+        LOGF_INFO("%s is online.", getDeviceName());
+
+        uint16_t value = 0;
+        if (m_GIOTTO->getBrightness(value))
+            LightIntensityNP[0].setValue(value);
+
+        auto lightEnabled = m_GIOTTO->isLightEnabled();
+        LightSP[0].setState(lightEnabled ? ISS_ON : ISS_OFF);
+        LightSP[1].setState(lightEnabled ? ISS_OFF : ISS_ON);
+
+        return true;
+    }
+
+    LOG_INFO("Error retrieving data from device, please ensure GIOTTO is powered and the port is correct.");
+    return false;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+const char *GIOTTO::getDefaultName()
+{
+    return "GIOTTO";
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool GIOTTO::ISNewNumber(const char *dev, const char *name, double values[], char *names[], int n)
+{
+    if (LI::processNumber(dev, name, values, names, n))
+        return true;
+
+    return INDI::DefaultDevice::ISNewNumber(dev, name, values, names, n);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool GIOTTO::ISNewText(const char *dev, const char *name, char *texts[], char *names[], int n)
+{
+    if (LI::processText(dev, name, texts, names, n))
+        return true;
+
+    return INDI::DefaultDevice::ISNewText(dev, name, texts, names, n);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool GIOTTO::ISNewSwitch(const char *dev, const char *name, ISState *states, char *names[], int n)
+{
+    if (LI::processSwitch(dev, name, states, names, n))
+        return true;
+
+    return INDI::DefaultDevice::ISNewSwitch(dev, name, states, names, n);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool GIOTTO::ISSnoopDevice(XMLEle *root)
+{
+    LI::snoop(root);
+
+    return INDI::DefaultDevice::ISSnoopDevice(root);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool GIOTTO::SetLightBoxBrightness(uint16_t value)
+{
+    return m_GIOTTO->setBrightness(value);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool GIOTTO::EnableLightBox(bool enable)
+{
+    return m_GIOTTO->setLightEnabled(enable);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool GIOTTO::saveConfigItems(FILE *fp)
+{
+    INDI::DefaultDevice::saveConfigItems(fp);
+
+    return LI::saveConfigItems(fp);
+}
