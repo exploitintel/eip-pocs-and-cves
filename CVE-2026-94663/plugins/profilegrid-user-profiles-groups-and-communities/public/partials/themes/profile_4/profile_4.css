@@ -1,0 +1,290 @@
+/*----- Theme Fourth----*/
+
+.pm-group-view.pg-theme-fourth .pg-profile-area-left {
+    width: 100%;
+    max-width: 230px;
+}
+
+.pm-group-view.pg-theme-fourth .pg-profile-area-right {  
+    width: calc(100% - 240px);
+    max-width: 100%;
+    position: relative;
+    margin-left: 10px;
+}
+
+
+.pm-group-view.pg-theme-fourth .pg-profile-area-wrap {
+    background-color: #fff;
+    width: 100%;
+    border: 1px solid rgba(232, 232, 232, 0.28);
+    position: relative;
+    height: auto;
+    min-height: 365px;
+}
+
+.pm-group-view.pg-theme-fourth .pm-cover-image {
+    overflow: hidden;
+    height: 130px;
+}
+
+.pm-group-view.pg-theme-fourth .pm-header-section .pm-cover-image img {
+    clip: rect(0px, 1200px, 130px, 0px) !important;
+    height: 130px;
+}
+
+.pm-group-view.pg-theme-fourth .pg-profile-area-wrap .pm-profile-image { 
+    position: relative;
+    top: 0px;
+    border: 1px solid #dedede;
+
+}
+
+.pm-group-view.pg-theme-fourth .pg-profile-area-wrap .pm-profile-title{
+    width: 100%;
+    margin: 0px;
+    margin-left: 1px;
+    text-align: center;
+}
+
+.pm-group-view.pg-theme-fourth .pm-profile-title-header {
+    height: auto;
+}
+
+.pm-group-view.pg-theme-fourth .pm-header-section { 
+    height: 100%;
+    overflow: visible;
+    margin-bottom: 35px;
+    border-radius: 0px;
+    border: 0px;
+}
+
+.pm-group-view.pg-theme-fourth .pg-additional-header {   
+    width: 100%;
+    position: relative;
+
+}
+
+.pm-group-view.pg-theme-fourth .pg-additional-info {
+    width: 100%;
+}
+
+.pm-group-view.pg-theme-fourth .pg-additional-info-wrap {
+    border: 1px solid rgba(232, 232, 232, 0.28);
+    width: 100%;
+    float: left;
+    margin-top: 20px;
+}
+
+.pm-group-view.pg-theme-fourth .pg-additional-info-wrap .pg-additional-col {
+    width: 100%;
+    text-align: center;
+}
+
+.pm-group-view.pg-theme-fourth .pg-additional-info-wrap .pg-additional-col .pm-user-mycred-rank-points { 
+    width: 100%;
+    margin: 10px 0px;
+}
+
+.pm-group-view.pg-theme-fourth .pg-additional-info-wrap .pg-additional-col .pm-user-mycred-rank-points .pm-user-mycred-rank { text-align: center}
+
+.pm-group-view.pg-theme-fourth .pg-additional-info-wrap .pg-additional-col .pm-user-mycred-rank-points .pm-user-mycred-rank .pm-user-mycred-rank-title,
+.pm-group-view.pg-theme-fourth .pg-additional-info-wrap .pg-additional-col .pm-user-mycred-rank-points .pm-user-mycred-rank .pm-user-mycred-rank-logo{
+    float: none;
+}
+
+.pm-group-view.pg-theme-fourth .pg-additional-info-wrap .pg-additional-col .pm-user-mycred-rank-points .mycred-rank-progress {  
+    width: 75%;
+    margin: 0px auto;
+    float: none;
+    display: inline-block;
+}
+
+.pm-group-view.pg-theme-fourth .pg-additional-info-wrap .pg-additional-col .pm-user-woocommerce-field {  
+    padding: 12px 0px 12px 0px;
+    border-bottom: 1px solid rgba(232, 232, 232, 0.28);
+}
+
+.pm-group-view.pg-theme-fourth .pm-profile-title-header .pm-group-icon {   
+    position: absolute;
+    bottom: 150px;
+    right: 0px;
+}
+
+.pm-group-view.pg-theme-fourth .pm-user-name {
+    font-size: 1.5em;
+    height: 1.8em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    margin-bottom: 11px;
+
+}
+
+
+
+
+.pm-group-view.pg-theme-fourth .pg-additional-header .pg-profile-menu {   
+    margin-left: 1%;
+    width: 99%;
+}
+
+.pm-group-view.pg-theme-fourth .pg-additional-header .pg-profile-menu ul.pm-profile-tab-wrap {  
+    padding-left: 12px;
+    border: 1px solid rgba(232, 232, 232, 0.5);
+}
+
+.pm-group-view.pg-theme-fourth .pm-cover-image .pg-cover-image-mask {  
+    /*background-color: rgba(0, 0, 0, 0.5);*/
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    max-height: 205px;
+}
+
+.pm-group-view.pg-theme-fourth .pm-cover-image .pg-item-image-change {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    color: #fff;
+    width: 44px;
+    height: 31px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 18px;
+    background-color: rgba(125, 125, 125, 0.56);
+}
+.pm-group-view.pg-theme-fourth .pg-profile-area-wrap .pm-profile-image {
+    border: 0px;
+    background-color: rgba(0, 0, 0, 0.22);
+    padding: 5px;
+    left: 62px;
+    width: 100%;
+    max-width: 100px;
+    height: 100px;
+}
+
+.pm-group-view.pg-theme-fourth .pg-profile-area-wrap .pm-profile-image img {
+    width: 90px;
+    height: 90px;
+}
+
+.pm-group-view.pg-theme-fourth .pg-profile-area-wrap .pg-profile-change-img {
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    font-size: 0.6em;
+    margin: 0px !important;
+    padding: 0px !important;
+    bottom: 0px;
+    line-height: 110px;
+    text-align: center;
+}
+
+.pm-group-view.pg-theme-fourth .pg-additional-info .pg-additional-col .pm-user-mycred-rank-points .pm-user-mycred-points { 
+    text-align: center;
+}
+
+
+.pmagic .pm-group-view.pg-theme-fourth  #pg-profile-tabs {
+    width: 100%;
+}
+
+
+.pmagic .pm-group-view.pg-theme-fourth .pg-profile-area-wrap .pg-profile-name-wrap {  
+    position: absolute;
+    width: 98%;
+    top: 80px;
+}
+
+
+.pm-group-view.pg-theme-fourth .pg-profile-area-wrap .pm-group-icon  {   
+    max-width: 270px;
+    height: 54px;
+    padding: 0px 10px;
+    width: 100%;
+    position: absolute;
+    bottom: 15px;
+    left: 0px;
+}
+
+.pm-group-view.pg-theme-fourth .pg-profile-area-wrap .pm-group-icon #pg-group-badge {  
+    margin: 0px 12px 0px 0px;
+    text-align: center;
+}
+
+
+.pmagic .pm-group-view .pm-section .pm-section-content .pmagic-form .pm-field-input { 
+    width:100%;
+}
+
+.pmagic .pm-group-view .pm-section .pm-section-content .pmagic-form .pm-field-lable { 
+    width:50%;
+}
+
+.pmagic .pm-group-view .pm-section .pm-section-content .pmagic-form .pm-form-field-icon:empty{display: none;}
+
+
+.pmagic .pm-group-view.pg-theme-fourth .pg-user-groups-wrap .pg-user-group-icon img {
+    object-fit: cover;
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* --- Element Visiblilty ---*/
+
+
+.pmagic .pm-group-view.pg-theme-fourth .pm-header-section.pm-without-cover-image .pg-profile-area-wrap .pg-profile-name-wrap {
+    top: 20px;
+}
+
+.pm-group-view.pg-theme-fourth .pg-profile-area-wrap .pm-profile-image.pm-no-profile-image {
+    display:none;
+}
+
+
+/* --- End Element Visiblilty ---*/
+
+
+
+/*--- Responsive------*/
+
+@media only screen and (max-width:1200px)  {
+
+}
+
+
+@media only screen and (max-width:979px) {
+
+    .pm-group-view.pg-theme-fourth .pg-profile-area-left {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .pm-group-view.pg-theme-fourth .pg-profile-area-right {
+        width: 100%;
+        margin: 20px 0px 0px 0px;
+    }
+
+    .pm-group-view.pg-theme-fourth .pg-profile-area-wrap .pm-profile-image {
+        left: calc(50% - 50px);
+    }
+
+    .pm-group-view.pg-theme-fourth .pg-profile-area-wrap .pm-group-icon {   
+        max-width: 100%;
+    }
+
+    .pm-group-view.pg-theme-fourth .pg-additional-info { text-align: center;}
+
+
+}
+
+
+
+
+@media only screen and (max-width:760px) {
+
+
+}
+
+@media only screen and (max-width:479px) {}

@@ -1,0 +1,194 @@
+
+
+.pmagic .pm-group-view.pg-theme-third .pm-profile-title-header {
+    height: auto;
+    bottom: 0px;
+    top: inherit;
+    position: absolute;
+    z-index: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.pmagic .pm-group-view.pg-theme-third .pm-profile-image {
+    left: 10px;
+    top: -55px;
+    border-radius: 0px;
+}
+
+.pmagic .pm-group-view.pg-theme-third .pm-profile-image img {
+    border-radius: 0px;
+}
+
+.pmagic .pm-group-view.pg-theme-third .pm-header-section img.pm-cover-image {
+    clip: rect(0px, 1200px, 445px, 0px) !important;
+    height: 445px;
+}
+
+.pmagic .pm-group-view.pg-theme-third .pm-profile-header-overlay {
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+
+.pmagic .pm-group-view.pg-theme-third .pm-profile-title-header .pm-user-name {
+    color: #fff;
+}
+
+.pmagic .pm-group-view.pg-theme-third .pm-profile-title-header .pm-user-group-name a span {
+    color:#fff;
+}
+
+
+.pmagic .pm-group-view.pg-theme-third .pm-profile-title .pm-user-woocommerce-field {
+    color: #fff;
+}
+
+.pmagic .pm-group-view.pg-theme-third .pm-profile-title-header .pm-user-mycred-rank-points{
+    color: #fff;
+}
+
+
+
+.pmagic .pm-group-view.pg-theme-third #unread_notification_count.thread-count-show {
+    left: calc(50% - 20px);
+    top: 40px;
+    right: unset;
+    border: 3px solid rgb(216 216 216 / 96%);
+    min-width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    line-height: 26px;
+}
+
+
+/* --- Element Visiblilty ---*/
+
+
+.pm-group-view.pg-theme-third .pm-profile-title-header.pm-without-profile-image .pm-profile-title {
+    margin-left: 14px;
+}
+
+.pm-group-view.pg-theme-third .pm-profile-title-header.pm-without-profile-image .pm-profile-image {
+    display:none;
+}
+
+.pm-group-view.pg-theme-third .pm-header-section.pm-without-cover-image {
+    height: 200px;
+    padding: 0px 0px;
+}
+
+
+.pmagic .pm-group-view.pg-theme-third .pm-profile-image img {
+    border-radius: 0px;
+    width: 120px;
+    height: 120px;
+}
+
+.pmagic .pm-group-view.pg-theme-third .pm-profile-image {
+    left: 10px;
+    top: -30px;
+    border-radius: 0px;
+}
+
+.pmagic .pm-group-view.pg-theme-third .pm-without-cover-image .pm-profile-title-header {
+    top: 0px;
+}
+
+
+/* --- End Element Visiblilty ---*/
+
+
+
+/*--- Responsive ---*/
+
+
+@media only screen and (max-width:1200px)  {
+
+}
+
+@media only screen and (max-width:979px) {
+
+    .pmagic .pm-group-view.pg-theme-third .pm-cover-image {
+        overflow: hidden;
+        height: auto;
+    }
+
+    .pmagic .pm-group-view.pg-theme-third .pm-header-section img.pm-cover-image {
+        clip: rect(0px, 1200px, 465px, 0px) !important;
+        height: 465px;
+    }
+
+
+
+    .pmagic .pm-group-view.pg-theme-third .pm-profile-image {
+        left: 24%;
+        left: calc(50% - 83px);
+        position: relative;
+    }
+
+    .pmagic .pm-group-view.pg-theme-third .pm-profile-title {
+        width: 100%;
+        margin: 0px auto;
+        text-align: center;
+        margin-top: -40px;
+    }
+
+    .pmagic .pm-group-view.pg-theme-third .pm-profile-title-header {
+        height: auto;
+        position: relative;
+        top: 0px;
+    }
+
+    .pmagic .pm-group-view.pg-theme-third .pm-user-mycred-rank-points {
+        width: 70%;
+        margin: 15px auto;
+        float: none;
+        display: flow-root;
+        text-align: center;
+    }
+
+    .pmagic .pm-group-view.pg-theme-third .pm-user-mycred-rank .pm-user-mycred-rank-title,
+    .pmagic .pm-group-view.pg-theme-third .pm-user-mycred-rank .pm-user-mycred-rank-logo{
+        display: inline-block;
+        float: none;
+    }
+
+    .pmagic .pm-group-view.pg-theme-third .pm-group-icon {
+        max-width: 100%;
+    }
+
+    .pmagic .pm-group-view.pg-theme-third .pm-group-icon #pg-group-badge {
+        text-align: center;
+    }
+
+    .pmagic .pm-group-view.pg-theme-third .pm-header-section {
+        height: auto;
+    }
+    
+      .pmagic .pm-group-view.pg-theme-third .pm-profile-image {
+        left: 24%;
+        top:12px;
+        left: calc(50% - 70px);
+        position: absolute;
+    }
+
+    .pmagic .pm-group-view.pg-theme-third .pm-profile-title {
+        margin-top: 144px;
+    }
+
+
+}
+
+@media only screen and (max-width:760px) {
+
+  
+
+
+}
+
+@media only screen and (max-width:479px) {
+
+}

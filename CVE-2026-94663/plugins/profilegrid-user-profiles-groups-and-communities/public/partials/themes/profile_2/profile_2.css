@@ -1,0 +1,149 @@
+
+.pm-group-view.pg-theme-second .pm-header-section {
+    border-radius: 0px;
+    border: 1px solid #e8e8e9;
+    box-shadow: 0 3px 5px 0 rgba(197, 197, 197, 0.30);
+    height: auto;
+}
+
+.pm-group-view.pg-theme-second .pm-cover-image {
+    overflow: hidden;
+    height: 299px;
+}
+
+.pm-group-view.pg-theme-second .pm-cover-image img {
+    clip: rect(0px, 1200px, 299px, 0px) !important;
+    height: 299px;
+}
+
+.pm-group-view.pg-theme-second .pm-profile-title-header {
+    position: relative;
+    background-color: #fff;
+    height: auto;
+}
+
+.pm-group-view.pg-theme-second .pm-profile-image {
+    left: 10px;
+    top: -24px;
+    border-radius: 0px;
+    background-color: rgba(255, 255, 255, 0.54);
+    padding: 8px;
+}
+
+.pm-group-view.pg-theme-second .pm-profile-image img {
+    border-radius: 0px;
+    max-width: 100%;
+    width: 120px;
+    height: 120px;
+}
+
+.pm-group-view.pg-theme-second .pm-profile-image #pm-change-image{
+    font-size: 12px;
+}
+
+.pm-group-view.pg-theme-second .pm-profile-header-overlay {
+    background-color: #fff;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.pmagic .pm-group-view.pg-theme-second .pm-profile-tab-wrap.pg-horizontal-responsive-menu {
+    width: 100%;
+}
+
+
+.pmagic .pm-group-view.pg-theme-second .pm-profile-title {
+    margin: 5px 0 0 180px;
+    margin-right: 14px;
+    height: 100%;
+}
+
+/* --- Element Visiblilty ---*/
+
+
+.pm-group-view.pg-theme-second .pm-profile-title-header.pm-without-profile-image .pm-profile-title {
+    margin-left: 14px;
+}
+
+.pm-group-view.pg-theme-second .pm-profile-title-header.pm-without-profile-image .pm-profile-image {
+    display:none;
+}
+
+.pm-group-view.pg-theme-second .pm-header-section.pm-without-cover-image {
+    padding: 0px 0px;
+}
+
+/* --- End Element Visiblilty ---*/
+
+
+/*--- Responsive ---*/
+
+
+@media only screen and (max-width:1200px)  {
+
+}
+
+@media only screen and (max-width:979px) {
+
+    .pm-group-view.pg-theme-second .pm-profile-image {
+        left: 24%;
+        left: calc(50% - 69px);
+        position: relative;
+    }
+
+    .pmagic .pm-group-view.pg-theme-second .pm-profile-title {
+        width: 100%;
+        margin: 0px auto;
+        text-align: center;
+        margin-top: -40px;
+    }
+
+    .pmagic .pm-group-view.pg-theme-second .pm-user-mycred-rank-points {
+        width: 70%;
+        margin: 15px auto;
+        float: none;
+        display: flow-root;
+        text-align: center;
+    }
+
+    .pmagic .pm-group-view.pg-theme-second .pm-user-mycred-rank .pm-user-mycred-rank-title,
+    .pmagic .pm-group-view.pg-theme-second .pm-user-mycred-rank .pm-user-mycred-rank-logo{
+        display: inline-block;
+        float: none;
+    }
+
+    .pmagic .pm-group-view.pg-theme-second .pm-group-icon {
+        max-width: 100%;
+    }
+
+    .pmagic .pm-group-view.pg-theme-second .pm-group-icon #pg-group-badge {
+        text-align: center;
+    }
+
+    .pm-group-view.pg-theme-second .pm-header-section {
+        height: auto;
+    }
+
+
+}
+
+@media only screen and (max-width:760px) {
+
+    .pm-group-view.pg-theme-second .pm-profile-image {
+        left: 24%;
+        left: calc(50% - 69px);
+        position: absolute;
+    }
+
+    .pmagic .pm-group-view.pg-theme-second .pm-profile-title {
+        margin-top: 130px;
+    }
+
+
+}
+
+@media only screen and (max-width:479px) {
+
+}
