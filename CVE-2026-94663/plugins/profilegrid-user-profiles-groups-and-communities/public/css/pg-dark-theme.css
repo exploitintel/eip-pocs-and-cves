@@ -1,0 +1,132 @@
+.pmagic .pm-profile-tab-wrap .pm-profile-tab a{color:currentColor;background-image:none;text-shadow:none}.pmagic .pm-border-bt{border-color:rgba(225,225,225,.25)}.pmagic .pm-border{border-color:rgba(225,225,225,.25)}.pmagic .pm-bg{background-color:rgba(255,255,255,.25)}.pm-bg-lt{background-color:rgba(255,255,255,.25)}body .pmagic a{background-image:none;text-shadow:none}.pmagic .pm-group-description .pm-card-value{color:currentColor}.pm-group-view .pm-user-group-name{color:currentColor}.pmagic .pm-group-container .pm-group .pm-group-info{color:currentColor}.pmagic .pm-users-search-page .pm-search-box .pm-search-input,.pmagic .pmrow .pm-field-input select{color:#757575}.pmagic .pm-group-view .pm-user-group-name a{color:#c3c3c3}ul.page-numbers li span.current{background:rgba(255,255,255,.25)!important}.pmagic ul.page-numbers li span.dots{background:rgba(255,255,255,.25)!important;color:#fff!important}.pm-group-view .pm-section .pm-section-nav-vertical ul li.ui-state-active,.pm-group-view .pm-section .pm-section-nav-vertical ul li.ui-state-hover{background-color:rgba(255,255,255,.25)}.pmagic .pm-group-view .pm-section-nav-vertical ul li.ui-state-active,.pmagic .pm-group-view .pm-section-nav-vertical ul li.ui-state-hover{background-color:rgba(250,250,250,.25)!important}.pmagic .pm-group-view #pg-about .pm-section .pm-section-nav-vertical ul li{border-bottom:1px solid rgba(225,225,225,.25)}.pm-group-view .pm-section .pm-section-content.pm-message-thread-section{border-color:rgba(225,225,225,.25)}.pmagic #pg-messages .pm-section .pm-section-nav-vertical ul li,.pmagic .pm-new-message-area{border-color:rgba(225,225,225,.25)}.pm-group-view .pm-section .pm-section-content #chat_message_form .pm-user-display-area{border-color:rgba(225,225,225,.25)}.pm-group-view .pm-section .pm-section-content #typing_on{border-color:rgba(225,225,225,.25)}.pmagic .pm-chat-messenger-box{border-color:rgba(225,225,225,.25)}.pmagic .pm-blog-desc-wrap #chat_message_form .pm_msg_rf .pm-user-description-row{background-color:rgba(251,251,251,.25)}.pmagic .pm-blog-desc-wrap #chat_message_form .pm_msg_lf .pm-user-description-row{box-shadow:inset 0 0 0 1px rgba(225,225,225,.25);background-color:transparent}.pmagic .pm-blog-desc-wrap #chat_message_form #message_display_area::-webkit-scrollbar{background-color:rgba(255,255,255,.31)}.pmagic .pm-blog-desc-wrap #chat_message_form #message_display_area::-webkit-scrollbar-thumb{background-color:rgba(255,255,255,.2)}.pmagic .pm-chat-messenger-box .emoji-wysiwyg-editor{background-color:rgba(255,255,255,.25)}.pmagic #pm-autocomplete ul.ui-autocomplete{background-color:rgba(255,255,255,.25);box-shadow:-3px 3px 4px 1px rgba(220,220,220,.25);border:1px solid rgba(225,225,225,.25)}.pmagic .pm-notification .pm-notification-card{background-color:rgba(255,255,255,.25)}.pmagic .pm-notification-footer{background-color:rgba(249,249,249,.25)}.pmagic .pm-notification-date{background-color:transparent}.pmagic .pm-new-post-comment-notice{border-color:rgba(249,249,249,.25)}.pmagic #pm_load_more_notif{background-color:rgba(249,249,249,.25)}.pmagic .pm-notification-close{background-color:rgba(225,224,225,.4)}.pmagic .pm-friend-request-notice,.pmagic .pm-group-blog-post-notice,.pmagic .pm-new-friend-added-notice{border-color:rgba(249,249,249,.25)}.pmagic #unread_notification_count,.pmagic #unread_thread_count{color:#383737}.pmagic #pg-friend-requests,.pmagic #pg-myfriends,.pmagic #pg-requests-sent{border-left:1px solid rgba(225,225,225,.25)}.pmagic #pg-friend-requests .pm-my-requests,.pmagic #pg-myfriends .pm-my-friends,.pmagic #pg-requests-sent .pm-my-requests{border-top:1px solid rgba(225,225,225,.25)}#pg-friends .pm-group-view .pm-section .pm-section-nav-vertical ul li.ui-state-active,#pg-friends .pm-group-view .pm-section .pm-section-nav-vertical ul li.ui-state-hover{background-color:rgba(250,250,250,.25)}.pmagic .pm-myfriends-list:hover .pm-myfriends-overlay{background:rgba(86,86,86,.65);border-radius:100%}.pmagic .pm-friend-message-Remove a,.pmagic .pm-friend-message-button a,.pmagic .pm-friend-select label{background-color:rgba(0,0,0,.33)}.pmagic #pg-friends .pm-selected-image svg{fill:#000!important}.pmagic .pg-group-wall-container .pg-group-wall-wrap{border-color:rgba(249,249,249,.25)}.pmagic .pg-group-wall-container .pg-group-wall-wrap .pg-group-wall{border-color:rgba(249,249,249,.25)}.pmagic .pg-group-wall-comment-wrap .pg-group-wall-comments-count{border-color:rgba(249,249,249,.25)}.pmagic .pg-group-wall-comment-threads .pg-group-wall-comment-thread{border-left:0;background-color:rgba(255,255,255,.25);border-color:rgba(249,249,249,.25);margin:0}.pmagic .pg-group-wall-wrap .pg-group-wall-load-post{background-color:rgba(239,239,239,.25)}.pmagic .pm-group-card-box .pm-group-card .pm-group-description{background-color:transparent}.pmagic .pm-user-card.pm50 .pm-card-value{color:#b9b7b7;color:#b9b7b7}.pmagic .pg-group-wall-featured-image img{border:0}.pmagic .pm-user-card.pm50 .pm-user-description-row::after{width:100%;float:left}.pmagic .pm-group-image img,.pmagic .pm-user-card .pm-user-card-cover img{border:0}.pg-group-wall-comment-wrap .pg-group-wall-action input.pg-delete-gw-wall{margin-top:0}.pmagic .pm-friend-message-Remove a,.pmagic .pm-friend-message-button a,.pmagic .pm-friend-select label{min-width:65px;margin:0}.pmagic .pm-blog-desc-wrap #chat_message_form input#receipent_field{margin:0}.pmagic .pm-cover-image ul li,.pmagic .pm-profile-title-header .pm-profile-image ul li{line-height:inherit}.pmagic .pm-group-view .pm-accordian-content .pmrow .pm-field-lable label{color:#fff;color:#cecece}.pm-popup-container .pm-popup-title{color:#dcdcdc;color:#dcdcdc}.pm-popup-container{background-color:#444}.pmagic .pm-popup-close{border:0}.pmagic ul.pg-photo-albums .pg-create-album{border-color:rgba(225,225,225,.25)}.pmagic #pg_group_photos_container #pg-image-caption{color:#dcdcdc}.pmagic #pg_group_photos_container .pg-comments-section .pg-uploaded-by{border-color:rgba(225,225,225,.25)}.pmagic #pg_group_photos_container .pg-comment_result .pg-image-comment-thread{background-color:rgba(239,239,239,.25);border-color:rgba(225,225,225,.25);margin-bottom:0;border-left-color:inherit!important}.pmagic #pg_group_photos_container .pg-comment-meta-wrap .pg-comment-content{color:rgba(225,225,225,.6)}.pmagic #pg_group_photos_container .pg-comment-meta span{color:rgba(225,225,225,.6)}.pmagic #pg_group_photos_container .pg-comment-meta-wrap textarea{background-color:rgba(0,0,0,.25);border-color:rgba(225,225,225,.25);color:rgba(255,255,255,.8)}.pmagic #pg_group_photos_container .pg-album-btns{border-color:rgba(225,225,225,.25)}.pmagic #edit_new_album .pg-album-form-row input,.pmagic #edit_new_album .pg-album-form-row select,.pmagic #edit_new_album .pg-album-form-row textarea{background-color:rgba(0,0,0,.25);border:1px solid rgba(225,225,225,.5)}.pmagic #create_new_album .pg-album-form-row input,.pmagic #create_new_album .pg-album-form-row select,.pmagic #create_new_album .pg-album-form-row textarea{background-color:rgba(0,0,0,.25);border:1px solid rgba(225,225,225,.5)}.pmagic #create_new_album label{color:#fbfbfb;font-weight:400}.pmagic #edit_new_album label{color:#fbfbfb;font-weight:400}.pmagic #edit_new_album.pg-edit-album a.pg-edit-album-btn{padding:0 15px;line-height:35px}.pmagic #pg_group_photos_container .pg-media-uploader{background-color:rgba(241,246,249,.25)}.pmagic #pg-image-caption textarea#pg-img-caption-editor{background-color:rgba(0,0,0,.25);border-color:rgba(225,225,225,.25);color:rgba(255,255,255,.8)}.pmagic .pm-group-view .pm-section .pm-section-content{border-left:1px solid rgba(225,225,225,.25)}#new_album_form ::-webkit-input-placeholder,#pm_photo_add_comment_form ::-webkit-input-placeholder{color:rgba(177,177,177,.86)}#new_album_form ::-moz-placeholder,#pm_photo_add_comment_form ::-moz-placeholder{color:rgba(177,177,177,.86)}#new_album_form :-ms-input-placeholder,#pm_photo_add_comment_form :-ms-input-placeholder{color:rgba(177,177,177,.86)}#new_album_form :-moz-placeholder,#pm_photo_add_comment_form :-moz-placeholder{color:rgba(177,177,177,.86)}.pmagic #pg-profile-menuToggle input:checked~span.pg-toggle-menu-icon{background:#a9a9a9}.pmagic #bbpress_forum .pm-section-nav-vertical ul li.ui-state-active,.pmagic #bbpress_forum .pm-section-nav-vertical ul li.ui-state-hover{background-color:rgba(250,250,250,.25)!important}.pmagic .pg-bbpress-sections-warp .pg-bbpress-list{border-color:rgba(225,225,225,.25)!important}.pmagic .pg-bbpress-title a{color:inherit!important}.pmagic #bbpress_forum .pg-bbpress-sections-warp{border-color:rgba(225,225,225,.25)}.pmagic #pg_social_wrapper .pg-social-profile-info{border:1px solid rgba(241,241,241,.2);padding:10px;max-width:400px;background-color:rgba(253,253,253,.25);margin:10px 0;border-radius:3px}.pmagic #pg_social_wrapper .pg-social-profile-info:after{opacity:.3}.pg-group-menu-slab{border:1px solid #ddd;border:1px solid rgba(221,221,221,.25);background-color:#fff;background-color:rgba(255,255,255,.25)}.pmagic table.pg-group-members tr:nth-child(odd){background-color:#fafafa;background-color:rgba(250,250,250,.25)}.pmagic table.pg-group-members tr{background-color:rgba(255,255,255,.3)}.pmagic .pg-members-sortby .pg-sort-dropdown select{background-color:rgba(255,255,255,.25)}.pmagic #pg_show_pending_post .pg-pending-posts{background-color:rgba(255,255,255,.35)!important}.pmagic #pg_group_tabs #pg_group_setting .pm-section-content{border-color:rgba(225,225,225,.25)!important}.pmagic .pg-members-sortby .pg-sort-dropdown select{background-image:linear-gradient(45deg,transparent 50%,gray 50%),linear-gradient(135deg,gray 50%,transparent 50%),linear-gradient(to right,rgba(204,204,204,.25),rgba(204,204,204,.25))!important}#pm-edit-group-popup .pm-popup-container .pm-popup-title{color:#fff}.pg-group-setting-popup-footer{background-color:#444;border-top:1px solid rgba(132,131,131,.25)}.pg-add-admin-wrap .select2-container--default.select2-container--focus .select2-selection--multiple{background-color:rgba(0,0,0,.64)!important;border:1px solid rgba(99,99,99,.81)!important}.pg-group-setting-popup-wrap .pm-bg{background-color:rgba(255,255,255,.25)}#pm-edit-group-popup .pm-popup-container .pm-popup-title{border-color:rgba(225,225,225,.25)}.pmagic #pm-view-status-dialog .pm-status-popup-container{background-color:#444}.pmagic .pm-group-view.pg-theme-one .pm-header-section{background-color:rgba(255,255,255,.25);border:1px solid rgba(232,232,233,.25)}.pmagic .pm-group-view.pg-theme-one .pm-profile-tab-wrap.pg-horizontal-responsive-menu{background-color:rgba(255,255,255,.25)!important;border:1px solid rgba(232,232,233,.25)!important}.pmagic .pm-group-view.pg-theme-second .pm-profile-title-header{background-color:rgba(255,255,255,.25);border:1px solid rgba(232,232,233,.25)}.pmagic .pm-group-view.pg-theme-second .pm-header-section{border:1px solid rgba(232,232,233,.25);box-shadow:none}body .pmagic .pm-group-view.pg-theme-second .pm-profile-tab-wrap.pg-horizontal-responsive-menu{background-color:transparent}.pmagic .pm-group-view.pg-theme-fourth .pg-profile-area-wrap{background-color:rgba(255,255,255,.25)}.pmagic .pm-group-view.pg-theme-six .pg-profile-area-wrap{background-color:rgba(0,0,0,.5);border:1px solid rgba(111,111,111,.25)}.pmagic .pm-group-view.pg-theme-six .pg-profile-area-wrap .pm-profile-image{border:1px solid rgba(99,99,99,.22);background-color:#212121}.pmagic .pm-group-view.pg-theme-seven .pm-header-section{background-color:rgba(158,158,158,.04)}.pmagic .pm-group-view.pg-theme-seven .pg-profile-area-wrap{background-color:rgba(0,0,0,.5)!important}.pmagic .pm-group-view.pg-theme-seven .pg-additional-info{background-color:transparent;border-color:rgba(225,225,225,.25)}.pmagic .pg-status-form-options .pm-status-field textarea{background-color:rgba(0,0,0,.75)}.pmagic #pg-status-slider .pg-status-user-seen-head{background-color:rgba(0,0,0,.5)}#add_status_form .pg-add-status-bg-wrap .pg-status-type input[type=radio]:checked~label{background-color:rgba(238,238,238,.34)!important}.pg-status-file-upload .pg-file-select-button{background-color:rgba(60,60,60,.34)!important}.pm-view-status-slider ul#pg-status-slider li .pg-status-seen{color:rgba(19,19,19,.76)}@media only screen and (max-width:760px){.pmagic #pg-mobile-menu{background:#333}}.pg-horizontal-responsive-menu li.hideshow ul{background-color:#494949;z-index:999999;border:1px solid rgba(109,109,109,.85)}
+.pg-group-slider.pg-slick-slider .pg-slick-slide{ 
+    max-width: 100%;
+    border: 1px solid rgb(246 246 246 / 26%);
+    background-color: rgb(255 255 255 / 44%);
+}
+
+
+/*-- Chat System--*/
+
+.pmagic .pg-message-box-sidebar {
+    background-color: rgba(255,255,255,.0);
+}
+
+.pmagic .pg-message-box-sidebar .pg-msg-list-wrap {
+    background-color: rgba(0, 0, 0) !important;
+    border-color: rgba(255,255,255,.25) !important;
+}
+
+.pmagic .pg-message-box-sidebar .pg-msg-list-wrap .pg-msg-conversation-list {
+    background-color: rgba(255,255,255,.0);
+    border-bottom: 1px solid rgba(255,255,255,.25) !important;
+}
+
+.pmagic .pg-message-box-container.pg-message-box-medium .pg-message-box-sidebar {
+    border-right: 1px solid rgba(255,255,255,.25) !important;
+}
+
+.pmagic .pg-message-box-sidebar .pg-msg-list-wrap .pg-msg-conversation-list:hover, 
+.pmagic .pg-message-box-sidebar .pg-msg-list-wrap .pg-msg-conversation-list.active {
+    background-color: rgba(255,255,255,.25) !important;
+}
+
+.pmagic .pg-message-box-sidebar .pg-message-box-action {
+    border-bottom: 1px solid rgba(255,255,255,.25) !important;
+}
+
+.pmagic .pg-msg-thread-container .pg-msg-thread-header {
+    background-color: rgba(255,255,255,.0) !important;
+    border-bottom: 1px solid rgba(255,255,255,.25) !important;
+}
+
+.pmagic .pg-users-search-list-wrap .pg-message-list.pg-user-self-msg .pg-message-box {
+    background-color: transparent;
+    border-color: rgba(255,255,255,.25) !important;
+}
+
+.pmagic .pg-message-box-sidebar .pg-message-box-action input.pg-msg-search {
+    background-color: transparent;
+    border: 1px solid rgba(255,255,255,.25) !important;
+}
+
+.pmagic .pg-users-search-list-wrap .pg-message-list.pg-user-self-msg .pg-message-action {
+    background-color: rgba(255,255,255,.0) !important;
+}
+
+.pg-users-search-list-wrap .pg-message-list.pg-user-self-msg:hover .pg-message-action svg {
+    fill:#fff;
+}
+
+.pmagic .pg-message-footer {
+    background-color: rgba(255,255,255,.25) !important;
+    border-top: 0px;
+} 
+
+.pg-users-search-list-wrap .pg-message-list .pg-message-box {
+    background: rgb(255, 255, 255, 0%);
+}
+
+
+.pmagic .pg-users-search-list-wrap::-webkit-scrollbar, .pg-message-box-sidebar .pg-msg-list-wrap::-webkit-scrollbar {
+
+    background-color: rgb(64 64 64 / 68%);
+}
+
+.pmagic .pg-users-search-list-wrap::-webkit-scrollbar-thumb, .pg-message-box-sidebar .pg-msg-list-wrap::-webkit-scrollbar-thumb {
+    background-color: #4e4e4eb0;
+
+}
+
+.pg-message-action.pg-action-active .pg-message-action-wrap {
+    background-color: transparent;
+}
+
+.pg-users-search-list-wrap ul {
+    background-color: rgb(48 48 48 / 90%);
+    box-shadow: 0px 0px 0px 0px rgb(60 60 60 / 42%);
+    border: 1px solid #545454;
+    padding: 0px 0px !important;
+}
+
+.pg-users-search-list-wrap .pg-message-list.pg-user-self-msg .pg-message-action {
+    right: 5px;
+}
+
+.pg-users-search-list-wrap ul li a {
+    color: #fff;;
+}
+
+/* --- Login Widget --- */
+
+.pmagic .pm-widget-login-box .pg_widget_logout_link {
+    background-color: rgb(240 240 240 / 25%);
+}
+
+@media screen and (max-width: 700px) {
+
+.pg-message-box-container.pg-message-box-small .pg-message-box-sidebar {
+    background-color: #000 !important;
+    box-shadow: 1px 1px 9px 2px rgb(118 118 118 / 63%);
+    }
+    
+    .pg-thread-open.pg-thread-icon a svg,
+    .pg-thread-new-msg.pg-thread-icon a svg{
+        fill: #fff;
+    }
+    
+    
+
+}
+
+/*--Photos extension---*/
+
+.pmagic #pg-user-photos #pg-user-photo-tab .pg-media-uploader {
+    border: 1px dashed rgb(106 106 106);
+    background-color: rgb(53 53 53);
+
+}
+
+.pmagic .pm-user-photos-tab-wrap .pg-user-photos-extension-tab a.pm-dbfl:not(.pmagic .pm-user-photos-tab-wrap .pg-user-photos-extension-tab.active .pm-dbfl) {
+ color: rgb(163 163 163) !important;
+}

@@ -1,0 +1,6 @@
+#toplevel_page_pm_manage_groups ul li:last-child a::before {
+    font-family: dashicons;
+    content: "\f313" !important;
+    vertical-align: text-top;
+    margin-right: 5px;
+}

@@ -6,16 +6,14 @@
 
 <h1 align="center">EIP PoCs and CVEs</h1>
 
-<p align="center"><strong>CVE-focused PoC material, Docker lab environments, and source-backed research produced with Forge v4.</strong></p>
+<p align="center"><strong>CVE-focused PoC material, labs, and source-backed research from Exploit Intel workflows.</strong></p>
 
 <p align="center">
   <a href="https://exploit-intel.com"><img src="https://img.shields.io/badge/Exploit_Intel-platform-1689d8.svg" alt="Exploit Intelligence Platform"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-16b8c4.svg" alt="MIT License"></a>
 </p>
 
-This repository publishes the CVE research packages produced with
-[Forge v4](https://github.com/exploitintel/eip-cve-public-v4), Exploit Intel's
-operator-controlled CVE research workbench.
+This repository publishes packages from [Forge v4](https://github.com/exploitintel/eip-cve-public-v4), CVEForge, and PocSmith.
 
 Each directory groups the material produced for one CVE: source-backed analysis,
 Docker lab definitions, PoC code, recorded test results, fix assessment, and any
@@ -222,8 +220,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;28296](CVE-2026-28296/) | **GVFS FTP Backend**<br>CRLF Command Injection<br><br>**Bypass / fix review:** server-supplied path injection | **4.3** |
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
+| [CVE&#8209;2026&#8209;94663](CVE-2026-94663/) | **ProfileGrid 6.0.0.2 Subscriber blind SQLi** | **N/A** |
 
-26 of the 187 indexed packages record a bypass or incomplete-fix finding.
+26 of the 188 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 

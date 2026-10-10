@@ -1,0 +1,291 @@
+/*----- Theme Five----*/
+
+.pm-group-view.pg-theme-five .pm-cover-image {
+    height: 450px;
+}
+
+.pm-group-view.pg-theme-five .pg-profile-area-wrap {
+    width: 200px;
+    position: absolute;
+    left: 40%;
+    top: 4%;
+    padding-top: 8px;
+}
+
+.pm-group-view.pg-theme-five .pg-profile-area-wrap .pm-profile-image {
+    position: relative;
+    top: 0px;
+    background-color: rgba(255, 255, 255, 0.2);
+
+}
+
+.pm-group-view.pg-theme-five .pg-profile-area-wrap .pm-profile-title{
+    width: 100%;
+    margin: 0px;
+}
+
+.pm-group-view.pg-theme-five .pm-profile-title-header {
+    height: auto;
+}
+
+.pm-group-view.pg-theme-five .pm-header-section {
+    height: auto;
+    overflow: visible;
+    margin-bottom: 35px;
+    border-radius: 0px;
+}
+
+.pm-group-view.pg-theme-five .pg-additional-header {
+    width: 100%;
+    position: relative;
+
+}
+
+.pm-group-view.pg-theme-five .pg-additional-header .pg-additional-info {
+    position: absolute;
+    bottom: 122px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    text-align: center;
+}
+
+.pm-group-view.pg-theme-five .pg-additional-header .pg-additional-col {
+    width: auto;
+    margin: 2px 0px;
+    padding: 8px 12px 0px 12px;
+    color: #fff;
+    display: inline-block;
+    min-height: 65px;
+    border-top: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+.pm-group-view.pg-theme-five .pg-additional-header .pg-additional-col.pg-group-col {
+    border-right: 1px solid rgba(255, 255, 255, 0.65);
+    border-left: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+
+.pm-group-view.pg-theme-five .pg-additional-header .pg-additional-col:last-child{
+    border-right:0px;
+}
+
+.pm-group-view.pg-theme-five .pg-additional-header .pg-additional-col .pm-user-mycred-rank-points {
+    width: 100%;
+    margin: 0px;
+}
+
+.pm-group-view.pg-theme-five .pg-additional-header .pg-additional-col .mycred-rank-progress {
+    margin-top: 0;
+}
+
+.pm-group-view.pg-theme-five .pg-additional-header .pg-additional-col .pm-user-mycred-rank-points .pm-user-mycred-rank-logo {
+    line-height: 0px;
+}
+
+.pm-group-view.pg-theme-five .pm-profile-title-header .pm-group-icon {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    max-width: 100%;
+}
+
+.pm-group-view.pg-theme-five .pm-profile-title-header .pm-group-icon #pg-group-badge-dock ul {
+    text-align: center;
+}
+
+.pm-group-view.pg-theme-five .pg-additional-header .pg-additional-col .pm-user-mycred-rank-points .pm-user-mycred-rank-logo img {
+    width: 15px;
+    margin-top: 3px !important;
+}
+
+.pm-group-view.pg-theme-five .pg-additional-header .pg-additional-col .pm-user-mycred-rank-points .pm-user-mycred-rank .pm-user-mycred-rank-title {
+    margin-right: 5px;
+    text-transform: uppercase;
+    line-height: 15px;
+    margin-top: 5px;
+}
+
+.pm-group-view.pg-theme-five .pm-user-name {
+    font-size: 1.5em;
+    color: #fff;
+    text-align: center;
+}
+
+.pm-group-view.pg-theme-five .pm-user-group-name a i {
+    color: #fff;
+}
+
+.pm-group-view.pg-theme-five .pm-user-group-name a span {
+    color:#fff;
+}
+
+.pm-group-view.pg-theme-five .pm-user-group-name .pg-more-groups a {
+    color:#fff;
+}
+
+.pm-group-view.pg-theme-five .pg-additional-header .pg-profile-menu {
+    margin-left: 1%;
+    width: 99%;
+}
+
+.pm-group-view.pg-theme-five .pg-additional-header .pg-profile-menu ul.pm-profile-tab-wrap {
+    border: 0px;
+}
+
+.pm-group-view.pg-theme-five .pm-cover-image .pg-cover-image-mask {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    max-height: 450px;
+}
+
+.pm-group-view.pg-theme-five .pm-cover-image img {
+    clip: rect(0px, 1200px, 450px, 0px) !important;
+}
+
+.pm-group-view.pg-theme-five .pm-cover-image .pg-item-image-change {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    color: #fff;
+    width: 50px;
+    height: 40px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 20px;
+    background-color: rgba(125, 125, 125, 0.76);
+    padding: 10px 0px;
+}
+
+.pm-group-view.pg-theme-five .pm-cover-image .pg-item-image-change i {
+    margin:0px;
+}
+
+.pm-group-view.pg-theme-five .pg-additional-header .pg-additional-col:empty {
+    width: 60px;
+}
+
+.pmagic .pm-group-view.pg-theme-five #unread_notification_count.thread-count-show {
+    left: calc(50% - 20px);
+    top: 40px;
+    right: unset;
+    border: 3px solid rgb(216 216 216 / 96%);
+    min-width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    line-height: 26px;
+}
+
+/* --- Element Visiblilty ---*/
+
+.pm-group-view.pg-theme-five .pm-header-section.pm-without-cover-image .pm-cover-image {
+    height: 450px;
+}
+
+.pm-group-view.pg-theme-five .pm-header-section.pm-without-cover-image {
+    padding: 0px;
+}
+
+.pm-group-view.pg-theme-five .pm-header-section.pm-without-cover-image  .pm-user-name,
+.pm-group-view.pg-theme-five .pm-header-section.pm-without-cover-image .pm-user-group-name a span,
+.pm-group-view.pg-theme-five .pm-header-section.pm-without-cover-image .pm-user-group-name .pg-more-groups a{
+    color: inherit;
+}
+
+.pm-group-view.pg-theme-five .pm-without-profile-image .pg-profile-area-wrap .pm-profile-image {
+    width: 170px;
+    height: 170px;
+    visibility: hidden;
+}
+
+/* --- End Element Visiblilty ---*/
+
+
+@media only screen and (max-width:1200px) {
+
+}
+
+
+@media only screen and (max-width:979px) {
+
+
+    .pm-group-view.pg-theme-five .pg-profile-area-wrap {
+        width:100%;
+        left: 0px;
+    }
+
+    .pm-group-view.pg-theme-five .pg-profile-area-wrap .pm-profile-image {
+        position: relative;
+        top: 0px;
+        left: calc(50% - 85px);
+    }
+
+    .pm-group-view.pg-theme-five .pm-profile-title-header .pm-group-icon #pg-group-badge  {
+        text-align:center;
+    }
+
+
+}
+
+
+@media only screen and (max-width:760px) {
+
+
+
+}
+
+@media only screen and (max-width:479px) {
+
+    .pm-group-view.pg-theme-five .pg-additional-header .pg-additional-col:empty {
+        display: none;
+    }
+
+    .pm-group-view.pg-theme-five .pg-profile-area-wrap .pm-profile-image {
+        position: relative;
+        top: 0px;
+        left: calc(50% - 50px);
+    }
+
+    .pm-group-view.pg-theme-five .pg-profile-area-wrap .pm-profile-image img {
+        width: 100px;
+        height: 100px;
+    }
+
+
+    .pm-group-view.pg-theme-five .pg-additional-header .pg-additional-info {
+        flex-direction: column;
+    }
+
+    .pm-group-view.pg-theme-five .pg-additional-header .pg-additional-col {
+        min-height: 1px;
+        border: 0px;
+    }
+
+
+    .pm-group-view.pg-theme-five .pg-additional-header .pg-additional-info {
+        bottom: 102px;
+    }
+
+
+    .pm-group-view.pg-theme-five .pm-profile-title-header .pm-group-icon {
+        max-width: 100%;
+        left: 0px;
+    }
+
+
+    .pm-group-view.pg-theme-five .pm-profile-title-header .pm-group-icon #pg-group-badge {
+        margin: 33px 0px 0px 0px;
+        text-align: center;
+    }
+
+    .pm-group-view.pg-theme-five .pg-additional-header .pg-additional-col.pg-group-col {
+        border:0px;
+    }
+
+}
