@@ -221,8 +221,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;35414](CVE-2026-35414/) | **OpenSSH**<br>Certificate Principal Matching Authentication Bypass | **N/A** |
 | [CVE&#8209;2025&#8209;59060](CVE-2025-59060/) | **Apache Ranger**<br>Apache Ranger TLS Hostname Verification Bypass | **N/A** |
 | [CVE&#8209;2026&#8209;94663](CVE-2026-94663/) | **ProfileGrid 6.0.0.2 Subscriber blind SQLi** | **N/A** |
+| [CVE&#8209;2026&#8209;32070](CVE-2026-32070/) | **Windows Common Log File System Driver Elevation of Privilege Vulnerability** | **N/A** |
 
-26 of the 188 indexed packages record a bypass or incomplete-fix finding.
+26 of the 189 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
