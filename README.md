@@ -223,8 +223,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;94663](CVE-2026-94663/) | **ProfileGrid 6.0.0.2 Subscriber blind SQLi** | **N/A** |
 | [CVE&#8209;2026&#8209;32070](CVE-2026-32070/) | **Windows Common Log File System Driver Elevation of Privilege Vulnerability** | **N/A** |
 | [CVE&#8209;2026&#8209;105839](CVE-2026-105839/) | **reproduction package** | **N/A** |
+| [CVE&#8209;2026&#8209;41567](CVE-2026-41567/) | **reproduction package** | **N/A** |
 
-26 of the 190 indexed packages record a bypass or incomplete-fix finding.
+26 of the 191 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
