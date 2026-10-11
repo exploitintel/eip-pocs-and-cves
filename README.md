@@ -224,8 +224,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;32070](CVE-2026-32070/) | **Windows Common Log File System Driver Elevation of Privilege Vulnerability** | **N/A** |
 | [CVE&#8209;2026&#8209;105839](CVE-2026-105839/) | **reproduction package** | **N/A** |
 | [CVE&#8209;2026&#8209;41567](CVE-2026-41567/) | **reproduction package** | **N/A** |
+| [CVE&#8209;2024&#8209;25621](CVE-2024-25621/) | **reproduction package — containerd world-searchable state directory** | **N/A** |
 
-26 of the 191 indexed packages record a bypass or incomplete-fix finding.
+26 of the 192 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
