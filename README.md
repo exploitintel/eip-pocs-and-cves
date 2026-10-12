@@ -230,8 +230,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;11801](CVE-2026-11801/) | **WPAdverts 2.3.2, unauthenticated configuration disclosure via \`classifieds-types\` REST route** | **N/A** |
 | [CVE&#8209;2026&#8209;101160](CVE-2026-101160/) | **reproduction package — WP Ultimate Review 2.4.3 unauthenticated DoS** | **N/A** |
 | [CVE&#8209;2026&#8209;103242](CVE-2026-103242/) | **reproduction package** | **N/A** |
+| [CVE&#8209;2025&#8209;9951](CVE-2025-9951/) | **FFmpeg \`jpeg2000dec\` heap OOB write via crafted \`cdef\` box** | **N/A** |
 
-26 of the 197 indexed packages record a bypass or incomplete-fix finding.
+26 of the 198 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
