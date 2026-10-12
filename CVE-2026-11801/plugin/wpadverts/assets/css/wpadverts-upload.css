@@ -1,0 +1,588 @@
+/* ADVERTS GALLERY */
+.adverts-form-aligned .adverts-plupload-upload-ui {
+    width:60%;
+    float:left;
+}
+
+.adverts-update-description-success {
+    font-size: 20px;
+    line-height: 28px;
+    display: none;
+}
+
+.adverts-form input[type=number].adverts-image-scale-width,
+.adverts-form input[type=number].adverts-image-scale-height {
+    margin: 0;
+}
+
+.adverts-gallery {
+    width:100%;
+    height:130px;
+    border:1px solid #e5e5e5; 
+    background-color: #fcfcfc;
+    padding: 0px 0 20px 0;
+    opacity: 0.7;
+    z-index: 0;
+    text-align: center;
+    line-height: 100%;
+    font-weight: bold;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+.drag-over .adverts-gallery {
+    opacity: 0.7;
+    border:1px solid silver
+}
+
+.drag-over .adverts-drag-drop-area  {
+    position: absolute !important;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 130px;
+    opacity: 1;
+    z-index: 5;
+    box-sizing: border-box;
+    
+}
+
+.adverts-gallery > p {
+    font-size: 1.3em;
+    font-weight: normal;
+    margin: 20px 0 20px;
+    padding: 0;
+    color: gray;
+    box-sizing: border-box;
+}
+
+.adverts-gallery-uploads {
+    overflow: hidden;
+    padding: 0 3px 3px 3px !important;
+}
+
+.adverts-gallery-uploads .adverts-gallery-upload-item {
+    background-color: #fff;
+    width: 150px;
+    height: 105px;
+    -webkit-box-shadow: 0 0 3px rgba(0,0,0,0.15);
+    -moz-box-shadow: 0 0 3px rgba(0,0,0,0.15);
+    box-shadow: 0 0 3px rgba(0,0,0,0.15);
+    -webkit-transition: height 0.1s ease-in-out,margin 0.1s ease-in-out;
+    -moz-transition: height 0.1s ease-in-out,margin 0.1s ease-in-out;
+    -o-transition: height 0.1s ease-in-out,margin 0.1s ease-in-out;
+    transition: height 0.1s ease-in-out,margin 0.1s ease-in-out;
+    position: relative;
+    float:left;
+    margin: 10px 10px 0 0;
+    overflow: hidden;
+}
+
+.adverts-gallery-uploads .adverts-gallery-upload-item a {
+    display: inline-block;
+    overflow: hidden;
+    padding: 0px;
+    margin: 0 0 0 2px;
+    width: 30px;
+    height: 28px;
+}
+
+.adverts-gallery-uploads .adverts-gallery-upload-item .adverts-gallery-item-features {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    font-size: 14px;
+    line-height: 18px;
+    
+}
+
+.adverts-gallery-item-features .adverts-gallery-item-feature {
+    color: white;
+    padding: 3px 3px;
+    background: rgba(0,0,0, 0.075);
+    display: block;
+    float: left;
+}
+
+.adverts-gallery-upload-actions {
+    position: absolute;
+    display: none;
+    margin: 0;
+    padding: 0;
+    height: 30px;
+    bottom: 3px;
+    right: 3px;
+}
+
+.adverts-gallery-upload-actions .adverts-icon-spinner {
+  vertical-align: top;
+}
+
+.adverts-gallery-upload-update  {
+    width: 100%;
+    height: 105px;
+    text-align: center;
+    position: absolute;
+}
+
+.adverts-gallery-upload-update.adverts-icon-spinner {
+    font-size: 64px;
+    line-height: 105px;
+}
+
+.adverts-gallery-upload-update .adverts-icon-spinner {
+    font-size: 48px;
+}
+
+.adverts-gallery-upload-item-percent-wrap {
+    margin: 0px;
+    position: absolute;
+    bottom: 8px;
+    left: 4px;
+    right: 4px;
+    background: #ddd;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    height: 20px;
+}
+
+.adverts-gallery-upload-item-percent {
+    position: absolute;
+    width: 0;
+    height: 100%;
+    background-color:#5988dc;
+    z-index: 10;
+    border-radius: 4px;
+}
+
+.adverts-gallery-upload-item-percent-text {
+    text-align: center;
+    color: white;
+    z-index: 11;
+    font-weight: bold;
+    width: 100%;
+    position: absolute;
+}
+
+.adverts-gallery-upload-failed {
+    font-family: Arial;
+    font-size: 10px;
+    line-height: 12px;
+    overflow: hidden;
+    display: inline-block;
+    padding: 0 2px 0 2px;
+}
+
+.adverts-gallery-uploads .adverts-gallery-upload-item:hover .adverts-gallery-upload-actions {
+    display: block;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.adverts-gallery-upload-item-img {
+    width: 150px;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+    border: none !important;
+    cursor: move;
+}
+
+.adverts-gallery-upload-update.adverts-icon-attention {
+    cursor: pointer;
+}
+
+.adverts-gallery-upload-item .adverts-icon-attention:before { 
+    display:block;
+    font-size: 42px;
+    color: red;
+    margin: 10px auto 0;
+}
+
+.wpadverts-overlay {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    bottom: 0; 
+    right: 0;
+    z-index: 160000;
+    display: block;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.wpadverts-overlay.show {
+    display:block;
+}
+
+.wpadverts-overlay h2 {
+    font-size: 22px;
+}
+
+.wpadverts-overlay p {
+    margin: 5px 0 25px 0;
+}
+
+.wpadverts-overlay input[type=radio] {
+    display: inline !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.wpadverts-overlay > .wpadverts-overlay-body {
+    
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    overflow: hidden;
+    margin: auto;
+
+    box-sizing: border-box;
+
+    background-color: #fff;
+    border:1px solid silver;
+    padding:0;
+}
+
+.wpadverts-overlay .wpadverts-overlay-header {
+    clear: both;
+    margin: 0;
+    background: #fcfcfc;
+    border-bottom: 1px solid #ddd;
+    padding: 0 0 0 0;
+    height: 50px;
+}
+
+.wpadverts-attachment-media-view {
+    float: left;
+    width: 65%;
+    height: 100%;
+}
+
+
+.wpadverts-overlay-buttons {
+    float:right;
+}
+
+.wpadverts-overlay-button {
+    cursor: pointer;
+    color: #72777c;
+    background-color: transparent;
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    line-height: 50px;
+    font-size: 20px;
+    text-align: center;
+    border: 0;
+    border-left: 1px solid #ddd;
+    -webkit-transition: color .1s ease-in-out,background .1s ease-in-out;
+    transition: color .1s ease-in-out,background .1s ease-in-out;
+    display: inline-block;
+    text-decoration: none !important;
+}
+
+.wpadverts-overlay-button:not(.wpadverts-navi-disabled):hover {
+    background: #ddd none repeat scroll 0 0;
+    border-color: #ccc;
+    color: #000;
+}
+
+.wpadverts-overlay-button.wpadverts-navi-disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+
+.wpadverts-attachment-info {
+    overflow: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-bottom: 0;
+    padding: 12px 16px 0;
+    width: 35%;
+    height: 100%;
+    -webkit-box-shadow: inset 0 4px 4px -4px rgba(0,0,0,.1);
+    box-shadow: inset 0 4px 4px -4px rgba(0,0,0,.1);
+    border-bottom: 0;
+    border-left: 1px solid #ddd;
+    background: #f3f3f3;
+}
+
+.wpadverts-overlay .adverts-form-aligned .adverts-control-group > label {
+    width: 100%;
+    font-weight: bold;
+    margin: 6px 0 6px 0;
+}
+
+.wpadverts-overlay input[type="text"],
+.wpadverts-overlay textarea {
+    width: 100%;
+}
+
+.wpadverts-overlay .wpadverts-overlay-title {
+        padding: 0 16px;
+    font-size: 22px;
+    line-height: 50px;
+    margin: 0;
+    float: left;
+}
+
+.wpadverts-attachment-details {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+@media (max-width: 420px) and (min-width: 0px) {
+ .wpadverts-attachment-details {
+    position: initial !important;
+  }
+}
+
+.adverts-form.adverts-form-aligned .adverts-control-group.wpadverts-file-browser-video-actions > div {
+    width:100%;
+    padding: 0;
+    height:38px;
+}
+
+.wpadverts-overlay .wpadverts-attachment-info .details {
+    position: relative;
+    overflow: hidden;
+    float: none;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+
+    font-size: 12px;
+    max-width: 100%;
+    line-height: 18px;
+    color: #666;
+}
+
+.wpadverts-attachment-audio,
+.wpadverts-attachment-video,
+.wpadverts-attachment-other,
+.wpadverts-attachment-image {
+    padding: 25px;
+    text-align: center;
+    position: relative;
+    height: inherit;
+}
+
+.adverts-gallery-upload-item-file {
+    display: block;
+    width: 100%;
+    height: 105px;
+    
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    
+}
+
+.adverts-gallery-upload-item-file .adverts-gallery-upload-item-file-icon {
+    font-size: 74px;
+    line-height: 94px;
+}
+
+.adverts-gallery-upload-item-file .adverts-gallery-upload-item-file-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: white;
+    font-size: 12px;
+    background: rgba(0,0,0, 0.5);
+    text-align: left;
+    right: 0;
+    padding: 1px 6px;
+}
+
+.adverts-image-missing {
+    text-align: center;
+}
+
+.adverts-image-preview {
+    padding: 25px;
+}
+   
+.adverts-image-preview > img {
+    max-width: 100%; 
+    max-height: 100%;
+}
+
+.adverts-image-action-scale {
+    vertical-align: middle;
+}
+
+.wpadverts-image-apply-to {
+    padding: 0;
+    margin: 1em 0 0 0;
+}
+
+.wpadverts-image-apply-to > label {
+    float: none !important;
+}
+
+.wpadverts-file-browser-video {
+    object-fit: contain
+}
+
+.wpadverts-attachment-icon-big-wrap {
+    margin: 0 0 2em 0
+}
+
+.wpadverts-attachment-icon-big-wrap .wpadverts-attachment-icon-big {
+    font-size: 128px; 
+    opacity: 0.35;
+}
+
+.wpadverts-file-preview {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+    clear:both;
+    overflow:hidden
+}
+
+.wpadverts-file-preview .wpadverts-image-sizes {
+    background: white;
+    border: 1px solid silver;
+    width: 100%;
+}
+
+.wpadverts-file-size-explain {
+    font-size: 12px; 
+    max-width: 100%; 
+    line-height: 18px; 
+    color: #666;
+}
+
+.adverts-image-scale-width,
+.adverts-image-scale-height {
+    width: 70px !important;
+    height: 30px;
+    box-sizing: border-box !important;
+    border-radius: 1px;
+}
+
+.wpadverts-file-error {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    overflow: hidden;
+    margin: auto;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid silver;
+    padding: 0;
+    z-index: 170000;
+}
+
+.wpadverts-file-error > div {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+}
+
+.wpadverts-image-edit-spinner {
+    font-size: 24px;
+    vertical-align: middle
+}
+
+.adverts-file-video-spinner {
+    line-height: 38px;
+}
+
+.wpadverts-file-browser-image-actions,
+.wpadverts-file-browser-video-actions {
+    padding: 5px 0 5px 0;
+}
+
+.wpadverts-browser-admin .adverts-form fieldset {
+    margin: 0;
+    padding: 0.35em 0 0.75em;
+    border: 0;
+}
+
+.wpadverts-browser-admin.wpadverts-overlay .adverts-form-aligned .adverts-control-group > label {
+    display: block
+}
+
+.wpadverts-browser-admin .adverts-gallery {
+    border: 4px dashed #e5e5e5;
+}
+
+.wpadverts-browser-admin .adverts-gallery > p {
+    font-size: 22px;
+}
+
+.wpadverts-browser-admin .adverts-gallery-uploads .adverts-gallery-upload-item a {
+    text-align: center;
+    font-size: 16px;
+}
+
+.wpadverts-browser-admin.drag-over .adverts-gallery > p {
+    color: white;
+}
+
+.wpadverts-browser-admin.drag-over .adverts-gallery {
+    background: rgba(0,0,0, 0.65);
+    border:4px dashed white
+}
+
+.drag-over .adverts-plupload-browse-button {
+    display: none;
+}
+
+@media all and (min-width: 0px) and (max-width: 420px) {
+    .wpadverts-overlay > .wpadverts-overlay-body {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        overflow: scroll;
+    }
+    
+    .wpadverts-attachment-media-view {
+        width: 100%;
+        height: auto;
+    }
+    
+    .wpadverts-attachment-info {
+        width:100%;
+    }
+    
+    .adverts-gallery-upload-actions {
+        display: block;
+    }
+    
+    .wpadverts-attachment-media-image-editor {
+        height: 350px;
+    }
+    
+    .adverts-image-preview,
+    .wpadverts-attachment-media-image-editor .wpadverts-attachment-image {
+        padding: 5px;
+    }
+    
+    .adverts-form input[type="number"].adverts-image-scale-width,
+    .adverts-form input[type="number"].adverts-image-scale-height {
+        padding: 6px;
+        margin: 0;
+        display: inline-block;
+    }
+    
+}
