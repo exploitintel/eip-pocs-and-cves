@@ -226,7 +226,7 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;41567](CVE-2026-41567/) | **reproduction package** | **N/A** |
 | [CVE&#8209;2024&#8209;25621](CVE-2024-25621/) | **reproduction package — containerd world-searchable state directory** | **N/A** |
 | [CVE&#8209;2026&#8209;94440](CVE-2026-94440/) | **QA-fix** | **N/A** |
-| [CVE&#8209;2026&#8209;100178](CVE-2026-100178/) | **Repro package — (WPAdverts = 2.3.4 unauthenticated stored XSS** | **N/A** |
+| [CVE&#8209;2026&#8209;100178](CVE-2026-100178/) | **WPAdverts &lt;= 2.3.4 unauthenticated stored XSS** | **N/A** |
 
 26 of the 194 indexed packages record a bypass or incomplete-fix finding.
 
