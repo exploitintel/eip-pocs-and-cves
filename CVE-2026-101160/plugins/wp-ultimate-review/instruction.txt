@@ -1,0 +1,19 @@
+===== Custom Function Guideline ====
+==== return-type ====== parametter
+1. return-type = 'only_avg' ? show only avg ratting of this post.	
+2. return-type = 'total_ratting' ? show only total ratting of this post.	
+3. return-type = 'total_review' ? show only total review of this post.	
+4. return-type = 'get_score_limit' ? get max score limit of total reviews.	
+4. return-type = 'percentage' ? get percentage of total reviews.	
+5. return-type = 'get_all' ? get all data by array.	
+
+==== ratting-style ====== parametter
+1. ratting-style = 'star' ? show star ratting
+2. ratting-style = 'point' ? show point style ratting
+2. ratting-style = 'percentange' ? show percentange style ratting
+2. ratting-style = 'pie' ? show pie chart style ratting
+
+review_kit_rating( [ 'post-id' =>  get_the_ID(), 'ratting-show' => 'no', 'ratting-style' => 'star', 'count-show' => 'no', 'vote-show' => 'no', 'vote-text' => 'no', 'return-type' => '' ]);
+
+
+review_kit_forms( ['post-id' =>  get_the_ID()]);

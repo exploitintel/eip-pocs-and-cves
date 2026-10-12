@@ -1,0 +1,30 @@
+/**
+ * Admin Menu
+ */
+#adminmenu .menu-icon-xs_review .wp-menu-image > img {
+    -webkit-filter: grayscale(1);
+            filter: grayscale(1);
+    transition: opacity 0.3s, -webkit-filter 0.3s;
+    transition: opacity 0.3s, filter 0.3s;
+    transition: opacity 0.3s, filter 0.3s, -webkit-filter 0.3s;
+}
+#adminmenu .menu-icon-xs_review:hover .wp-menu-image > img,
+#adminmenu .menu-icon-xs_review.opensub .wp-menu-image > img,
+#adminmenu .menu-icon-xs_review.wp-menu-open .wp-menu-image > img {
+    -webkit-filter: grayscale(0);
+            filter: grayscale(0);
+}
+
+
+/**
+ * Title
+ */
+.wur-main-header > h1 > img {
+    vertical-align: -2px;
+}
+.alert-wrapper.ip-based-limit-disclaimer .alert-frame{
+    width: 400px;
+}
+.alert-wrapper .alert-frame .alert-button.warning-bg.warning-btn{
+    color: #000000;
+}
