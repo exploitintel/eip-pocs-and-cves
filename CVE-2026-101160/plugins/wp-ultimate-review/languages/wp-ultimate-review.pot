@@ -1,0 +1,352 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: Wp ultimate review\n"
+"POT-Creation-Date: 2020-11-17 13:02+0600\n"
+"PO-Revision-Date: 2020-11-17 13:02+0600\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3.1\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: wp-ultimate-review.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+
+#: app/content.php:197
+msgid "Please fill up all require filed"
+msgstr ""
+
+#: app/content.php:232
+msgid "Successfully submitted review"
+msgstr ""
+
+#: app/content.php:265
+msgid "Already submitted review"
+msgstr ""
+
+#: app/content.php:740
+msgid "«"
+msgstr ""
+
+#: app/content.php:741
+msgid "»"
+msgstr ""
+
+#: app/cpt.php:298
+msgid "Review Title"
+msgstr ""
+
+#: app/cpt.php:299
+msgid "Review Summary"
+msgstr ""
+
+#: app/cpt.php:300
+msgid "Reviewer"
+msgstr ""
+
+#: app/cpt.php:301 views/admin/meta-box-html-details.php:215
+msgid "Ratting"
+msgstr ""
+
+#: app/cpt.php:302
+msgid "Content Type "
+msgstr ""
+
+#: app/cpt.php:303
+msgid "In Response To"
+msgstr ""
+
+#: app/cpt.php:304
+msgid "Review Date"
+msgstr ""
+
+#: app/settings.php:71
+msgid "Review Settings"
+msgstr ""
+
+#: app/settings.php:72
+msgid "Settings"
+msgstr ""
+
+#: app/settings.php:104 views/admin/global-settings-html.php:31
+msgid "Global Settings"
+msgstr ""
+
+#: app/settings.php:121 views/admin/global-settings-html.php:37
+msgid "Display Settings"
+msgstr ""
+
+#: init.php:157
+msgctxt "WP Ultimate Reviews"
+msgid "Wp Reviews"
+msgstr ""
+
+#: init.php:158
+msgctxt "WP Ultimate Reviews"
+msgid "Review"
+msgstr ""
+
+#: init.php:159
+msgctxt "WP Ultimate Reviews"
+msgid "Add Review"
+msgstr ""
+
+#: init.php:160
+msgctxt "WP Ultimate Reviews"
+msgid "Add New Review"
+msgstr ""
+
+#: init.php:161
+msgctxt "WP Ultimate Reviews"
+msgid "Edit Review"
+msgstr ""
+
+#: init.php:162
+msgctxt "WP Ultimate Reviews"
+msgid "New Review"
+msgstr ""
+
+#: init.php:163
+msgctxt "WP Ultimate Reviews"
+msgid "All Reviews"
+msgstr ""
+
+#: init.php:164
+msgctxt "WP Ultimate Reviews"
+msgid "View Reviews"
+msgstr ""
+
+#: init.php:165
+msgctxt "WP Ultimate Reviews"
+msgid "Search Review"
+msgstr ""
+
+#: init.php:166
+msgctxt "WP Ultimate Reviews"
+msgid "No Review found"
+msgstr ""
+
+#: init.php:167
+msgctxt "WP Ultimate Reviews"
+msgid "No Review found in Trash"
+msgstr ""
+
+#: init.php:169
+msgctxt "WP Ultimate Reviews"
+msgid "WP Reviews"
+msgstr ""
+
+#: views/admin/global-settings-html.php:14
+msgid "Dismiss this notice."
+msgstr ""
+
+#: views/admin/global-settings-html.php:21
+msgid "WP Review Settings"
+msgstr ""
+
+#: views/admin/global-settings-html.php:56
+msgid "Enable user review"
+msgstr ""
+
+#: views/admin/global-settings-html.php:70
+msgid ""
+"If enabled, user will see a review form in post/pages and they will be able "
+"to submit that review"
+msgstr ""
+
+#: views/admin/global-settings-html.php:81
+msgid "Enable author review"
+msgstr ""
+
+#: views/admin/global-settings-html.php:94
+msgid ""
+"If enabled, post/page author will be able to give review/rating for that "
+"post/page"
+msgstr ""
+
+#: views/admin/global-settings-html.php:106
+msgid "Require Admin Approval"
+msgstr ""
+
+#: views/admin/global-settings-html.php:120
+msgid "Restrict rating to registered users only "
+msgstr ""
+
+#: views/admin/global-settings-html.php:133
+msgid "Review Score Style"
+msgstr ""
+
+#: views/admin/global-settings-html.php:160
+msgid "Pie chart circle background color"
+msgstr ""
+
+#: views/admin/global-settings-html.php:177
+msgid "Review Score Limit"
+msgstr ""
+
+#: views/admin/global-settings-html.php:190
+msgid "Review Score Input Style"
+msgstr ""
+
+#: views/admin/global-settings-html.php:214
+msgid "Send to adminstrator Email "
+msgstr ""
+
+#: views/admin/global-settings-html.php:227
+msgid "Send to Author Email"
+msgstr ""
+
+#: views/admin/global-settings-html.php:244
+#: views/admin/global-settings-html.php:556
+msgid "Save Changes"
+msgstr ""
+
+#: views/admin/global-settings-html.php:257
+msgid "Enable Review For"
+msgstr ""
+
+#: views/admin/global-settings-html.php:292
+msgid "Review Location"
+msgstr ""
+
+#: views/admin/global-settings-html.php:305
+msgid "After Content"
+msgstr ""
+
+#: views/admin/global-settings-html.php:308
+msgid "Before Content"
+msgstr ""
+
+#: views/admin/global-settings-html.php:311
+msgid "Custom (use shortcode)"
+msgstr ""
+
+#: views/admin/global-settings-html.php:326
+msgid "Display Review with Comments"
+msgstr ""
+
+#: views/admin/global-settings-html.php:345
+msgid "Review Shown Per Page "
+msgstr ""
+
+#: views/admin/global-settings-html.php:359
+msgid "Review Form Settings "
+msgstr ""
+
+#: views/admin/global-settings-html.php:425
+msgid "Review Display Layout "
+msgstr ""
+
+#: views/admin/global-settings-html.php:467
+msgid "Enable \""
+msgstr ""
+
+#: views/admin/global-settings-html.php:489
+msgid "Average rating text"
+msgstr ""
+
+#: views/admin/global-settings-html.php:495
+msgid "SUPERB!"
+msgstr ""
+
+#: views/admin/global-settings-html.php:519
+msgid "Show rating text if "
+msgstr ""
+
+#: views/admin/meta-box-html-details.php:15
+msgid "Overview Enable"
+msgstr ""
+
+#: views/admin/meta-box-html-details.php:38
+msgid "Review Style"
+msgstr ""
+
+#: views/admin/meta-box-html-details.php:75
+msgid "Heading"
+msgstr ""
+
+#: views/admin/meta-box-html-details.php:96
+msgid "Summary Enable"
+msgstr ""
+
+#: views/admin/meta-box-html-details.php:118
+msgid "Enable author average"
+msgstr ""
+
+#: views/admin/meta-box-html-details.php:131
+msgid "Enable user rating average"
+msgstr ""
+
+#: views/admin/meta-box-html-details.php:145
+msgid "Rating Short-code"
+msgstr ""
+
+#: views/admin/meta-box-html-details.php:156
+msgid "Shortcode Rating "
+msgstr ""
+
+#: views/admin/meta-box-html-details.php:165
+msgid "Review Item"
+msgstr ""
+
+#: views/admin/meta-box-html-details.php:181
+msgid "Add"
+msgstr ""
+
+#: views/admin/meta-box-html-details.php:202
+msgid "Itam Name"
+msgstr ""
+
+#: views/public/meta-box-author-review.php:3
+msgid "Overview"
+msgstr ""
+
+#: views/public/meta-box-author-review.php:172
+#: views/public/meta-box-view.php:89
+msgid "Summary"
+msgstr ""
+
+#: views/public/meta-box-user-review.php:100 views/public/meta-box-view.php:167
+msgctxt "no of reviews"
+msgid " Review"
+msgid_plural " Reviews"
+msgstr[0] ""
+msgstr[1] ""
+
+#: views/public/meta-box-user-review.php:270 views/public/meta-box-view.php:339
+msgid "Votes"
+msgstr ""
+
+#: views/public/meta-box-user-review.php:298 views/public/meta-box-view.php:364
+msgid "Write a Review "
+msgstr ""
+
+#: views/public/meta-box-user-review.php:517 views/public/meta-box-view.php:583
+msgid "Submit Review"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Wp ultimate review"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+#. Author URI of the plugin/theme
+msgid "https://wpmet.com/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "The most advanced WordPress Review Plugin"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Wpmet"
+msgstr ""

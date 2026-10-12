@@ -228,8 +228,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;94440](CVE-2026-94440/) | **QA-fix** | **N/A** |
 | [CVE&#8209;2026&#8209;100178](CVE-2026-100178/) | **WPAdverts &lt;= 2.3.4 unauthenticated stored XSS** | **N/A** |
 | [CVE&#8209;2026&#8209;11801](CVE-2026-11801/) | **WPAdverts 2.3.2, unauthenticated configuration disclosure via \`classifieds-types\` REST route** | **N/A** |
+| [CVE&#8209;2026&#8209;101160](CVE-2026-101160/) | **reproduction package — WP Ultimate Review 2.4.3 unauthenticated DoS** | **N/A** |
 
-26 of the 195 indexed packages record a bypass or incomplete-fix finding.
+26 of the 196 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
