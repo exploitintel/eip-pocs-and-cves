@@ -234,8 +234,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2025&#8209;32463](CVE-2025-32463/) | **sudo-logic-package-32463-r3-20261011 — portable reproduction** | **N/A** |
 | [CVE&#8209;2026&#8209;105837](CVE-2026-105837/) | **reproduction package** | **N/A** |
 | [CVE&#8209;2026&#8209;92174](CVE-2026-92174/) | **reproduction package** | **N/A** |
+| [CVE&#8209;2026&#8209;16742](CVE-2026-16742/) | **systemd-homed authenticate path, local privilege escalation** | **N/A** |
 
-26 of the 201 indexed packages record a bypass or incomplete-fix finding.
+26 of the 202 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
