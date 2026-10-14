@@ -237,8 +237,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;16742](CVE-2026-16742/) | **systemd-homed authenticate path, local privilege escalation** | **N/A** |
 | [CVE&#8209;2026&#8209;98365](CVE-2026-98365/) | **reproduction package** | **N/A** |
 | [CVE&#8209;2026&#8209;32181](CVE-2026-32181/) | **Connected User Experiences and Telemetry Service Denial of Service Vulnerability** | **N/A** |
+| [CVE&#8209;2021&#8209;43798](CVE-2021-43798/) | **Grafana Plugin Path Traversal Allowing Local File Read** | **N/A** |
 
-26 of the 204 indexed packages record a bypass or incomplete-fix finding.
+26 of the 205 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
