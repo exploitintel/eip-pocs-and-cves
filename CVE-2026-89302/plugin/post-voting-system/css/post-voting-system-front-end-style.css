@@ -1,0 +1,26 @@
+.main-wrapper{
+	float:left;
+	clear:both;
+	width:100%;
+}
+.first{
+	float:left;
+}
+.other{
+	float:left;
+	margin-left:10px;
+	margin-right:10px;
+}
+.counter{
+	padding: 3px 5px;
+	line-height: 13px;
+	border:1px solid #999;
+	float:right;
+	margin-left:5px;
+	text-align:center;
+}
+.voted{
+	color:#999;
+	font:lighter 11px verdena;
+	padding: 4px 0 0 0;
+}
