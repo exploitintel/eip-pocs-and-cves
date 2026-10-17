@@ -240,8 +240,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2021&#8209;43798](CVE-2021-43798/) | **Grafana Plugin Path Traversal Allowing Local File Read** | **N/A** |
 | [CVE&#8209;2026&#8209;89302](CVE-2026-89302/) | **Post Voting System &lt;= 1.0 - Unauthenticated SQLi via 'id' Parameter** | **N/A** |
 | [CVE&#8209;2026&#8209;55573](CVE-2026-55573/) | **e107: Unsafe deserialization in install.php allows unauthenticated RCE via POP chain** | **N/A** |
+| [CVE&#8209;2026&#8209;10595](CVE-2026-10595/) | **Path Traversal Vulnerability in parisneo/lollms** | **N/A** |
 
-26 of the 207 indexed packages record a bypass or incomplete-fix finding.
+26 of the 208 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
