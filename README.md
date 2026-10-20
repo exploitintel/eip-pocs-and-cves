@@ -245,8 +245,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;27909](CVE-2026-27909/) | **PocSmith research package** | **N/A** |
 | [CVE&#8209;2026&#8209;111406](CVE-2026-111406/) | **WordPress MapSVG plugin &lt;= 8.16.1 - Arbitrary File Upload vulnerability** | **N/A** |
 | [CVE&#8209;2026&#8209;110887](CVE-2026-110887/) | **WordPress HivePress plugin &lt;= 1.7.32 - Remote Code Execution (RCE) vulnerability** | **N/A** |
+| [CVE&#8209;2026&#8209;112005](CVE-2026-112005/) | **WhoDB 0.104.0 before 0.135.0 Arbitrary File Read/Write via DuckDB Query Editor** | **N/A** |
 
-26 of the 212 indexed packages record a bypass or incomplete-fix finding.
+26 of the 213 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
