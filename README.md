@@ -249,8 +249,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;112292](CVE-2026-112292/) | **CheckCle through 1.6.0 Missing Authorization via Empty PocketBase API Rules** | **N/A** |
 | [CVE&#8209;2026&#8209;88900](CVE-2026-88900/) | **Apache Camel: Camel-JGroups: Unsafe Java Deserialization of Cluster Messages in the JGroups Consumer Can Lead to Remote Code Execution** | **N/A** |
 | [CVE&#8209;2026&#8209;112296](CVE-2026-112296/) | **FlyCms through commit edfdf724 Default Super Administrator Credentials** | **N/A** |
+| [CVE&#8209;2026&#8209;114053](CVE-2026-114053/) | **vLLM 0.7.3 before 0.31.0 RCE via mm\_processor\_kwargs.code\_revision** | **N/A** |
 
-26 of the 216 indexed packages record a bypass or incomplete-fix finding.
+26 of the 217 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
