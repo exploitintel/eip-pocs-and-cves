@@ -251,8 +251,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;112296](CVE-2026-112296/) | **FlyCms through commit edfdf724 Default Super Administrator Credentials** | **N/A** |
 | [CVE&#8209;2026&#8209;114053](CVE-2026-114053/) | **vLLM 0.7.3 before 0.31.0 RCE via mm\_processor\_kwargs.code\_revision** | **N/A** |
 | [CVE&#8209;2026&#8209;111832](CVE-2026-111832/) | **WordPress WP Mailster plugin &lt;= 1.9.1.0 - Arbitrary File Upload vulnerability** | **N/A** |
+| [CVE&#8209;2026&#8209;100219](CVE-2026-100219/) | **PocSmith research package** | **N/A** |
 
-26 of the 218 indexed packages record a bypass or incomplete-fix finding.
+26 of the 219 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
