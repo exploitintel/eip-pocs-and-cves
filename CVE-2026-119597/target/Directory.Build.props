@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <!-- 允许预发行版本包 -->
+    <!-- <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile> -->
+    <!-- <RestoreLockedMode Condition="$(ContinuousIntegrationBuild) == 'true'">true</RestoreLockedMode> -->
+    
+    <!-- 忽略预发行版本警告 -->
+    <NoWarn>$(NoWarn);NU1604;NU1903</NoWarn>
+    
+    <!-- 包验证配置 -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>NU1604;NU1903</WarningsNotAsErrors>
+  </PropertyGroup>
+  
+
+</Project> 
