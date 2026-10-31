@@ -258,8 +258,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;61645](CVE-2026-61645/) | **Docat has Arbitrary File Upload exists in Upload API** | **N/A** |
 | [CVE&#8209;2026&#8209;119597](CVE-2026-119597/) | **OpenDeepWiki through 2.0.6 Hard-coded JWT Signing Key Admin Token Forgery** | **N/A** |
 | [CVE&#8209;2026&#8209;119568](CVE-2026-119568/) | **vsftpd through 3.0.5 require\_ssl\_reuse Bypass via FTPS Data Channel Hijacking** | **N/A** |
+| [CVE&#8209;2026&#8209;119419](CVE-2026-119419/) | **CakePHP through 5.4.3 SQL Injection via StringExpression and IdentifierExpression Collation** | **N/A** |
 
-26 of the 225 indexed packages record a bypass or incomplete-fix finding.
+26 of the 226 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
