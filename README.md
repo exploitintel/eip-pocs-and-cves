@@ -260,8 +260,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;119568](CVE-2026-119568/) | **vsftpd through 3.0.5 require\_ssl\_reuse Bypass via FTPS Data Channel Hijacking** | **N/A** |
 | [CVE&#8209;2026&#8209;119419](CVE-2026-119419/) | **CakePHP through 5.4.3 SQL Injection via StringExpression and IdentifierExpression Collation** | **N/A** |
 | [CVE&#8209;2026&#8209;116512](CVE-2026-116512/) | **Project Manager &lt;= 4.1.1 - Unauthenticated Remote Code Execution via 'id' Parameter Function Injection** | **N/A** |
+| [CVE&#8209;2026&#8209;109220](CVE-2026-109220/) | **PDF Invoice for WooCommerce + Drag and Drop Template Builder &lt;= 7.1.1 - Unauthenticated PHP Object Injection to Remote Code Execution via 'c** | **N/A** |
 
-26 of the 227 indexed packages record a bypass or incomplete-fix finding.
+26 of the 228 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
