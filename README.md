@@ -262,8 +262,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;116512](CVE-2026-116512/) | **Project Manager &lt;= 4.1.1 - Unauthenticated Remote Code Execution via 'id' Parameter Function Injection** | **N/A** |
 | [CVE&#8209;2026&#8209;109220](CVE-2026-109220/) | **PDF Invoice for WooCommerce + Drag and Drop Template Builder &lt;= 7.1.1 - Unauthenticated PHP Object Injection to Remote Code Execution via 'c** | **N/A** |
 | [CVE&#8209;2026&#8209;103898](CVE-2026-103898/) | **Wp Social Login and Register Social Counter &lt;= 3.2.2 - Unauthenticated Authentication Bypass via Insufficient Email Verification in Social L** | **N/A** |
+| [CVE&#8209;2026&#8209;118627](CVE-2026-118627/) | **MLflow SHAP load\_explainer Deserialization of Untrusted Data Remote Code Execution Vulnerability** | **N/A** |
 
-26 of the 229 indexed packages record a bypass or incomplete-fix finding.
+26 of the 230 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
