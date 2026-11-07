@@ -264,8 +264,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;103898](CVE-2026-103898/) | **Wp Social Login and Register Social Counter &lt;= 3.2.2 - Unauthenticated Authentication Bypass via Insufficient Email Verification in Social L** | **N/A** |
 | [CVE&#8209;2026&#8209;118627](CVE-2026-118627/) | **MLflow SHAP load\_explainer Deserialization of Untrusted Data Remote Code Execution Vulnerability** | **N/A** |
 | [CVE&#8209;2026&#8209;63393](CVE-2026-63393/) | **OpenSearch SQL plugin: Unsafe cursor deserialization permits server code execution** | **N/A** |
+| [CVE&#8209;2026&#8209;119075](CVE-2026-119075/) | **Registration Form for WooCommerce &lt;= 1.1.4 - Unauthenticated Privilege Escalation to 'user\_roles' Parameter at Checkout** | **N/A** |
 
-26 of the 231 indexed packages record a bypass or incomplete-fix finding.
+26 of the 232 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
