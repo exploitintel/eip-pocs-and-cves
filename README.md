@@ -266,8 +266,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;63393](CVE-2026-63393/) | **OpenSearch SQL plugin: Unsafe cursor deserialization permits server code execution** | **N/A** |
 | [CVE&#8209;2026&#8209;119075](CVE-2026-119075/) | **Registration Form for WooCommerce &lt;= 1.1.4 - Unauthenticated Privilege Escalation to 'user\_roles' Parameter at Checkout** | **N/A** |
 | [CVE&#8209;2026&#8209;104014](CVE-2026-104014/) | **Naimur Email OTP Verification for WooCommerce &lt;= 2.1.0 - Unauthenticated Authentication Bypass to Account Takeover via Abandoned Password Re** | **N/A** |
+| [CVE&#8209;2026&#8209;87112](CVE-2026-87112/) | **QA Assistants &lt;= 5.3.0 - Unauthenticated PHP Object Injection to Remote Code Execution via 'raw\_name' and 'dlevent\_ver' Parameters** | **N/A** |
 
-26 of the 233 indexed packages record a bypass or incomplete-fix finding.
+26 of the 234 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
