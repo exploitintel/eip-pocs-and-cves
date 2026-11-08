@@ -269,8 +269,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;87112](CVE-2026-87112/) | **QA Assistants &lt;= 5.3.0 - Unauthenticated PHP Object Injection to Remote Code Execution via 'raw\_name' and 'dlevent\_ver' Parameters** | **N/A** |
 | [CVE&#8209;2026&#8209;95870](CVE-2026-95870/) | **wpForo Forum &lt;= 3.2.1 - Unauthenticated SQL Injection via 'data' Parameter** | **N/A** |
 | [CVE&#8209;2026&#8209;120984](CVE-2026-120984/) | **Keycloak-services: keycloak-services: manage-clients to arbitrary code execution through inline javascript policy import** | **N/A** |
+| [CVE&#8209;2026&#8209;120839](CVE-2026-120839/) | **WordPress WpTravelly plugin &lt;= 2.3.8 - Local File Inclusion vulnerability** | **N/A** |
 
-26 of the 236 indexed packages record a bypass or incomplete-fix finding.
+26 of the 237 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
