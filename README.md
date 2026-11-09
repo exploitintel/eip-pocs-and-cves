@@ -274,8 +274,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;123549](CVE-2026-123549/) | **OpenAM before 16.1.4 Privilege Escalation via Self-Registration Attribute Bypass** | **N/A** |
 | [CVE&#8209;2026&#8209;123551](CVE-2026-123551/) | **OpenAM 14.0.0 before 16.1.4 Session Token Disclosure via Notification WebSocket** | **N/A** |
 | [CVE&#8209;2026&#8209;123522](CVE-2026-123522/) | **Vikunja before 2.7.1 Task Information Disclosure via Kanban Bucket Move Webhook** | **N/A** |
+| [CVE&#8209;2026&#8209;123614](CVE-2026-123614/) | **imgproxy 4.0.0 before 4.0.16 Heap Buffer Overflow via ICO Loader Integer Overflow** | **N/A** |
 
-26 of the 241 indexed packages record a bypass or incomplete-fix finding.
+26 of the 242 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
