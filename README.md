@@ -277,8 +277,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;123614](CVE-2026-123614/) | **imgproxy 4.0.0 before 4.0.16 Heap Buffer Overflow via ICO Loader Integer Overflow** | **N/A** |
 | [CVE&#8209;2026&#8209;119759](CVE-2026-119759/) | **TrailBase 0.28.2 &lt; 0.35.10 IDOR via Record API File Column** | **N/A** |
 | [CVE&#8209;2026&#8209;102643](CVE-2026-102643/) | **AsyncSSH: SFTPServer Chroot Escape** | **N/A** |
+| [CVE&#8209;2026&#8209;123815](CVE-2026-123815/) | **pyLoad: Tar extraction creates device nodes and FIFOs (member types not filtered; tarfile extractall without filter=)** | **N/A** |
 
-26 of the 244 indexed packages record a bypass or incomplete-fix finding.
+26 of the 245 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
