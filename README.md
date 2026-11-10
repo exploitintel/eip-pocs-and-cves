@@ -278,8 +278,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;119759](CVE-2026-119759/) | **TrailBase 0.28.2 &lt; 0.35.10 IDOR via Record API File Column** | **N/A** |
 | [CVE&#8209;2026&#8209;102643](CVE-2026-102643/) | **AsyncSSH: SFTPServer Chroot Escape** | **N/A** |
 | [CVE&#8209;2026&#8209;123815](CVE-2026-123815/) | **pyLoad: Tar extraction creates device nodes and FIFOs (member types not filtered; tarfile extractall without filter=)** | **N/A** |
+| [CVE&#8209;2026&#8209;123816](CVE-2026-123816/) | **pyLoad: Authentication bypass in API key validation (check\_apikey cache)** | **N/A** |
 
-26 of the 245 indexed packages record a bypass or incomplete-fix finding.
+26 of the 246 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
