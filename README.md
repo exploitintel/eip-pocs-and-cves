@@ -279,8 +279,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;102643](CVE-2026-102643/) | **AsyncSSH: SFTPServer Chroot Escape** | **N/A** |
 | [CVE&#8209;2026&#8209;123815](CVE-2026-123815/) | **pyLoad: Tar extraction creates device nodes and FIFOs (member types not filtered; tarfile extractall without filter=)** | **N/A** |
 | [CVE&#8209;2026&#8209;123816](CVE-2026-123816/) | **pyLoad: Authentication bypass in API key validation (check\_apikey cache)** | **N/A** |
+| [CVE&#8209;2026&#8209;84410](CVE-2026-84410/) | **apport: Local privilege escalation to root via ldd execution on an attacker-controlled ExecutablePath in automatic crash report processing** | **N/A** |
 
-26 of the 246 indexed packages record a bypass or incomplete-fix finding.
+26 of the 247 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
