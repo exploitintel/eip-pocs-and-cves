@@ -281,8 +281,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;123816](CVE-2026-123816/) | **pyLoad: Authentication bypass in API key validation (check\_apikey cache)** | **N/A** |
 | [CVE&#8209;2026&#8209;84410](CVE-2026-84410/) | **apport: Local privilege escalation to root via ldd execution on an attacker-controlled ExecutablePath in automatic crash report processing** | **N/A** |
 | [CVE&#8209;2026&#8209;129167](CVE-2026-129167/) | **SeaDoc converter 2.0.4 before 2.0.11 and 3.0.0 before 3.0.8 Path Traversal RCE via confluence-to-wiki** | **N/A** |
+| [CVE&#8209;2026&#8209;129171](CVE-2026-129171/) | **NginxPulse 1.5.0 before 1.6.26 SQL Injection via /api/stats/:type** | **N/A** |
 
-26 of the 248 indexed packages record a bypass or incomplete-fix finding.
+26 of the 249 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
