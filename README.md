@@ -286,8 +286,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;129161](CVE-2026-129161/) | **Dromara free-fs 2.0.1 through 2.3.1 Password Reset Code Brute-Force Account Takeover** | **N/A** |
 | [CVE&#8209;2026&#8209;100386](CVE-2026-100386/) | **Ultra Addons for Contact Form 7 &lt;= 3.5.54 - Unauthenticated Arbitrary File Read via CF7 Field Value in mPDF WriteHTML SVG Parser** | **N/A** |
 | [CVE&#8209;2026&#8209;129433](CVE-2026-129433/) | **Dokploy before 0.31.1 OS Command Injection via Compose Backup serviceName** | **N/A** |
+| [CVE&#8209;2026&#8209;19907](CVE-2026-19907/) | **Shipo 1.6 - 1.8.0 - Authentication Bypass to Administrator** | **N/A** |
 
-26 of the 253 indexed packages record a bypass or incomplete-fix finding.
+26 of the 254 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
