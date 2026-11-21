@@ -289,8 +289,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;19907](CVE-2026-19907/) | **Shipo 1.6 - 1.8.0 - Authentication Bypass to Administrator** | **N/A** |
 | [CVE&#8209;2026&#8209;129483](CVE-2026-129483/) | **Cyrus SASL through 2.1.28 SRP Authentication Bypass via plugins/srp.c** | **N/A** |
 | [CVE&#8209;2026&#8209;19793](CVE-2026-19793/) | **WP Import Export Lite &lt;= 3.9.32 - Unauthenticated Stored Code Execution via Placeholder Substitution in Imported Comment Content** | **N/A** |
+| [CVE&#8209;2026&#8209;54039](CVE-2026-54039/) | **LibreChat: Pre-registration account takeover via attacker-controlled \`provider\` field and social-login email fallback** | **N/A** |
 
-26 of the 256 indexed packages record a bypass or incomplete-fix finding.
+26 of the 257 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
