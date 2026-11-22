@@ -293,8 +293,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;134052](CVE-2026-134052/) | **Open Robotics RViz fillIndexBuffer Heap-based Buffer Overflow Remote Code Execution Vulnerability** | **N/A** |
 | [CVE&#8209;2026&#8209;134172](CVE-2026-134172/) | **audio-separator before 0.47.2 RCE via Unsafe Pickle Deserialization of Demucs Models** | **N/A** |
 | [CVE&#8209;2026&#8209;134694](CVE-2026-134694/) | **Gammapy through 2.1 Code Injection via WCSSHAPE FITS Header Card** | **N/A** |
+| [CVE&#8209;2026&#8209;134253](CVE-2026-134253/) | **Grav API Plugin 1.0.0 before 1.1.4 RCE via blueprint-upload Theme Template Write** | **N/A** |
 
-26 of the 260 indexed packages record a bypass or incomplete-fix finding.
+26 of the 261 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
