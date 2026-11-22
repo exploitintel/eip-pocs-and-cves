@@ -296,8 +296,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;134253](CVE-2026-134253/) | **Grav API Plugin 1.0.0 before 1.1.4 RCE via blueprint-upload Theme Template Write** | **N/A** |
 | [CVE&#8209;2026&#8209;134167](CVE-2026-134167/) | **devpi-web before 5.2.0 Unauthenticated Path Traversal via +doc Route** | **N/A** |
 | [CVE&#8209;2026&#8209;134282](CVE-2026-134282/) | **Vikunja 0.14.0 before 2.8.0 Arbitrary File Read and Privilege Escalation via XML Binding** | **N/A** |
+| [CVE&#8209;2026&#8209;134249](CVE-2026-134249/) | **SiYuan before 3.8.10 Authentication Bypass via X-Forwarded-For on History Route** | **N/A** |
 
-26 of the 263 indexed packages record a bypass or incomplete-fix finding.
+26 of the 264 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
