@@ -297,8 +297,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;134167](CVE-2026-134167/) | **devpi-web before 5.2.0 Unauthenticated Path Traversal via +doc Route** | **N/A** |
 | [CVE&#8209;2026&#8209;134282](CVE-2026-134282/) | **Vikunja 0.14.0 before 2.8.0 Arbitrary File Read and Privilege Escalation via XML Binding** | **N/A** |
 | [CVE&#8209;2026&#8209;134249](CVE-2026-134249/) | **SiYuan before 3.8.10 Authentication Bypass via X-Forwarded-For on History Route** | **N/A** |
+| [CVE&#8209;2026&#8209;134679](CVE-2026-134679/) | **WeddingShare through 1.8.2 Missing Authorization via MediaViewer GalleryItem** | **N/A** |
 
-26 of the 264 indexed packages record a bypass or incomplete-fix finding.
+26 of the 265 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
