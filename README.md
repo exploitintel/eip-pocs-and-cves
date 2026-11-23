@@ -303,8 +303,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;134704](CVE-2026-134704/) | **OpenShot Video Editor through 4.1.1 Deserialization via Legacy Project Import** | **N/A** |
 | [CVE&#8209;2026&#8209;134804](CVE-2026-134804/) | **Portainer 2.39.0 before 2.39.9, 2.40.0 before 2.45.4, and 3.0.0 before 3.1.0 Authorization Bypass via WebSocket Attach and Exec** | **N/A** |
 | [CVE&#8209;2026&#8209;134817](CVE-2026-134817/) | **mcp-server-kubernetes before 4.2.0 Argument Injection via Flag-Shaped Positional Operands** | **N/A** |
+| [CVE&#8209;2026&#8209;134810](CVE-2026-134810/) | **diaspora\* before 0.10.0 Path Traversal via Account Import Photos Archive** | **N/A** |
 
-26 of the 270 indexed packages record a bypass or incomplete-fix finding.
+26 of the 271 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
