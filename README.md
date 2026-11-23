@@ -300,8 +300,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;134679](CVE-2026-134679/) | **WeddingShare through 1.8.2 Missing Authorization via MediaViewer GalleryItem** | **N/A** |
 | [CVE&#8209;2026&#8209;134254](CVE-2026-134254/) | **Admidio 5.0.0 before 5.0.18 Path Traversal via Documents &amp; Files Rename** | **N/A** |
 | [CVE&#8209;2026&#8209;134245](CVE-2026-134245/) | **SiYuan 3.8.0 before 3.8.10 Incorrect Authorization via /assets Cross-document Asset Collision** | **N/A** |
+| [CVE&#8209;2026&#8209;134704](CVE-2026-134704/) | **OpenShot Video Editor through 4.1.1 Deserialization via Legacy Project Import** | **N/A** |
 
-26 of the 267 indexed packages record a bypass or incomplete-fix finding.
+26 of the 268 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
