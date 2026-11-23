@@ -306,8 +306,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;134810](CVE-2026-134810/) | **diaspora\* before 0.10.0 Path Traversal via Account Import Photos Archive** | **N/A** |
 | [CVE&#8209;2024&#8209;1086](CVE-2024-1086/) | **Use-after-free in Linux kernel's netfilter: nf\_tables component** | **N/A** |
 | [CVE&#8209;2026&#8209;34040](CVE-2026-34040/) | **Moby: AuthZ plugin bypass with oversized request body** | **N/A** |
+| [CVE&#8209;2024&#8209;2961](CVE-2024-2961/) | **GNU C Library iconv() Function Vulnerability** | **N/A** |
 
-26 of the 273 indexed packages record a bypass or incomplete-fix finding.
+26 of the 274 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
