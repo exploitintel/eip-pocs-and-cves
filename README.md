@@ -309,8 +309,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2024&#8209;2961](CVE-2024-2961/) | **GNU C Library iconv() Function Vulnerability** | **N/A** |
 | [CVE&#8209;2024&#8209;6387](CVE-2024-6387/) | **Openssh: regresshion - race condition in ssh allows rce/dos** | **N/A** |
 | [CVE&#8209;2026&#8209;135695](CVE-2026-135695/) | **rConfig Core 8.0.0 before 8.2.13 and Pro before 8.4.0 Authorization Bypass via Users API** | **N/A** |
+| [CVE&#8209;2026&#8209;135696](CVE-2026-135696/) | **rConfig Core 8.2.19 before 8.2.22 SSRF via DeviceIpIsValid Hostname Loopback Bypass** | **N/A** |
 
-26 of the 276 indexed packages record a bypass or incomplete-fix finding.
+26 of the 277 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
