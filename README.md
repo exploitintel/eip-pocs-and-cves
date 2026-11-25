@@ -313,8 +313,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;135691](CVE-2026-135691/) | **Open5GS WebUI through 2.8.0 Privilege Escalation via /api/db/Account** | **N/A** |
 | [CVE&#8209;2026&#8209;135692](CVE-2026-135692/) | **rConfig Core 8.0.0 before 8.2.17 and Pro before 8.4.0 PHP Object Injection RCE** | **N/A** |
 | [CVE&#8209;2026&#8209;135202](CVE-2026-135202/) | **WP connect Plugins (Various Versions - Unauthenticated Remote Code Execution via Backdoored Software** | **N/A** |
+| [CVE&#8209;2026&#8209;135686](CVE-2026-135686/) | **Trilium through 0.107.0 SQL Injection via Sync Update Entity Name** | **N/A** |
 
-26 of the 280 indexed packages record a bypass or incomplete-fix finding.
+26 of the 281 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
