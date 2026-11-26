@@ -317,8 +317,9 @@ environment that you own or are explicitly authorized to test.
 | [CVE&#8209;2026&#8209;129968](CVE-2026-129968/) | **Template Injection in LiteSpeed Cache Plugin for Prestashop** | **N/A** |
 | [CVE&#8209;2026&#8209;78114](CVE-2026-78114/) | **Apache JSPWiki: Session fixation in the login flow** | **N/A** |
 | [CVE&#8209;2026&#8209;134326](CVE-2026-134326/) | **Webmin through 2.670 GnuPG Signature Check Bypass in Module Updates** | **N/A** |
+| [CVE&#8209;2026&#8209;134034](CVE-2026-134034/) | **HortusFox: Identifier-position SQL Injection in HortusFox AdminController allows persistent passwordless admin access** | **N/A** |
 
-26 of the 284 indexed packages record a bypass or incomplete-fix finding.
+26 of the 285 indexed packages record a bypass or incomplete-fix finding.
 
 ## Typical package layout
 
